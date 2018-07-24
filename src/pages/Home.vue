@@ -143,7 +143,7 @@ require('echarts/lib/component/tooltip');
 require('echarts/lib/component/title');
 
 import dayjs from 'dayjs'
-import { Popup, Button, Toast } from 'vant'
+import { Popup, Button, Toast, Dialog } from 'vant'
 import TypePicker from '../components/TypePicker'
 import TimePicker from '../components/TimePicker'
 import StaffPicker from '../components/StaffPicker'
@@ -152,6 +152,7 @@ import GoodsImport from '../../utils/goodsImport'
 import GoodsExport from '../../utils/goodsExport'
 import PieceRecord from '../../utils/pieceRecord'
 import FileSave from '../../utils/fileSave'
+import FileLoad from '../../utils/fileLoad'
 
 export default {
     components: {
@@ -209,9 +210,16 @@ export default {
             let file = this.files[0];
             if (!!file) {
                 let reader = new FileReader();
-                reader.readAsBinaryString(file);
+				reader.readAsBinaryString(file);
+				Toast.loading({duration:0,message:'文件解析中...'})
                 reader.onload = function () {
-                    console.log(JSON.parse(this.result))
+					Toast.clear();
+					try{
+						FileLoad(JSON.parse(this.result))
+					}catch(err){
+						Dialog.alert({title:'错误',message:'文件解析失败：文件格式错误，请选择JSON文件'})
+					}
+
                 }
             }
         }
