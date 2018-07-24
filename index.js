@@ -3,9 +3,10 @@ import VueRouter from "vue-router";
 
 import 'flex.css';
 
-import routes from "./src/route.js";
+import routes from "./src/route";
+import toTime from "./filter/toTime";  
 
-
+toTime(Vue);
 Vue.use(VueRouter);
 
 
