@@ -23,5 +23,7 @@ export default function ({ staff, type, num, time }) {
         return false
     }
     staffPieceRecordList[staff].push({ staff, type, num, time })
-    store.set('IMPORT_RECORD_LIST', [...exportRecordList, newExportRecord])
+    store.set('STAFF_PIECE_RECORD_LIST', staffPieceRecordList)
+
+    Toast.success('添加记单成功')
 }

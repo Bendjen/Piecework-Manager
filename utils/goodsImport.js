@@ -29,4 +29,6 @@ export default function ({ type, num, time }) {
     let importRecordList = store.get('IMPORT_RECORD_LIST') || []
     let newImportRecord = { type, num, time }
     store.set('IMPORT_RECORD_LIST', [...importRecordList, newImportRecord])
+
+    Toast.success('添加进货成功')
 }

@@ -28,4 +28,6 @@ export default function ({ type, num, time }) {
     let exportRecordList = store.get('EXPORT_RECORD_LIST') || []
     let newExportRecord = { type, num, time }
     store.set('IMPORT_RECORD_LIST', [...exportRecordList, newExportRecord])
+
+    Toast.success('添加出货成功')
 }

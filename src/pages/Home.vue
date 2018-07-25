@@ -5,13 +5,13 @@
 			  <ul flex='main:center cross:center'>
 				  <li v-for="item in navList1" :key="item.title" @click="item.onClick" flex="dir:top main:center cross:center">
 					  <div class='icon' flex='main:center cross:center'><i class='iconfont' :class="item.icon"></i></div>
-					  <span>{{item.title}}</span>
+					  <span style='text-align:center;'>{{item.title}}</span>
 				  </li>
 			  </ul>
 			  <ul flex='main:center cross:center'>
 				  <li v-for="item in navList2"  :key="item.title" @click='item.onClick' flex="dir:top main:center cross:center">
 					  <div class='icon' flex='main:center cross:center'><i class='iconfont' :class="item.icon"></i></div>
-					  <span>{{item.title}}</span>
+					  <span style='text-align:center;'>{{item.title}}</span>
 				  </li>
 			  </ul>
 		  </div>
@@ -40,7 +40,7 @@
 		  </div>
 
           <!-- 进货弹窗 -->
-          <van-popup v-model="importPopupVisible" position="right" style='width:100%;height:50%;background: #f3f3f3;' class='importPopup'>
+          <van-popup v-model="importPopupVisible" position="right" style='width:100%;height:50%;background: #f3f3f3;' class='popup'>
               <div style='width:100%;height:100%;'>
                   <h2 class='dialogTitle' style='height:15%;' flex='main:center cross:center'>进货</h2>
                   <div style='height:65%;' flex='dir:top cross:center main:center'>
@@ -65,7 +65,7 @@
           </van-popup>
 
           <!-- 出货弹窗 -->
-          <van-popup v-model="exportPopupVisible" position="right" style='width:100%;height:50%;background: #f3f3f3;' class='importPopup'>
+          <van-popup v-model="exportPopupVisible" position="right" style='width:100%;height:50%;background: #f3f3f3;' class='popup'>
               <div style='width:100%;height:100%;'>
                   <h2 class='dialogTitle' style='height:15%;' flex='main:center cross:center'>出货</h2>
                   <div style='height:65%;' flex='dir:top cross:center main:center'>
@@ -90,7 +90,7 @@
           </van-popup>
 
           <!-- 记单弹窗 -->
-          <van-popup v-model="pieceRecordPopupVisible" position="right" style='width:100%;height:60%;background: #f3f3f3;' class='importPopup'>
+          <van-popup v-model="pieceRecordPopupVisible" position="right" style='width:100%;height:60%;background: #f3f3f3;' class='popup'>
               <div style='width:100%;height:100%;'>
                   <h2 class='dialogTitle' style='height:15%;' flex='main:center cross:center'>员工记单</h2>
                   <div style='height:65%;' flex='dir:top cross:center main:center'>
@@ -181,10 +181,10 @@ export default {
                 time: "",
             },
             recordList: [
-                { type: "A123", num: 1000, time: new Date().getTime(), actionName: '进货', action: 'GOODS_IMPORT' },
-                { type: "A123", num: 1000, time: new Date().getTime(), actionName: '出货', action: 'GOODS_EXPORT' },
-                { staff: '张璐群', time: new Date().getTime(), actionName: '添加员工', action: 'STAFF_ADD' },
-                { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
+                // { type: "A123", num: 1000, time: new Date().getTime(), actionName: '进货', action: 'GOODS_IMPORT' },
+                // { type: "A123", num: 1000, time: new Date().getTime(), actionName: '出货', action: 'GOODS_EXPORT' },
+                // { staff: '张璐群', time: new Date().getTime(), actionName: '添加员工', action: 'STAFF_ADD' },
+                // { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
             ],
             navList1: [
                 { title: '进货', icon: 'icon-import', onClick: () => { this.importPopupVisible = true; this.activeKey = 'importValue'; this.importValue = { type: '', num: 0, time: new Date().getTime() } } },
@@ -193,7 +193,7 @@ export default {
                 { title: '工资结算', icon: 'icon-salery', onClick: this.onClick },
             ],
             navList2: [
-                { title: '员工管理', icon: 'icon-manager-add', onClick: this.onClick },
+                { title: '员工管理', icon: 'icon-manager-add', onClick: () => { this.$router.push("/staffManage") } },
                 { title: '库存管理', icon: 'icon-version-add', onClick: this.onClick },
                 { title: '读取数据', icon: 'icon-file-load', onClick: this.fileLoad },
                 { title: '导出数据', icon: 'icon-file-save', onClick: this.fileSave },
@@ -291,7 +291,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .summary {
   width: 100%;
   height: 35%;
@@ -368,7 +368,7 @@ export default {
   }
 }
 
-.importPopup {
+.popup {
   .dialogTitle {
     background: #fff;
     font-size: 20px;
@@ -392,19 +392,16 @@ export default {
     }
   }
 }
-.van-picker-column__item--selected {
-  background: #d8d8d8;
-}
 
 .slide-fade-enter-active {
-  transition: all 2s ease;
+  transition: all 0.5s ease;
 }
 .slide-fade-leave-active {
-  transition: all 2s cubic-bezier(1, 0.5, 0.8, 1);
+  transition: all 1.2s cubic-bezier(1, 0.5, 0.8, 1);
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
-  transform: translateX(10px);
+  transform: translateX(2rem);
   opacity: 0;
 }
 </style>
