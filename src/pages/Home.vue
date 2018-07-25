@@ -3,13 +3,13 @@
 		  <div class='summary' id='charts'> </div>
 		  <div class='quickList' flex='dir:top main:center'>
 			  <ul flex='main:center cross:center'>
-				  <li v-for="item in list1" :key="item.title" @click="item.onClick" flex="dir:top main:center cross:center">
+				  <li v-for="item in navList1" :key="item.title" @click="item.onClick" flex="dir:top main:center cross:center">
 					  <div class='icon' flex='main:center cross:center'><i class='iconfont' :class="item.icon"></i></div>
 					  <span>{{item.title}}</span>
 				  </li>
 			  </ul>
 			  <ul flex='main:center cross:center'>
-				  <li v-for="item in list2"  :key="item.title" @click='item.onClick' flex="dir:top main:center cross:center">
+				  <li v-for="item in navList2"  :key="item.title" @click='item.onClick' flex="dir:top main:center cross:center">
 					  <div class='icon' flex='main:center cross:center'><i class='iconfont' :class="item.icon"></i></div>
 					  <span>{{item.title}}</span>
 				  </li>
@@ -18,30 +18,24 @@
 		  <div class='operationRecords'>
 			  <!-- <h1 style='height:10%' flex='cross:center'>操作记录</h1> -->
 			  <ul>
-				  <li flex='main:justify cross:center'>
-					  <div flex='dir:top'>
-						  <h4>添加员工</h4>
-						  <p>&nbsp;</p>
-						  <p class='time'>今天 15:12:12</p>
-					  </div>
-					  <div class='content'>张璐群</div>
-				  </li>
-				  <li flex='main:justify cross:center'>
-					  <div flex='dir:top'>
-						  <h4>进货</h4>
-						  <p class='type'>[A4516]</p>
-						  <p class='name'>今天 15:12:12</p>
-					  </div>
-					  <div class='content'>+50000</div>
-				  </li>
-				  <li flex='main:justify cross:center'>
-					  <div flex='dir:top'>
-						  <h4>进货</h4>
-						  <p class='type'>[A4516]</p>
-						  <p class='name'>今天 15:12:12</p>
-					  </div>
-					  <div class='content'>+50000</div>
-				  </li>
+                  <li v-if="recordList.length == 0"> <div>暂无任何操作记录</div></li>
+                    <transition-group name="slide-fade"  v-else>
+                        <li flex='main:justify cross:center'  v-for='item in recordList' :key='item.time'>
+                            <div flex='dir:top'>
+                                <h4>{{item.actionName}}</h4>
+                                <p v-if='item.type'>[{{item.type}}]</p>
+                                <p v-else>&nbsp;</p>
+                                <p class='time'  style='color:#6a788c'>{{item.time | toTime}}</p>
+                            </div>
+                            <div class='content' v-if="item.action == 'STAFF_ADD'">{{item.staff}}</div>
+                            <div class='content' v-if="item.action == 'GOODS_EXPORT'" style='color:#00c000;'> -{{item.num}}</div>
+                            <div class='content' v-else-if="item.action == 'GOODS_IMPORT'" style='color:#f44'> +{{item.num}}</div>
+                            <div class='content' v-else-if="item.action == 'PIECE_RECORD'" flex='dir:top main:center cross:center' style='color:#38f;'>
+                                <span style='margin-bottom:.2rem;font-size:16px;'>{{item.staff}}</span>
+                                <span> +{{item.num}}</span>
+                            </div>
+                        </li>
+                    </transition-group>
 			  </ul>
 		  </div>
 
@@ -142,6 +136,7 @@ require('echarts/lib/chart/pie');
 require('echarts/lib/component/tooltip');
 require('echarts/lib/component/title');
 
+import onfire from 'onfire.js';
 import dayjs from 'dayjs'
 import { Popup, Button, Toast, Dialog } from 'vant'
 import TypePicker from '../components/TypePicker'
@@ -185,13 +180,19 @@ export default {
                 num: 0,
                 time: "",
             },
-            list1: [
+            recordList: [
+                { type: "A123", num: 1000, time: new Date().getTime(), actionName: '进货', action: 'GOODS_IMPORT' },
+                { type: "A123", num: 1000, time: new Date().getTime(), actionName: '出货', action: 'GOODS_EXPORT' },
+                { staff: '张璐群', time: new Date().getTime(), actionName: '添加员工', action: 'STAFF_ADD' },
+                { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
+            ],
+            navList1: [
                 { title: '进货', icon: 'icon-import', onClick: () => { this.importPopupVisible = true; this.activeKey = 'importValue'; this.importValue = { type: '', num: 0, time: new Date().getTime() } } },
                 { title: '出货', icon: 'icon-export', onClick: () => { this.exportPopupVisible = true; this.activeKey = 'exportValue'; this.exportValue = { type: '', num: 0, time: new Date().getTime() } } },
                 { title: '员工计单', icon: 'icon-records', onClick: () => { this.pieceRecordPopupVisible = true; this.activeKey = 'pieceRecordValue'; this.pieceRecordValue = { staff: '', type: '', num: 0, time: new Date().getTime() } } },
                 { title: '工资结算', icon: 'icon-salery', onClick: this.onClick },
             ],
-            list2: [
+            navList2: [
                 { title: '员工管理', icon: 'icon-manager-add', onClick: this.onClick },
                 { title: '库存管理', icon: 'icon-version-add', onClick: this.onClick },
                 { title: '读取数据', icon: 'icon-file-load', onClick: this.fileLoad },
@@ -202,27 +203,38 @@ export default {
         }
     },
     mounted () {
+        let vm = this;
+        // 图表渲染
         let myChart = echarts.init(document.getElementById('charts'));
         myChart.setOption(this.chartsOption);
 
+        // 读取文件监听
         let input = document.getElementById("file");
         input.onchange = function () {
             let file = this.files[0];
             if (!!file) {
                 let reader = new FileReader();
-				reader.readAsBinaryString(file);
-				Toast.loading({duration:0,message:'文件解析中...'})
+                reader.readAsBinaryString(file);
+                Toast.loading({ duration: 0, message: '文件解析中...' })
                 reader.onload = function () {
-					Toast.clear();
-					try{
-						FileLoad(JSON.parse(this.result))
-					}catch(err){
-						Dialog.alert({title:'错误',message:'文件解析失败：文件格式错误，请选择JSON文件'})
-					}
+                    Toast.clear();
+                    try {
+                        FileLoad(JSON.parse(this.result))
+                    } catch (err) {
+                        Dialog.alert({ title: '错误', message: '文件解析失败：文件格式错误，请选择JSON文件' })
+                    }
 
                 }
             }
         }
+
+        // 操作记录更新监听
+        onfire.on('add_operation_record', function (record) {
+            vm.recordList.splice(0, 0, record)
+        });
+    },
+    beforeDestroy () {
+        onfire.un('add_operation_record')
     },
     methods: {
         typeChoose (val) {
@@ -247,7 +259,7 @@ export default {
         exportConfirm () {
             if (!this.exportValue.type) {
                 Toast.fail('请选择型号')
-            } else if (!this.importValue.num) {
+            } else if (!this.exportValue.num) {
                 Toast.fail('数量不能为0')
             } else {
                 GoodsExport(this.exportValue)
@@ -339,6 +351,8 @@ export default {
       box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
         0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       padding: 0.4rem;
+      margin: 0.1rem;
+      background: #fff;
       h4 {
         padding: 0.1rem 0;
         font-size: 14px;
@@ -346,8 +360,9 @@ export default {
       p {
         padding: 0.1rem 0;
       }
-      .content {
-        font-size: 18px;
+      .content,
+      .content span {
+        font-size: 24px;
       }
     }
   }
@@ -379,6 +394,18 @@ export default {
 }
 .van-picker-column__item--selected {
   background: #d8d8d8;
+}
+
+.slide-fade-enter-active {
+  transition: all 2s ease;
+}
+.slide-fade-leave-active {
+  transition: all 2s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
 }
 </style>
 

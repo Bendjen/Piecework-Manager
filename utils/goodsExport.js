@@ -1,6 +1,7 @@
 import store from 'store'
 import NP from 'number-precision'
 import { Toast } from 'vant';
+import onfire from 'onfire.js';
 
 // 出货
 // @type : 型号
@@ -21,6 +22,7 @@ export default function ({ type, num, time }) {
     let operationRecorddList = store.get('OPERATION_RECORD_LIST') || []
     let newOperationRecord = { type, num, time, action: 'GOODS_EXPORT', actionName: '出货' }
     store.set('OPERATION_RECORD_LIST', [...operationRecorddList, newOperationRecord])
+    onfire.fire('add_operation_record', newOperationRecord);
 
     // 添加进货记录
     let exportRecordList = store.get('EXPORT_RECORD_LIST') || []
