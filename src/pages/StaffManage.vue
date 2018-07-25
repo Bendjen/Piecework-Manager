@@ -15,11 +15,11 @@
                                 <div @click='$refs.monthPicker.toggle()'>
                                     <i class='iconfont icon-calendar'></i>
                                     <span>{{monthName}}</span>
-                                </div>  
+                                </div>
                             </div>
-                        </h1>   
+                        </h1>
                         <div style="height:85%" id='charts'> </div>
-                    </div>        
+                    </div>
                     <div class='operationRecords' style="height:40%">
                         <h1 style='height:10%' flex='cross:center'>当月记单</h1>
                         <ul style='height:90%'>
@@ -30,13 +30,13 @@
                                         <p class='time'  style='color:#6a788c'>{{item.time | toTime}}</p>
                                     </div>
                                     <div class='content'  style='color:#38f;'> +{{item.num}}</div>
-                                </li>  
+                                </li>
                         </ul>
                     </div>
                 </div>
-            </transition>   
+            </transition>
         </div>
-        
+
          <i class='iconfont icon-last' @click="lastMonth"></i>
          <i class='iconfont icon-next' @click="nextMonth"></i>
          <!-- 添加员工 -->
@@ -66,7 +66,7 @@ require('echarts/lib/component/tooltip');
 require('echarts/lib/component/title');
 import dayjs from 'dayjs'
 
-import { Popup, Button, Toast } from 'vant'
+import { Popup, Button, Toast,Swipe, SwipeItem  } from 'vant'
 
 import MonthPicker from "../components/monthPicker"
 
@@ -78,6 +78,8 @@ export default {
     components: {
         'VanPopup': Popup,
         'VanButton': Button,
+        'VanSwipe': Swipe,
+        'VanSwipeItem': SwipeItem,
         'MonthPicker': MonthPicker,
     },
     data () {
@@ -85,7 +87,8 @@ export default {
             chooseMonth: new Date(),
             addPopVisible: false,
             newStaff: { name: "" },
-            transitionName: "slide-left",
+			transitionName: "none",
+			lastClick:"last",
             show: true,
             recordList: [
                 { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
@@ -143,20 +146,24 @@ export default {
         myChart.setOption(this.chartsOption);
     },
     methods: {
-        nextMonth () {
-            this.transitionName = 'slide-right'
-            this.show = !this.show
-            setTimeout(()=>{
-                this.show = !this.show
-            },50)
-
-        },
         lastMonth () {
-            this.transitionName = 'slide-left'
-            this.show = !this.show
+			this.transitionName = 'slide-last'
+			this.show = !this.show
+			this.lastClick = 'last'
             setTimeout(()=>{
-                this.show = !this.show
-            },500)
+				this.show = !this.show
+				console.log(this.transitionName)
+            },250)
+		},
+		nextMonth () {
+			this.transitionName =  'slide-next'
+			this.show = !this.show
+			this.lastClick = 'next'
+            setTimeout(()=>{
+				this.show = !this.show
+				console.log(this.transitionName)
+            },250)
+
         },
         monthChoose (month) {
             this.chooseMonth = month
@@ -279,33 +286,6 @@ export default {
   color: #888888;
 }
 
-.slide-left-enter-active {
-  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.slide-left-leave-active {
-  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.slide-left-enter,
-.slide-left-leave-to {
-  transform: translateX(-100%);
-  opacity: 0;
-}
-
-.slide-right-enter-active {
-  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.slide-right-leave-active {
-  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.slide-right-enter,
-.slide-right-leave-to {
-  transform: translateX(100%);
-  opacity: 0;
-}
 </style>
 
 
