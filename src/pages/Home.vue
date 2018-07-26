@@ -190,10 +190,10 @@ export default {
                 { title: '进货', icon: 'icon-import', onClick: () => { this.importPopupVisible = true; this.activeKey = 'importValue'; this.importValue = { type: '', num: 0, time: new Date().getTime() } } },
                 { title: '出货', icon: 'icon-export', onClick: () => { this.exportPopupVisible = true; this.activeKey = 'exportValue'; this.exportValue = { type: '', num: 0, time: new Date().getTime() } } },
                 { title: '员工计单', icon: 'icon-records', onClick: () => { this.pieceRecordPopupVisible = true; this.activeKey = 'pieceRecordValue'; this.pieceRecordValue = { staff: '', type: '', num: 0, time: new Date().getTime() } } },
-                { title: '工资结算', icon: 'icon-salery', onClick: this.onClick },
+                { title: '今日报表', icon: 'icon-summary', onClick: this.onClick },
             ],
             navList2: [
-                { title: '员工管理', icon: 'icon-manager-add', onClick: () => { this.$router.push("/staffManage") } },
+                { title: '员工管理', icon: 'icon-staff', onClick: () => { this.$router.push("/staffList") } },
                 { title: '库存管理', icon: 'icon-version-add', onClick: this.onClick },
                 { title: '读取数据', icon: 'icon-file-load', onClick: this.fileLoad },
                 { title: '导出数据', icon: 'icon-file-save', onClick: this.fileSave },

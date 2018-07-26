@@ -1,5 +1,6 @@
 import Home from "./pages/Home.vue";
-import StaffManage from "./pages/staffManage.vue";
+import StaffDetail from "./pages/staffDetail.vue";
+import StaffList from "./pages/staffList.vue";
 
 export default [{
     path: "/",
@@ -8,7 +9,10 @@ export default [{
     path: "/home",
     component: Home
 }, {
-    path: "/staffManage",
-    component: StaffManage
+    path: "/staffDetail",
+    component: StaffDetail
+}, {
+    path: "/staffList",
+    component: StaffList
 }
 ];

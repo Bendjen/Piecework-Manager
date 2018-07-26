@@ -4,25 +4,25 @@
             <i class='iconfont icon-back' @click="$router.push('/home')"></i>
             <i class='iconfont icon-add' @click="addPopVisible=true"></i>
         </div>
-
-        <div style='background:none;height:94%;'>
-            <transition :name="transitionName">
-                <div style='height:100%;width:100%;' class='staffDetail'  v-if='show'>
-                    <div style='height:60%;'>
-                        <h1 flex='main:justify cross:center' style="height:7%">
-                            <span style='font-size:16px'>张立群</span>
-                            <div flex='main:right cross:center'  class='bar'>
-                                <div @click='$refs.monthPicker.toggle()'>
-                                    <i class='iconfont icon-calendar'></i>
-                                    <span>{{monthName}}</span>
+        <div class='staffDetail' style='height:94%;'>
+            <van-swipe style='height:100%;' :loop='false' >
+                <van-swipe-item>
+                    <div style='height:100%;width:100%;' class='staffDetail'  v-if='show'>
+                        <div style='height:60%;'>
+                            <h1 flex='main:justify cross:center' style="height:7%">
+                                <span style='font-size:16px'>张立群</span>
+                                <div flex='main:right cross:center'  class='bar'>
+                                    <div @click='$refs.monthPicker.toggle()'>
+                                        <i class='iconfont icon-calendar'></i>
+                                        <span>{{monthName}}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </h1>
-                        <div style="height:85%" id='charts'> </div>
-                    </div>
-                    <div class='operationRecords' style="height:40%">
-                        <h1 style='height:10%' flex='cross:center'>当月记单</h1>
-                        <ul style='height:90%'>
+                            </h1>
+                           <div id="charts" style="width:9rem;height:85%;"></div>
+                        </div>
+                        <div class='operationRecords' style="height:40%">
+                            <h1 style='height:10%' flex='cross:center'>当月记单</h1>
+                            <ul style='height:90%'>
                                 <li v-if="recordList.length == 0"> <div>暂无任何操作记录</div></li>
                                 <li flex='main:justify cross:center'  v-for='item in recordList' :key='item.time'>
                                     <div flex='dir:top'>
@@ -31,11 +31,13 @@
                                     </div>
                                     <div class='content'  style='color:#38f;'> +{{item.num}}</div>
                                 </li>
-                        </ul>
-                    </div>
-                </div>
-            </transition>
+                            </ul>
+                        </div>
+                    </div> 
+                </van-swipe-item>
+            </van-swipe>
         </div>
+      
 
          <i class='iconfont icon-last' @click="lastMonth"></i>
          <i class='iconfont icon-next' @click="nextMonth"></i>
@@ -66,7 +68,7 @@ require('echarts/lib/component/tooltip');
 require('echarts/lib/component/title');
 import dayjs from 'dayjs'
 
-import { Popup, Button, Toast,Swipe, SwipeItem  } from 'vant'
+import { Popup, Button, Toast, Swipe, SwipeItem } from 'vant'
 
 import MonthPicker from "../components/monthPicker"
 
@@ -87,8 +89,6 @@ export default {
             chooseMonth: new Date(),
             addPopVisible: false,
             newStaff: { name: "" },
-			transitionName: "none",
-			lastClick:"last",
             show: true,
             recordList: [
                 { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
@@ -141,28 +141,13 @@ export default {
         }
     },
     mounted () {
-        // 图表渲染
-        let myChart = echarts.init(document.getElementById('charts'));
-        myChart.setOption(this.chartsOption);
     },
     methods: {
         lastMonth () {
-			this.transitionName = 'slide-last'
-			this.show = !this.show
-			this.lastClick = 'last'
-            setTimeout(()=>{
-				this.show = !this.show
-				console.log(this.transitionName)
-            },250)
-		},
-		nextMonth () {
-			this.transitionName =  'slide-next'
-			this.show = !this.show
-			this.lastClick = 'next'
-            setTimeout(()=>{
-				this.show = !this.show
-				console.log(this.transitionName)
-            },250)
+            let myChart = echarts.init(document.getElementById('charts'));
+            myChart.setOption(this.chartsOption);
+        },
+        nextMonth () {
 
         },
         monthChoose (month) {
@@ -196,6 +181,7 @@ export default {
     border: 1px solid #e5e5e5;
     box-sizing: border-box;
     h1 {
+      box-sizing: content-box;
       color: #fff;
       background: #967171;
       font-size: 16px;
@@ -285,7 +271,6 @@ export default {
   font-size: 26px;
   color: #888888;
 }
-
 </style>
 
 
