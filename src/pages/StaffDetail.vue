@@ -1,10 +1,10 @@
 <template>
     <div class='staffManageContainer'>
-        <div class='toolBar' flex='main:justify' style='height:6%'>
+        <!-- <div class='toolBar' flex='main:justify' style='height:6%'>
             <i class='iconfont icon-back' @click="$router.push('/home')"></i>
             <i class='iconfont icon-add' @click="addPopVisible=true"></i>
-        </div>
-        <div class='staffDetail' style='height:94%;'>
+        </div> -->
+        <div class='staffDetail' style='height:100%;'>
             <van-swipe style='height:100%;' :loop='false' >
                 <van-swipe-item>
                     <div style='height:100%;width:100%;' class='staffDetail'  v-if='show'>
@@ -33,29 +33,15 @@
                                 </li>
                             </ul>
                         </div>
-                    </div> 
+                    </div>
                 </van-swipe-item>
             </van-swipe>
         </div>
-      
+
 
          <i class='iconfont icon-last' @click="lastMonth"></i>
          <i class='iconfont icon-next' @click="nextMonth"></i>
-         <!-- 添加员工 -->
-          <van-popup v-model="addPopVisible" style='width:80%;height:25%;background: #f3f3f3;' class='popup'>
-              <div style='width:100%;height:100%;'>
-                  <div style='height:60%;' flex='dir:top cross:center main:center'>
-                        <p flex='main:center cross:center'>
-                            <span>姓名：</span>
-                            <input type="text" v-model.trim = "newStaff.name">
-                        </p>
-                  </div>
-                  <div style='height:40%;padding:0 10%;' flex='main:justify cross:center'>
-                        <van-button type="default" style='width:40%' @click='addPopVisible = false'>取消</van-button>
-                        <van-button type="primary" style='width:40%' @click='addStaffConfirm'>确定</van-button>
-                  </div>
-              </div>
-          </van-popup>
+
 
           <month-picker ref='monthPicker' @change='monthChoose'></month-picker>
     </div>
@@ -72,7 +58,7 @@ import { Popup, Button, Toast, Swipe, SwipeItem } from 'vant'
 
 import MonthPicker from "../components/monthPicker"
 
-import StaffAdd from '../../utils/staffAdd'
+
 
 
 
@@ -88,7 +74,7 @@ export default {
         return {
             chooseMonth: new Date(),
             addPopVisible: false,
-            newStaff: { name: "" },
+
             show: true,
             recordList: [
                 { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
@@ -152,16 +138,6 @@ export default {
         },
         monthChoose (month) {
             this.chooseMonth = month
-        },
-        addStaffConfirm () {
-            let vm = this
-            if (!this.newStaff.name) {
-                Toast.fail('姓名不能为空')
-            } else {
-                StaffAdd({ name: this.newStaff.name, time: new Date().getTime() }, () => {
-                    vm.addPopVisible = false
-                })
-            }
         }
     }
 };

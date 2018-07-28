@@ -1,27 +1,37 @@
 <template>
-    <transition :name="transitionName">
-        <router-view></router-view>
-    </transition>
+	<div style='height:100%;width:100%;padding:.4rem'>
+		<div class='toolBar' flex='main:justify' style='height:6%' v-if="$route.path != '/home' && $route.path != '/'">
+			<i class='iconfont icon-back' @click="$router.back()" ></i>
+		</div>
+		<div style='height:94%;'>
+			<transition :name="transitionName">
+				<router-view></router-view>
+			</transition>
+		</div>
+	</div>
+
 </template>
 
 <script>
-
 export default {
-    data () {
-        return {
-            transitionName: 'slide-left'
-        }
-    },
-    watch: {
-        '$route' (to, from) {
-            if (to.path == '/home') {
-                this.transitionName = 'slide-right'
-            } else {
-                this.transitionName = 'slide-left'
-            }
-        }
+  data() {
+    return {
+      transitionName: "slide-left"
+    };
+  },
+  watch: {
+    $route(to, from) {
+      if (to.path == "/home" || to.path == "/") {
+        this.transitionName = "slide-right";
+      } else if (from.path == "/home" || from.path == "/") {
+        this.transitionName = "slide-left";
+      } else if (from.path == "/staffDetail") {
+        this.transitionName = "slide-right";
+      } else {
+        this.transitionName = "slide-left";
+      }
     }
-
+  }
 };
 </script>
 

@@ -1,43 +1,14 @@
 <template>
 	<div class='staffList'>
-        <div class='toolBar' flex='main:justify' style='height:6%'>
+        <!-- <div class='toolBar' flex='main:justify' style='height:6%'>
             <i class='iconfont icon-back' @click="$router.push('/home')"></i>
             <i class='iconfont icon-add' @click="addPopVisible=true"></i>
-        </div>
+        </div> -->
+		<i class='iconfont icon-add' @click="addPopVisible=true" style='position:fixed;top:.4rem;right:.4rem'></i>
         <div style='height:40%' class='summary'>
             <h1 style='height:20%'>员工当月详情</h1>
             <ul style='height:60%'>
-                <li flex='main:justify'>
-                    <span>A153</span>
-                    <span>*1500</span>
-                    <span>500元</span>
-                </li>
-                <li flex='main:justify'>
-                    <span>A153</span>
-                    <span>*1500</span>
-                    <span>500元</span>
-                </li>
-                <li flex='main:justify'>
-                    <span>A153</span>
-                    <span>*1500</span>
-                    <span>500元</span>
-                </li>
-                <li flex='main:justify'>
-                    <span>A153</span>
-                    <span>*1500</span>
-                    <span>500元</span>
-                </li>
-                <li flex='main:justify'>
-                    <span>A153</span>
-                    <span>*1500</span>
-                    <span>500元</span>
-                </li>
-                <li flex='main:justify'>
-                    <span>A153</span>
-                    <span>*1500</span>
-                    <span>500元</span>
-                </li>
-                <li flex='main:justify'>
+                <li flex='main:justify' v-for='i in 10' :key='i' >
                     <span>A153</span>
                     <span>*1500</span>
                     <span>500元</span>
@@ -49,10 +20,10 @@
                 <span>50000</span>
             </div>
         </div>
-        <div class='staffs' style='height:54%'>     
+        <div class='staffs' style='height:60%'>
             <h1 style='height:10%' flex='cross:center'>当月记单</h1>
             <ul style='height:90%'>
-                <li flex='main:justify cross:center'  v-for='item in recordList' :key='item.time'>
+                <li flex='main:justify cross:center'  v-for='item in recordList' :key='item.time' @click="$router.push('/staffDetail')">
                     <div flex='dir:top'>
                         <h4>{{item.type}}</h4>
                         <p class='time'  style='color:#6a788c'>{{item.time | toTime}}</p>
@@ -61,34 +32,107 @@
                 </li>
             </ul>
         </div>
-       
+
+
+      <!-- 添加员工 -->
+          <van-popup v-model="addPopVisible" style='width:80%;height:25%;background: #f3f3f3;' class='popup'>
+              <div style='width:100%;height:100%;'>
+				  <h1 style='height:25%' class='dialogTitle'  flex='main:center cross:center'>添加员工</h1>
+                  <div style='height:45%;' flex='dir:top cross:center main:center'>
+                        <p flex='main:center cross:center'>
+                            <span style='padding-right:.4rem'>姓名：</span>
+                            <input type="text" v-model.trim = "newStaff.name" style='height:.8rem'>
+                        </p>
+                  </div>
+                  <div style='height:20%;padding:0 10%;' flex='main:justify cross:center'>
+                        <van-button type="default"  style='width:40%' @click='addPopVisible = false'>取消</van-button>
+                        <van-button type="primary" style='width:40%' @click='addStaffConfirm'>确定</van-button>
+                  </div>
+              </div>
+          </van-popup>
     </div>
 </template>
 
 <script>
-import { CollapseItem } from 'vant';
-
+import { Popup, Button } from "vant";
+import StaffAdd from "../../utils/staffAdd";
 export default {
-    components: {
-        'VanCollapseItem': CollapseItem,
-    },
-    data () {
-        return {
-            recordList: [
-                { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
-                { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
-                { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
-                { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
-                { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
-                { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
-            ],
+  components: {
+    VanPopup: Popup,
+    VanButton: Button
+  },
+  data() {
+    return {
+      addPopVisible: false,
+      newStaff: { name: "" },
+      recordList: [
+        {
+          type: "A123",
+          staff: "张璐群",
+          num: 100,
+          time: new Date().getTime(),
+          actionName: "员工计件",
+          action: "PIECE_RECORD"
+        },
+        {
+          type: "A123",
+          staff: "张璐群",
+          num: 100,
+          time: new Date().getTime(),
+          actionName: "员工计件",
+          action: "PIECE_RECORD"
+        },
+        {
+          type: "A123",
+          staff: "张璐群",
+          num: 100,
+          time: new Date().getTime(),
+          actionName: "员工计件",
+          action: "PIECE_RECORD"
+        },
+        {
+          type: "A123",
+          staff: "张璐群",
+          num: 100,
+          time: new Date().getTime(),
+          actionName: "员工计件",
+          action: "PIECE_RECORD"
+        },
+        {
+          type: "A123",
+          staff: "张璐群",
+          num: 100,
+          time: new Date().getTime(),
+          actionName: "员工计件",
+          action: "PIECE_RECORD"
+        },
+        {
+          type: "A123",
+          staff: "张璐群",
+          num: 100,
+          time: new Date().getTime(),
+          actionName: "员工计件",
+          action: "PIECE_RECORD"
         }
-    },
-    mounted () {
-    },
-    methods: {
-
+      ]
+    };
+  },
+  mounted() {},
+  methods: {
+    addStaffConfirm() {
+      let vm = this;
+      if (!this.newStaff.name) {
+        Toast.fail("姓名不能为空");
+      } else {
+        StaffAdd(
+          { name: this.newStaff.name, time: new Date().getTime() },
+          () => {
+            vm.addPopVisible = false;
+          }
+        );
+      }
     }
+  }
 };
 </script>
 
@@ -168,6 +212,11 @@ export default {
     }
   }
 }
+  .dialogTitle {
+    background: #fff;
+    font-size: 18px;
+	font-weight: normal;
+  }
 </style>
 
 

@@ -130,164 +130,249 @@
 </template>
 
 <script>
+let echarts = require("echarts/lib/echarts");
+require("echarts/lib/chart/pie");
+require("echarts/lib/component/tooltip");
+require("echarts/lib/component/title");
 
-let echarts = require('echarts/lib/echarts');
-require('echarts/lib/chart/pie');
-require('echarts/lib/component/tooltip');
-require('echarts/lib/component/title');
+import onfire from "onfire.js";
+import dayjs from "dayjs";
+import { Popup, Button, Toast, Dialog } from "vant";
+import TypePicker from "../components/TypePicker";
+import TimePicker from "../components/TimePicker";
+import StaffPicker from "../components/StaffPicker";
 
-import onfire from 'onfire.js';
-import dayjs from 'dayjs'
-import { Popup, Button, Toast, Dialog } from 'vant'
-import TypePicker from '../components/TypePicker'
-import TimePicker from '../components/TimePicker'
-import StaffPicker from '../components/StaffPicker'
-
-import GoodsImport from '../../utils/goodsImport'
-import GoodsExport from '../../utils/goodsExport'
-import PieceRecord from '../../utils/pieceRecord'
-import FileSave from '../../utils/fileSave'
-import FileLoad from '../../utils/fileLoad'
+import GoodsImport from "../../utils/goodsImport";
+import GoodsExport from "../../utils/goodsExport";
+import PieceRecord from "../../utils/pieceRecord";
+import FileSave from "../../utils/fileSave";
+import FileLoad from "../../utils/fileLoad";
 
 export default {
-    components: {
-        'VanPopup': Popup,
-        'VanButton': Button,
-        'TypePicker': TypePicker,
-        'TimePicker': TimePicker,
-        'StaffPicker': StaffPicker,
-    },
-    data () {
-        let that = this;
-        return {
-            activeKey: '',
-            importPopupVisible: false,
-            exportPopupVisible: false,
-            pieceRecordPopupVisible: false,
-            importValue: {
-                type: "",
-                num: 0,
-                time: "",
-            },
-            exportValue: {
-                type: "",
-                num: 0,
-                time: "",
-            },
-            pieceRecordValue: {
-                staff: "",
-                type: "",
-                num: 0,
-                time: "",
-            },
-            recordList: [
-                // { type: "A123", num: 1000, time: new Date().getTime(), actionName: '进货', action: 'GOODS_IMPORT' },
-                // { type: "A123", num: 1000, time: new Date().getTime(), actionName: '出货', action: 'GOODS_EXPORT' },
-                // { staff: '张璐群', time: new Date().getTime(), actionName: '添加员工', action: 'STAFF_ADD' },
-                // { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
-            ],
-            navList1: [
-                { title: '进货', icon: 'icon-import', onClick: () => { this.importPopupVisible = true; this.activeKey = 'importValue'; this.importValue = { type: '', num: 0, time: new Date().getTime() } } },
-                { title: '出货', icon: 'icon-export', onClick: () => { this.exportPopupVisible = true; this.activeKey = 'exportValue'; this.exportValue = { type: '', num: 0, time: new Date().getTime() } } },
-                { title: '员工计单', icon: 'icon-records', onClick: () => { this.pieceRecordPopupVisible = true; this.activeKey = 'pieceRecordValue'; this.pieceRecordValue = { staff: '', type: '', num: 0, time: new Date().getTime() } } },
-                { title: '今日报表', icon: 'icon-summary', onClick: this.onClick },
-            ],
-            navList2: [
-                { title: '员工管理', icon: 'icon-staff', onClick: () => { this.$router.push("/staffList") } },
-                { title: '库存管理', icon: 'icon-version-add', onClick: this.onClick },
-                { title: '读取数据', icon: 'icon-file-load', onClick: this.fileLoad },
-                { title: '导出数据', icon: 'icon-file-save', onClick: this.fileSave },
-            ],
-            chartsOption: {}
-
+  components: {
+    VanPopup: Popup,
+    VanButton: Button,
+    TypePicker: TypePicker,
+    TimePicker: TimePicker,
+    StaffPicker: StaffPicker
+  },
+  data() {
+    let that = this;
+    return {
+      activeKey: "",
+      importPopupVisible: false,
+      exportPopupVisible: false,
+      pieceRecordPopupVisible: false,
+      importValue: {
+        type: "",
+        num: 0,
+        time: ""
+      },
+      exportValue: {
+        type: "",
+        num: 0,
+        time: ""
+      },
+      pieceRecordValue: {
+        staff: "",
+        type: "",
+        num: 0,
+        time: ""
+      },
+      recordList: [
+        // { type: "A123", num: 1000, time: new Date().getTime(), actionName: '进货', action: 'GOODS_IMPORT' },
+        // { type: "A123", num: 1000, time: new Date().getTime(), actionName: '出货', action: 'GOODS_EXPORT' },
+        // { staff: '张璐群', time: new Date().getTime(), actionName: '添加员工', action: 'STAFF_ADD' },
+        // { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
+      ],
+      navList1: [
+        {
+          title: "进货",
+          icon: "icon-import",
+          onClick: () => {
+            this.importPopupVisible = true;
+            this.activeKey = "importValue";
+            this.importValue = { type: "", num: 0, time: new Date().getTime() };
+          }
+        },
+        {
+          title: "出货",
+          icon: "icon-export",
+          onClick: () => {
+            this.exportPopupVisible = true;
+            this.activeKey = "exportValue";
+            this.exportValue = { type: "", num: 0, time: new Date().getTime() };
+          }
+        },
+        {
+          title: "员工计单",
+          icon: "icon-records",
+          onClick: () => {
+            this.pieceRecordPopupVisible = true;
+            this.activeKey = "pieceRecordValue";
+            this.pieceRecordValue = {
+              staff: "",
+              type: "",
+              num: 0,
+              time: new Date().getTime()
+            };
+          }
+        },
+        {
+          title: "今日报表",
+          icon: "icon-summary",
+          onClick: () => {
+            this.$router.push("/today");
+          }
         }
+      ],
+      navList2: [
+        {
+          title: "当月结算",
+          icon: "icon-staff",
+          onClick: () => {
+            this.$router.push("/staffList");
+          }
+        },
+        {
+          title: "库存结算",
+          icon: "icon-version-add",
+          onClick: () => {
+            this.$router.push("/goods");
+          }
+        },
+        { title: "读取数据", icon: "icon-file-load", onClick: this.fileLoad },
+        { title: "导出数据", icon: "icon-file-save", onClick: this.fileSave }
+      ],
+      chartsOption: {
+        title: {
+          text: "今日完成",
+          subtext: "纯属虚构",
+          x: "center"
+        },
+        tooltip: {
+          trigger: "item",
+          formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+          orient: "vertical",
+          left: "left",
+          data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
+        },
+        series: [
+          {
+            name: "访问来源",
+            type: "pie",
+            radius: "55%",
+            center: ["50%", "60%"],
+            data: [
+              { value: 335, name: "直接访问" },
+              { value: 310, name: "邮件营销" },
+              { value: 234, name: "联盟广告" },
+              { value: 135, name: "视频广告" },
+              { value: 1548, name: "搜索引擎" }
+            ],
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)"
+              }
+            }
+          }
+        ]
+      }
+    };
+  },
+  mounted() {
+    let vm = this;
+
+    setTimeout(() => {
+      // 图表渲染
+      let myChart = echarts.init(document.getElementById("charts"));
+      myChart.setOption(this.chartsOption);
+    }, 500);
+
+    // 读取文件监听
+    let input = document.getElementById("file");
+    input.onchange = function() {
+      let file = this.files[0];
+      if (!!file) {
+        let reader = new FileReader();
+        reader.readAsBinaryString(file);
+        Toast.loading({ duration: 0, message: "文件解析中..." });
+        reader.onload = function() {
+          Toast.clear();
+          try {
+            FileLoad(JSON.parse(this.result));
+          } catch (err) {
+            Dialog.alert({
+              title: "错误",
+              message: "文件解析失败：文件格式错误，请选择JSON文件"
+            });
+          }
+        };
+      }
+    };
+
+    // 操作记录更新监听
+    onfire.on("add_operation_record", function(record) {
+      vm.recordList.splice(0, 0, record);
+    });
+  },
+  beforeDestroy() {
+    onfire.un("add_operation_record");
+  },
+  methods: {
+    typeChoose(val) {
+      this.$set(this.$data[this.activeKey], "type", val);
     },
-    mounted () {
-        let vm = this;
-        // 图表渲染
-        let myChart = echarts.init(document.getElementById('charts'));
-        myChart.setOption(this.chartsOption);
-
-        // 读取文件监听
-        let input = document.getElementById("file");
-        input.onchange = function () {
-            let file = this.files[0];
-            if (!!file) {
-                let reader = new FileReader();
-                reader.readAsBinaryString(file);
-                Toast.loading({ duration: 0, message: '文件解析中...' })
-                reader.onload = function () {
-                    Toast.clear();
-                    try {
-                        FileLoad(JSON.parse(this.result))
-                    } catch (err) {
-                        Dialog.alert({ title: '错误', message: '文件解析失败：文件格式错误，请选择JSON文件' })
-                    }
-
-                }
-            }
-        }
-
-        // 操作记录更新监听
-        onfire.on('add_operation_record', function (record) {
-            vm.recordList.splice(0, 0, record)
-        });
+    timeChoose(val) {
+      this.$set(this.$data[this.activeKey], "time", val.getTime());
     },
-    beforeDestroy () {
-        onfire.un('add_operation_record')
+    staffChoose(val) {
+      this.$set(this.$data[this.activeKey], "staff", val);
     },
-    methods: {
-        typeChoose (val) {
-            this.$set(this.$data[this.activeKey], 'type', val);
-        },
-        timeChoose (val) {
-            this.$set(this.$data[this.activeKey], 'time', val.getTime());
-        },
-        staffChoose (val) {
-            this.$set(this.$data[this.activeKey], 'staff', val);
-        },
-        importConfirm () {
-            if (!this.importValue.type) {
-                Toast.fail('请选择型号')
-            } else if (!this.importValue.num) {
-                Toast.fail('数量不能为0')
-            } else {
-                GoodsImport(this.importValue)
-                this.importPopupVisible = false;
-            }
-        },
-        exportConfirm () {
-            if (!this.exportValue.type) {
-                Toast.fail('请选择型号')
-            } else if (!this.exportValue.num) {
-                Toast.fail('数量不能为0')
-            } else {
-                GoodsExport(this.exportValue)
-                this.exportPopupVisible = false;
-            }
-        },
-        pieceRecordConfirm () {
-            if (!this.pieceRecordValue.type) {
-                Toast.fail('请选择型号')
-            } else if (!this.pieceRecordValue.num) {
-                Toast.fail('数量不能为0')
-            } else if (!this.pieceRecordValue.staff) {
-                Toast.fail('请选择员工')
-            } else {
-                PieceRecord(this.pieceRecordValue)
-                this.pieceRecordPopupVisible = false;
-            }
-        },
-        fileLoad () {
-            document.getElementById('file').click()
-        },
-        fileSave () {
-            FileSave()
-        },
-        onClick () {
-
-        }
-    }
+    importConfirm() {
+      if (!this.importValue.type) {
+        Toast.fail("请选择型号");
+      } else if (!this.importValue.num) {
+        Toast.fail("数量不能为0");
+      } else {
+        GoodsImport(this.importValue);
+        this.importPopupVisible = false;
+      }
+    },
+    exportConfirm() {
+      if (!this.exportValue.type) {
+        Toast.fail("请选择型号");
+      } else if (!this.exportValue.num) {
+        Toast.fail("数量不能为0");
+      } else {
+        GoodsExport(this.exportValue);
+        this.exportPopupVisible = false;
+      }
+    },
+    pieceRecordConfirm() {
+      if (!this.pieceRecordValue.type) {
+        Toast.fail("请选择型号");
+      } else if (!this.pieceRecordValue.num) {
+        Toast.fail("数量不能为0");
+      } else if (!this.pieceRecordValue.staff) {
+        Toast.fail("请选择员工");
+      } else {
+        PieceRecord(this.pieceRecordValue);
+        this.pieceRecordPopupVisible = false;
+      }
+    },
+    fileLoad() {
+      document.getElementById("file").click();
+    },
+    fileSave() {
+      FileSave();
+    },
+    onClick() {}
+  }
 };
 </script>
 

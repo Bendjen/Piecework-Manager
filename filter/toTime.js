@@ -10,7 +10,7 @@ export default function toyun (Vue) {
         } else if (dayjs(val).isBefore(tommorrow) && dayjs(val).isAfter(today)) {
             return dayjs(val).format('今天 HH:mm');
         } else {
-            return dayjs(val).format('MM:DD HH:mm');
+            return dayjs(val).format('MM-DD HH:mm');
         }
 
     })
