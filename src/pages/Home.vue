@@ -30,6 +30,7 @@
                             <div class='content' v-if="item.action == 'STAFF_ADD'">{{item.staff}}</div>
                             <div class='content' v-if="item.action == 'GOODS_EXPORT'" style='color:#00c000;'> -{{item.num}}</div>
                             <div class='content' v-else-if="item.action == 'GOODS_IMPORT'" style='color:#f44'> +{{item.num}}</div>
+                            <div class='content' v-else-if="item.action == 'TYPE_ADD'" style='color:#f44'> {{item.name}}</div>
                             <div class='content' v-else-if="item.action == 'PIECE_RECORD'" flex='dir:top main:center cross:center' style='color:#38f;'>
                                 <span style='margin-bottom:.2rem;font-size:16px;'>{{item.staff}}</span>
                                 <span> +{{item.num}}</span>
@@ -147,6 +148,7 @@ import GoodsExport from "../../utils/goodsExport";
 import PieceRecord from "../../utils/pieceRecord";
 import FileSave from "../../utils/fileSave";
 import FileLoad from "../../utils/fileLoad";
+import * as Fetch from "../../utils/fetch";
 
 export default {
   components: {
@@ -179,12 +181,7 @@ export default {
         num: 0,
         time: ""
       },
-      recordList: [
-        // { type: "A123", num: 1000, time: new Date().getTime(), actionName: '进货', action: 'GOODS_IMPORT' },
-        // { type: "A123", num: 1000, time: new Date().getTime(), actionName: '出货', action: 'GOODS_EXPORT' },
-        // { staff: '张璐群', time: new Date().getTime(), actionName: '添加员工', action: 'STAFF_ADD' },
-        // { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
-      ],
+      recordList: Fetch.operationRecord(),
       navList1: [
         {
           title: "进货",

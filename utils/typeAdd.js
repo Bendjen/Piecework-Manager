@@ -12,7 +12,7 @@ export default function({ name, price, time }, callback) {
 	// 添加操作记录
 	let operationRecorddList = store.get("OPERATION_RECORD_LIST") || [];
 	let newOperationRecord = {
-		staff: name,
+		name,
 		time,
 		price,
 		action: "TYPE_ADD",

@@ -43,7 +43,7 @@
          <i class='iconfont icon-next' @click="nextMonth"></i>
 
 
-          <month-picker ref='monthPicker' @change='monthChoose'></month-picker>
+        <month-picker ref='monthPicker' @change='monthChoose'></month-picker>
     </div>
 </template>
 
@@ -74,7 +74,6 @@ export default {
         return {
             chooseMonth: new Date(),
             addPopVisible: false,
-
             show: true,
             recordList: [
                 { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },

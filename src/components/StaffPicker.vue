@@ -7,7 +7,7 @@
 
 <script>
 import { Popup, Picker } from 'vant';
-
+import * as Fetch from '../../utils/fetch.js'
 
 export default {
     components: {
@@ -18,7 +18,7 @@ export default {
         return {
             show: false,
             value: '',
-            columns: ['杭州', '宁波', '温州', '嘉兴', '湖州', '湖州', '湖州', '湖州', '湖州', '湖州', '湖州', '湖州']
+            columns: Fetch.staffList()
         }
     },
     mounted () {

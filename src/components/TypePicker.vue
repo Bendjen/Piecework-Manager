@@ -7,7 +7,7 @@
 
 <script>
 import { Popup, Picker } from 'vant';
-
+import * as Fetch from '../../utils/fetch.js'
 
 export default {
     components: {
@@ -18,7 +18,7 @@ export default {
         return {
             show: false,
             value: '',
-            columns: ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9']
+            columns: Fetch.itemTypeList()
         }
     },
     mounted () {

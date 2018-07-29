@@ -5,6 +5,10 @@
             <i class='iconfont icon-add' @click="addPopVisible=true"></i>
         </div> -->
 		<i class='iconfont icon-add' @click="addPopVisible=true" style='position:fixed;top:.4rem;right:.4rem'></i>
+		<div @click='$refs.monthPicker.toggle()' style='position:fixed;top:1.0rem;right:.8rem;color:#333;'>
+			<i class='iconfont icon-calendar'></i>
+			<span>{{monthName}}</span>
+		</div>
         <div style='height:40%' class='summary'>
             <h1 style='height:20%'>员工当月详情</h1>
             <ul style='height:60%'>
@@ -34,6 +38,8 @@
         </div>
 
 
+		<month-picker ref='monthPicker' @change='monthChoose'></month-picker>
+
       <!-- 添加员工 -->
           <van-popup v-model="addPopVisible" style='width:80%;height:25%;background: #f3f3f3;' class='popup'>
               <div style='width:100%;height:100%;'>
@@ -41,7 +47,7 @@
                   <div style='height:45%;' flex='dir:top cross:center main:center'>
                         <p flex='main:center cross:center'>
                             <span style='padding-right:.4rem'>姓名：</span>
-                            <input type="text" v-model.trim = "newStaff.name" style='height:.8rem'>
+                            <input type="text" v-model.trim = "newStaff.name" style='height:.8rem;text-align:center'>
                         </p>
                   </div>
                   <div style='height:20%;padding:0 10%;' flex='main:justify cross:center'>
@@ -54,15 +60,20 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
 import { Popup, Button } from "vant";
 import StaffAdd from "../../utils/staffAdd";
+import MonthPicker from "../components/monthPicker";
+
 export default {
   components: {
     VanPopup: Popup,
-    VanButton: Button
+    VanButton: Button,
+    MonthPicker: MonthPicker
   },
   data() {
     return {
+      chooseMonth: new Date(),
       addPopVisible: false,
       newStaff: { name: "" },
       recordList: [
@@ -117,8 +128,15 @@ export default {
       ]
     };
   },
-  mounted() {},
+  computed: {
+    monthName: function() {
+      return dayjs(this.chooseMonth).format("YYYY-MM");
+    }
+  },
   methods: {
+    monthChoose(month) {
+      this.chooseMonth = month;
+    },
     addStaffConfirm() {
       let vm = this;
       if (!this.newStaff.name) {
@@ -212,11 +230,11 @@ export default {
     }
   }
 }
-  .dialogTitle {
-    background: #fff;
-    font-size: 18px;
-	font-weight: normal;
-  }
+.dialogTitle {
+  background: #fff;
+  font-size: 18px;
+  font-weight: normal;
+}
 </style>
 
 

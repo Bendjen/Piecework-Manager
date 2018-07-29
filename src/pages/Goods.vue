@@ -11,7 +11,7 @@
 				  <h1 style='height:20%' class='dialogTitle'  flex='main:center cross:center'>添加型号</h1>
                   <div style='height:55%;' flex='dir:top cross:center main:center'>
                         <p flex='main:center cross:center'>
-                            <span style='padding-right:.4rem'>姓名：</span>
+                            <span style='padding-right:.4rem'>名称：</span>
                             <input type="text" v-model.trim = "newType.name"  @focus="$event.target.select()" style='height:.8rem;text-align:center'>
                         </p>
                         <p flex='main:center cross:center' style='margin:.4rem 0;'>
@@ -141,7 +141,7 @@ export default {
         TypeAdd(
           {
             name: this.newType.name,
-            price: this.newType.name,
+            price: this.newType.price,
             time: new Date().getTime()
           },
           () => {

@@ -11,11 +11,11 @@
 </template>
 
 <script>
-// import {  } from "vant";
-let echarts = require('echarts/lib/echarts');
-require('echarts/lib/chart/bar');
-require('echarts/lib/component/tooltip');
-require('echarts/lib/component/title');
+import { Toast } from "vant";
+let echarts = require("echarts/lib/echarts");
+require("echarts/lib/chart/bar");
+require("echarts/lib/component/tooltip");
+require("echarts/lib/component/title");
 
 export default {
   components: {},
@@ -90,9 +90,13 @@ export default {
     };
   },
   mounted() {
-    // 图表渲染
-    let myChart = echarts.init(document.getElementById("charts"));
-    myChart.setOption(this.chartsOption);
+    Toast.loading("加载中...");
+    setTimeout(() => {
+      Toast.clear();
+      // 图表渲染
+      let myChart = echarts.init(document.getElementById("charts"));
+      myChart.setOption(this.chartsOption);
+    },500);
   },
   methods: {}
 };

@@ -3,7 +3,7 @@
 		<div class='toolBar' flex='main:justify' style='height:6%' v-if="$route.path != '/home' && $route.path != '/'">
 			<i class='iconfont icon-back' @click="$router.back()" ></i>
 		</div>
-		<div style='height:94%;'>
+		<div :class=" ($route.path != '/home' && $route.path != '/') ? 'height94' : 'height100'">
 			<transition :name="transitionName">
 				<router-view></router-view>
 			</transition>
@@ -62,6 +62,13 @@ export default {
 .slide-right-leave-to {
   transform: translateX(100%);
   opacity: 0;
+}
+
+.height94{
+	height: 94%;
+}
+.height100{
+	height: 100%;
 }
 </style>
 
