@@ -60,9 +60,10 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 import { Popup, Button } from "vant";
 import StaffAdd from "../../utils/staffAdd";
+import * as Fetch from "../../utils/fetch";
 import MonthPicker from "../components/monthPicker";
 
 export default {
@@ -72,6 +73,8 @@ export default {
     MonthPicker: MonthPicker
   },
   data() {
+	  console.log(Fetch.targetDayPieceRecord(new Date()))
+
     return {
       chooseMonth: new Date(),
       addPopVisible: false,
