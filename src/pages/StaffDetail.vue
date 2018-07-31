@@ -58,10 +58,6 @@ import { Popup, Button, Toast, Swipe, SwipeItem } from 'vant'
 
 import MonthPicker from "../components/monthPicker"
 
-
-
-
-
 export default {
     components: {
         'VanPopup': Popup,

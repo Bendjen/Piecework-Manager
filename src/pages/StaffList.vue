@@ -27,7 +27,7 @@
         <div class='staffs' style='height:60%'>
             <h1 style='height:10%' flex='cross:center'>当月记单</h1>
             <ul style='height:90%'>
-                <li flex='main:justify cross:center'  v-for='item in recordList' :key='item.time' @click="$router.push('/staffDetail')">
+                <li flex='main:justify cross:center'  v-for='item in staffSummaryList' :key='item.time' @click="$router.push('/staffDetail')">
                     <div flex='dir:top'>
                         <h4>{{item.type}}</h4>
                         <p class='time'  style='color:#6a788c'>{{item.time | toTime}}</p>
@@ -67,93 +67,42 @@ import * as Fetch from "../../utils/fetch";
 import MonthPicker from "../components/monthPicker";
 
 export default {
-  components: {
-    VanPopup: Popup,
-    VanButton: Button,
-    MonthPicker: MonthPicker
-  },
-  data() {
-	  console.log(Fetch.targetDayPieceRecord(new Date()))
-
-    return {
-      chooseMonth: new Date(),
-      addPopVisible: false,
-      newStaff: { name: "" },
-      recordList: [
-        {
-          type: "A123",
-          staff: "张璐群",
-          num: 100,
-          time: new Date().getTime(),
-          actionName: "员工计件",
-          action: "PIECE_RECORD"
-        },
-        {
-          type: "A123",
-          staff: "张璐群",
-          num: 100,
-          time: new Date().getTime(),
-          actionName: "员工计件",
-          action: "PIECE_RECORD"
-        },
-        {
-          type: "A123",
-          staff: "张璐群",
-          num: 100,
-          time: new Date().getTime(),
-          actionName: "员工计件",
-          action: "PIECE_RECORD"
-        },
-        {
-          type: "A123",
-          staff: "张璐群",
-          num: 100,
-          time: new Date().getTime(),
-          actionName: "员工计件",
-          action: "PIECE_RECORD"
-        },
-        {
-          type: "A123",
-          staff: "张璐群",
-          num: 100,
-          time: new Date().getTime(),
-          actionName: "员工计件",
-          action: "PIECE_RECORD"
-        },
-        {
-          type: "A123",
-          staff: "张璐群",
-          num: 100,
-          time: new Date().getTime(),
-          actionName: "员工计件",
-          action: "PIECE_RECORD"
-        }
-      ]
-    };
-  },
-  computed: {
-    monthName: function() {
-      return dayjs(this.chooseMonth).format("YYYY-MM");
-    }
-  },
-  methods: {
-    monthChoose(month) {
-      this.chooseMonth = month;
+    components: {
+        VanPopup: Popup,
+        VanButton: Button,
+        MonthPicker: MonthPicker
     },
-    addStaffConfirm() {
-      let vm = this;
-      if (!this.newStaff.name) {
-        Toast.fail("姓名不能为空");
-      } else {
-        StaffAdd(
-          { name: this.newStaff.name, time: new Date().getTime() },
-          () => {
-            vm.addPopVisible = false;
-          }
-        );
-      }
+    data () {
+        return {
+            chooseMonth: new Date(),
+            addPopVisible: false,
+            newStaff: { name: "" },
+            staffSummaryList: Fetch.targerMonthStaffSummary(new Date())
+        };
+    },
+    computed: {
+        monthName: function () {
+            return dayjs(this.chooseMonth).format("YYYY-MM");
+        }
+    },
+    methods: {
+        monthChoose (month) {
+            this.chooseMonth = month;
+        },
+        addStaffConfirm () {
+            let vm = this;
+            if (!this.newStaff.name) {
+                Toast.fail("姓名不能为空");
+            } else {
+                StaffAdd(
+                    { name: this.newStaff.name, time: new Date().getTime() },
+                    () => {
+                        vm.addPopVisible = false;
+                    }
+                );
+            }
+        }
     }
-  }
 };
 </script>
 
