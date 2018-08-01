@@ -151,227 +151,230 @@ import FileLoad from "../../utils/fileLoad";
 import * as Fetch from "../../utils/fetch";
 
 export default {
-    components: {
-        VanPopup: Popup,
-        VanButton: Button,
-        TypePicker: TypePicker,
-        TimePicker: TimePicker,
-        StaffPicker: StaffPicker
-    },
-    data () {
-        let that = this;
-        return {
-            activeKey: "",
-            importPopupVisible: false,
-            exportPopupVisible: false,
-            pieceRecordPopupVisible: false,
-            importValue: {
-                type: "",
-                num: "",
-                time: ""
-            },
-            exportValue: {
-                type: "",
-                num: "",
-                time: ""
-            },
-            pieceRecordValue: {
-                staff: "",
-                type: "",
-                num: "",
-                time: ""
-            },
-            recordList: Fetch.operationRecord(),
-            navList1: [
-                {
-                    title: "进货",
-                    icon: "icon-import",
-                    onClick: () => {
-                        this.importPopupVisible = true;
-                        this.activeKey = "importValue";
-                        this.importValue = { type: "", num: 0, time: new Date().getTime() };
-                    }
-                },
-                {
-                    title: "出货",
-                    icon: "icon-export",
-                    onClick: () => {
-                        this.exportPopupVisible = true;
-                        this.activeKey = "exportValue";
-                        this.exportValue = { type: "", num: 0, time: new Date().getTime() };
-                    }
-                },
-                {
-                    title: "员工计单",
-                    icon: "icon-records",
-                    onClick: () => {
-                        this.pieceRecordPopupVisible = true;
-                        this.activeKey = "pieceRecordValue";
-                        this.pieceRecordValue = {
-                            staff: "",
-                            type: "",
-                            num: 0,
-                            time: new Date().getTime()
-                        };
-                    }
-                },
-                {
-                    title: "今日报表",
-                    icon: "icon-summary",
-                    onClick: () => {
-                        this.$router.push("/today");
-                    }
-                }
-            ],
-            navList2: [
-                {
-                    title: "当月结算",
-                    icon: "icon-staff",
-                    onClick: () => {
-                        this.$router.push("/staffList");
-                    }
-                },
-                {
-                    title: "库存结算",
-                    icon: "icon-version-add",
-                    onClick: () => {
-                        this.$router.push("/goods");
-                    }
-                },
-                { title: "读取数据", icon: "icon-file-load", onClick: this.fileLoad },
-                { title: "导出数据", icon: "icon-file-save", onClick: this.fileSave }
-            ],
-            chartsOption: {
-                title: {
-                    text: "今日完成",
-                    subtext: "纯属虚构",
-                    x: "center"
-                },
-                tooltip: {
-                    trigger: "item",
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                legend: {
-                    orient: "vertical",
-                    left: "left",
-                    data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
-                },
-                series: [
-                    {
-                        name: "访问来源",
-                        type: "pie",
-                        radius: "55%",
-                        center: ["50%", "60%"],
-                        data: [
-                            { value: 335, name: "直接访问" },
-                            { value: 310, name: "邮件营销" },
-                            { value: 234, name: "联盟广告" },
-                            { value: 135, name: "视频广告" },
-                            { value: 1548, name: "搜索引擎" }
-                        ],
-                        itemStyle: {
-                            emphasis: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: "rgba(0, 0, 0, 0.5)"
-                            }
-                        }
-                    }
-                ]
-            }
-        };
-    },
-    mounted () {
-        let vm = this;
-
-        setTimeout(() => {
-            // 图表渲染
-            let myChart = echarts.init(document.getElementById("charts"));
-            myChart.setOption(this.chartsOption);
-        }, 500);
-
-        // 读取文件监听
-        let input = document.getElementById("file");
-        input.onchange = function () {
-            let file = this.files[0];
-            if (!!file) {
-                let reader = new FileReader();
-                reader.readAsBinaryString(file);
-                Toast.loading({ duration: 0, message: "文件解析中..." });
-                reader.onload = function () {
-                    Toast.clear();
-                    try {
-                        FileLoad(JSON.parse(this.result));
-                    } catch (err) {
-                        Dialog.alert({
-                            title: "错误",
-                            message: "文件解析失败：文件格式错误，请选择JSON文件"
-                        });
-                    }
-                };
-            }
-        };
-
-        // 操作记录更新监听
-        onfire.on("add_operation_record", function (record) {
-            vm.recordList.splice(0, 0, record);
-        });
-    },
-    beforeDestroy () {
-        onfire.un("add_operation_record");
-    },
-    methods: {
-        typeChoose (val) {
-            this.$set(this.$data[this.activeKey], "type", val);
+  components: {
+    VanPopup: Popup,
+    VanButton: Button,
+    TypePicker: TypePicker,
+    TimePicker: TimePicker,
+    StaffPicker: StaffPicker
+  },
+  data() {
+    let that = this;
+    return {
+      activeKey: "",
+      importPopupVisible: false,
+      exportPopupVisible: false,
+      pieceRecordPopupVisible: false,
+      importValue: {
+        type: "",
+        num: "",
+        time: ""
+      },
+      exportValue: {
+        type: "",
+        num: "",
+        time: ""
+      },
+      pieceRecordValue: {
+        staff: "",
+        type: "",
+        num: "",
+        time: ""
+      },
+      recordList: Fetch.operationRecord(),
+      navList1: [
+        // {
+        //     title: "进货",
+        //     icon: "icon-import",
+        //     onClick: () => {
+        //         this.importPopupVisible = true;
+        //         this.activeKey = "importValue";
+        //         this.importValue = { type: "", num: 0, time: new Date().getTime() };
+        //     }
+        // },
+        {
+          title: "出货",
+          icon: "icon-export",
+          onClick: () => {
+            this.exportPopupVisible = true;
+            this.activeKey = "exportValue";
+            this.exportValue = { type: "", num: 0, time: new Date().getTime() };
+          }
         },
-        timeChoose (val) {
-            this.$set(this.$data[this.activeKey], "time", val.getTime());
+        {
+          title: "员工计单",
+          icon: "icon-records",
+          onClick: () => {
+            this.pieceRecordPopupVisible = true;
+            this.activeKey = "pieceRecordValue";
+            this.pieceRecordValue = {
+              staff: "",
+              type: "",
+              num: 0,
+              time: new Date().getTime()
+            };
+          }
         },
-        staffChoose (val) {
-            this.$set(this.$data[this.activeKey], "staff", val);
+        {
+          title: "今日核对",
+          icon: "icon-summary",
+          onClick: () => {
+            this.$router.push("/today");
+          }
         },
-        importConfirm () {
-            if (!this.importValue.type) {
-                Toast.fail("请选择型号");
-            } else if (!this.importValue.num) {
-                Toast.fail("数量不能为0");
-            } else {
-                GoodsImport(this.importValue);
-                this.importPopupVisible = false;
-            }
-        },
-        exportConfirm () {
-            if (!this.exportValue.type) {
-                Toast.fail("请选择型号");
-            } else if (!this.exportValue.num) {
-                Toast.fail("数量不能为0");
-            } else {
-                GoodsExport(this.exportValue);
-                this.exportPopupVisible = false;
-            }
-        },
-        pieceRecordConfirm () {
-            if (!this.pieceRecordValue.type) {
-                Toast.fail("请选择型号");
-            } else if (!this.pieceRecordValue.num) {
-                Toast.fail("数量不能为0");
-            } else if (!this.pieceRecordValue.staff) {
-                Toast.fail("请选择员工");
-            } else {
-                PieceRecord(this.pieceRecordValue);
-                this.pieceRecordPopupVisible = false;
-            }
-        },
-        fileLoad () {
-            document.getElementById("file").click();
-        },
-        fileSave () {
-            FileSave();
-        },
-        renderCharts () {
-            
+        {
+          title: "工资结算",
+          icon: "icon-staff",
+          onClick: () => {
+            this.$router.push("/staffList");
+          }
         }
+      ],
+      navList2: [
+        {
+          title: "出货报表",
+          icon: "icon-goodsSummary",
+          onClick: () => {
+            this.$router.push("/goods");
+          }
+        },
+        {
+          title: "数据管理",
+          icon: "icon-data",
+          onClick: () => {
+            this.$router.push("/dataManage");
+          }
+        },
+        { title: "读取数据", icon: "icon-file-load", onClick: this.fileLoad },
+        { title: "导出数据", icon: "icon-file-save", onClick: this.fileSave }
+      ],
+      initOption: {
+        title: {
+          text: "今日完成",
+          x: "center"
+        },
+        tooltip: {
+          trigger: "item",
+          formatter: "{b} : {c} "
+        },
+        series: [
+          {
+            name: "访问来源",
+            type: "pie",
+            radius: "55%",
+            center: ["50%", "60%"],
+            data: [],
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)"
+              }
+            }
+          }
+        ]
+      }
+    };
+  },
+  mounted() {
+    let vm = this;
+    this.renderCharts();
+
+    // 读取文件监听
+    let input = document.getElementById("file");
+    input.onchange = function() {
+      let file = this.files[0];
+      if (!!file) {
+        let reader = new FileReader();
+        reader.readAsBinaryString(file);
+        Toast.loading({ duration: 0, message: "文件解析中..." });
+        reader.onload = function() {
+          Toast.clear();
+          try {
+            FileLoad(JSON.parse(this.result));
+          } catch (err) {
+            m;
+            Dialog.alert({
+              title: "错误",
+              message: "文件解析失败：文件格式错误，请选择JSON文件"
+            });
+          }
+        };
+      }
+    };
+
+    // 操作记录更新监听
+    onfire.on("add_operation_record", function(record) {
+      vm.recordList.splice(0, 0, record);
+      vm.renderCharts();
+    });
+  },
+  beforeDestroy() {
+    onfire.un("add_operation_record");
+  },
+  methods: {
+    typeChoose(val) {
+      this.$set(this.$data[this.activeKey], "type", val);
+    },
+    timeChoose(val) {
+      this.$set(this.$data[this.activeKey], "time", val.getTime());
+    },
+    staffChoose(val) {
+      this.$set(this.$data[this.activeKey], "staff", val);
+    },
+    importConfirm() {
+      if (!this.importValue.type) {
+        Toast.fail("请选择型号");
+      } else if (!this.importValue.num) {
+        Toast.fail("数量不能为0");
+      } else {
+        GoodsImport(this.importValue);
+        this.importPopupVisible = false;
+      }
+    },
+    exportConfirm() {
+      if (!this.exportValue.type) {
+        Toast.fail("请选择型号");
+      } else if (!this.exportValue.num) {
+        Toast.fail("数量不能为0");
+      } else {
+        GoodsExport(this.exportValue);
+        this.exportPopupVisible = false;
+      }
+    },
+    pieceRecordConfirm() {
+      if (!this.pieceRecordValue.type) {
+        Toast.fail("请选择型号");
+      } else if (!this.pieceRecordValue.num) {
+        Toast.fail("数量不能为0");
+      } else if (!this.pieceRecordValue.staff) {
+        Toast.fail("请选择员工");
+      } else {
+        PieceRecord(this.pieceRecordValue);
+        this.pieceRecordPopupVisible = false;
+      }
+    },
+    fileLoad() {
+      document.getElementById("file").click();
+    },
+    fileSave() {
+      FileSave();
+    },
+    renderCharts() {
+      setTimeout(() => {
+        // 图表渲染
+        let chartsOption = this.initOption;
+        chartsOption.series[0].data = Object.entries(
+          Fetch.goodsSummary(new Date(), "day")
+        ).map(item => {
+          return { name: item[0], value: item[1].num };
+        });
+        console.log(chartsOption);
+        let myChart = echarts.init(document.getElementById("charts"));
+        myChart.setOption(chartsOption);
+      }, 300);
     }
+  }
 };
 </script>
 

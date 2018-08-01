@@ -16,21 +16,21 @@ let echarts = require("echarts/lib/echarts");
 require("echarts/lib/chart/bar");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
+import * as Fetch from "../../utils/fetch";
 
 export default {
   components: {},
   data() {
     return {
-      chartsOption: {
+      initOption: {
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+            type: "shadow"
           }
         },
         legend: {
-          data: ["利润", "支出", "收入"]
+          data: ["今日出货", "今日完成"]
         },
         grid: {
           left: "3%",
@@ -38,67 +38,78 @@ export default {
           bottom: "3%",
           containLabel: true
         },
-        xAxis: [
-          {
-            type: "value"
-          }
-        ],
-        yAxis: [
-          {
-            type: "category",
-            axisTick: { show: false },
-            data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
-          }
-        ],
+        xAxis: {
+          type: "value",
+          boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+          type: "category",
+          data: []
+        },
         series: [
           {
-            name: "利润",
+            name: "今日出货",
             type: "bar",
+            data: [],
             label: {
               normal: {
                 show: true,
-                position: "inside"
+                position: "right"
               }
-            },
-            data: [200, 170, 240, 244, 200, 220, 210]
+            }
           },
           {
-            name: "收入",
+            name: "今日完成",
             type: "bar",
-            stack: "总量",
-            label: {
-              normal: {
-                show: true
-              }
-            },
-            data: [320, 302, 341, 374, 390, 450, 420]
-          },
-          {
-            name: "支出",
-            type: "bar",
-            stack: "总量",
+            data: [],
             label: {
               normal: {
                 show: true,
-                position: "left"
+                position: "right"
               }
-            },
-            data: [-120, -132, -101, -134, -190, -230, -210]
+            }
           }
         ]
       }
     };
   },
   mounted() {
-    Toast.loading("加载中...");
-    setTimeout(() => {
-      Toast.clear();
-      // 图表渲染
-      let myChart = echarts.init(document.getElementById("charts"));
-      myChart.setOption(this.chartsOption);
-    },500);
+    this.renderCharts();
   },
-  methods: {}
+  methods: {
+    renderCharts() {
+      Toast.loading("加载中...");
+      setTimeout(() => {
+        Toast.clear();
+        let goodsSummary = Fetch.goodsSummary(new Date(), "day");
+        let exportSummary = Fetch.exportSummary(new Date(), "day");
+        let chartsOption = this.initOption;
+
+        let exportData = Object.values(exportSummary);
+        let finishData = Object.values(goodsSummary).map(item => item.num);
+
+        chartsOption.yAxis.data = Object.keys(goodsSummary).filter(
+          (item, index) => !!exportData[index] || !!finishData[index]
+        );
+        chartsOption.series[0].data = exportData.filter(
+          (item, index) => !!item || !!finishData[index]
+        );
+        chartsOption.series[1].data = finishData.filter(
+          (item, index) => !!item || !!exportData[index]
+        );
+
+        if (chartsOption.yAxis.data.length == 0) {
+          Toast.fail({
+            message: "当月无数据",
+            duration: 1000
+          });
+        }
+        // 图表渲染
+        let myChart = echarts.init(document.getElementById("charts"));
+        myChart.setOption(chartsOption);
+      }, 500);
+    }
+  }
 };
 </script>
 

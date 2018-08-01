@@ -1,30 +1,17 @@
 <template>
 	<div class='goods'>
-		<i class='iconfont icon-add' @click="addPopVisible=true" style='position:fixed;top:.4rem;right:.4rem'></i>
+		 <div flex='main:right cross:center' style='position:fixed;top:.4rem;right:.4rem'  class='bar'>
+			<div @click='$refs.monthPicker.toggle()'>
+				<i class='iconfont icon-calendar'></i>
+				<span>{{monthName}}</span>
+			</div>
+		</div>
 		<div style='height:100%'>
 			<div id='charts' style='width:100%;height:100%'></div>
 		</div>
 
-		  <!-- 添加型号 -->
-          <van-popup v-model="addPopVisible" style='width:80%;height:32%;background: #f3f3f3;' class='popup'>
-              <div style='width:100%;height:100%;'>
-				  <h1 style='height:20%' class='dialogTitle'  flex='main:center cross:center'>添加型号</h1>
-                  <div style='height:55%;' flex='dir:top cross:center main:center'>
-                        <p flex='main:center cross:center'>
-                            <span style='padding-right:.4rem'>名称：</span>
-                            <input type="text" v-model.trim = "newType.name"  @focus="$event.target.select()" style='height:.8rem;text-align:center'>
-                        </p>
-                        <p flex='main:center cross:center' style='margin:.4rem 0;'>
-                            <span style='padding-right:.4rem' >单价：</span>
-                            <input type="text" v-model.number = "newType.price"  @focus="$event.target.select()" style='height:.8rem;text-align:center'>
-                        </p>
-                  </div>
-                  <div style='height:20%;padding:0 10%;' flex='main:justify cross:center'>
-                        <van-button type="default"  style='width:40%' @click='addPopVisible = false'>取消</van-button>
-                        <van-button type="primary" style='width:40%' @click='addTypeConfirm'>确定</van-button>
-                  </div>
-              </div>
-          </van-popup>
+        <month-picker ref='monthPicker' @change='monthChoose'></month-picker>
+
     </div>
 
 </template>
@@ -35,123 +22,119 @@ let echarts = require("echarts/lib/echarts");
 require("echarts/lib/chart/bar");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
-// require('echarts/lib/component/legend');
+require("echarts/lib/component/legend");
+import MonthPicker from "../components/monthPicker";
+import dayjs from "dayjs";
 
-import TypeAdd from "../../utils/typeAdd";
-
+import * as Fetch from "../../utils/fetch";
 
 export default {
-    components: {
-        VanPopup: Popup,
-        VanButton: Button
-    },
-    data () {
-        return {
-            addPopVisible: false,
-            newType: { name: "", price: 0 },
-            chartsOption: {
-                title: {
-                    text: "2018年7月",
-                    subtext: "纯属虚构",
-                    x: "center"
-                },
-                tooltip: {
-                    trigger: "axis",
-                    axisPointer: {
-                        // 坐标轴指示器，坐标轴触发有效
-                        type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
-                    }
-                },
-                legend: {
-                    data: ["利润", "支出", "收入"]
-                },
-                grid: {
-                    left: "3%",
-                    right: "4%",
-                    bottom: "3%",
-                    containLabel: true
-                },
-                xAxis: [
-                    {
-                        type: "value"
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: "category",
-                        axisTick: { show: false },
-                        data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
-                    }
-                ],
-                series: [
-                    {
-                        name: "利润",
-                        type: "bar",
-                        label: {
-                            normal: {
-                                show: true,
-                                position: "inside"
-                            }
-                        },
-                        data: [200, 170, 240, 244, 200, 220, 210]
-                    },
-                    {
-                        name: "收入",
-                        type: "bar",
-                        stack: "总量",
-                        label: {
-                            normal: {
-                                show: true
-                            }
-                        },
-                        data: [320, 302, 341, 374, 390, 450, 420]
-                    },
-                    {
-                        name: "支出",
-                        type: "bar",
-                        stack: "总量",
-                        label: {
-                            normal: {
-                                show: true,
-                                position: "left"
-                            }
-                        },
-                        data: [-120, -132, -101, -134, -190, -230, -210]
-                    }
-                ]
+  components: {
+    VanPopup: Popup,
+    VanButton: Button,
+    MonthPicker: MonthPicker
+  },
+  data() {
+    return {
+      chooseMonth: new Date(),
+      initOption: {
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow"
+          }
+        },
+        legend: {
+          data: ["当月出货", "当月完成"]
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true
+        },
+        xAxis: {
+          type: "value",
+          boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+          type: "category",
+          data: []
+        },
+        series: [
+          {
+            name: "当月出货",
+            type: "bar",
+            data: [],
+            label: {
+              normal: {
+                show: true,
+                position: "right"
+              }
             }
-        };
-    },
-    mounted () {
-        Toast.loading("加载中...");
-        setTimeout(() => {
-            Toast.clear();
-            // 图表渲染
-            let myChart = echarts.init(document.getElementById("charts"));
-            myChart.setOption(this.chartsOption);
-        }, 500);
-    },
-    methods: {
-        addTypeConfirm () {
-            let vm = this;
-            if (!this.newType.name) {
-                Toast.fail("名称不能为空");
-            } else if (!this.newType.price) {
-                Toast.fail("单格不能为0");
-            } else {
-                TypeAdd(
-                    {
-                        name: this.newType.name,
-                        price: this.newType.price,
-                        time: new Date().getTime()
-                    },
-                    () => {
-                        vm.addPopVisible = false;
-                    }
-                );
+          },
+          {
+            name: "当月完成",
+            type: "bar",
+            data: [],
+            label: {
+              normal: {
+                show: true,
+                position: "right"
+              }
             }
-        }
+          }
+        ]
+      }
+    };
+  },
+  mounted() {
+    this.renderCharts();
+  },
+  computed: {
+    monthName: function() {
+      return dayjs(this.chooseMonth).format("YYYY-MM");
     }
+  },
+  methods: {
+    monthChoose(month) {
+      this.chooseMonth = month;
+      this.renderCharts(month);
+    },
+    renderCharts(month) {
+      Toast.loading("加载中...");
+      setTimeout(() => {
+        Toast.clear();
+        let goodsSummary = Fetch.goodsSummary(month);
+        let exportSummary = Fetch.exportSummary(month);
+        let chartsOption = this.initOption;
+
+        let exportData = Object.values(exportSummary);
+        let finishData = Object.values(goodsSummary).map(item => item.num);
+
+        chartsOption.yAxis.data = Object.keys(goodsSummary).filter(
+          (item, index) => !!exportData[index] || !!finishData[index]
+        );
+        chartsOption.series[0].data = exportData.filter(
+          (item, index) => !!item || !!finishData[index]
+        );
+        chartsOption.series[1].data = finishData.filter(
+          (item, index) => !!item || !!exportData[index]
+        );
+
+        if (chartsOption.yAxis.data.length == 0) {
+          Toast.fail({
+            message: "当月无数据",
+            duration: 1000
+          });
+        }
+        // 图表渲染
+        let myChart = echarts.init(document.getElementById("charts"));
+        myChart.setOption(chartsOption);
+      }, 500);
+    }
+
+  }
 };
 </script>
 

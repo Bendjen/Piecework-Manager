@@ -6,7 +6,7 @@
   "author": "Bendjen <unbolibob@foxmail.com>",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html --no-minify --no-cache --out-dir docs "
   },
   "license": "MIT",
   "dependencies": {

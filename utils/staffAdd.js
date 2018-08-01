@@ -32,6 +32,6 @@ export default function ({ name, time }, callback) {
     staffPieceRecordList[name] = [];
     store.set('STAFF_PIECE_RECORD_LIST', staffPieceRecordList)
 
-    Toast.success('添加成功')
+    Toast.success({message:'添加成功',duration: 1000})
     callback && callback()
 }

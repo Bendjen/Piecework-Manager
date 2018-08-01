@@ -3,6 +3,7 @@ import StaffDetail from "./pages/StaffDetail.vue";
 import StaffList from "./pages/StaffList.vue";
 import Goods from "./pages/Goods.vue";
 import Today from "./pages/Today.vue";
+import DataManage from "./pages/DataManage.vue";
 
 export default [
     {
@@ -29,5 +30,9 @@ export default [
     {
         path: "/today",
         component: Today
+    },
+    {
+        path: "/dataManage",
+        component: DataManage
     }
 ];

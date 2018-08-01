@@ -1,30 +1,26 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add ubdex.scss
+  C:\Program Files\nodejs\node.exe C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js build
 
 PATH: 
-  E:\PieceworkManager\node_modules\.bin;C:\Users\Administrator\AppData\Local\Yarn\Data\link\node_modules\.bin;E:\PieceworkManager\node_modules\.bin;C:\Users\Administrator\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Users\Administrator\AppData\Local\Yarn\bin;C:\Program Files\libexec\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Administrator\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\HashiCorp\Vagrant\bin;C:\Program Files\Git\cmd;C:\Program Files\nodejs;D:\Program Files\Microsoft VS Code Insiders\bin;C:\Users\Administrator\AppData\Local\Programs\Python\Python37\Scripts;C:\Users\Administrator\AppData\Local\Programs\Python\Python37;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Users\Administrator\AppData\Roaming\npm;D:\Program Files\Microsoft VS Code Insiders\bin;D:\Program Files\Fiddler
+  C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Administrator\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\HashiCorp\Vagrant\bin;C:\Program Files\nodejs;E:\Program Files\Microsoft VS Code Insiders\bin;C:\Program Files\Git\cmd;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;E:\Program Files\Microsoft VS Code Insiders\bin;C:\Users\Administrator\AppData\Roaming\npm
 
 Yarn version: 
-  1.6.0
+  1.7.0
 
 Node version: 
-  8.11.1
+  8.11.3
 
 Platform: 
   win32 x64
 
 Trace: 
-  Error: https://registry.npm.taobao.org/ubdex.scss: Not found
-      at Request.params.callback [as _callback] (C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:65327:18)
-      at Request.self.callback (C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:133155:22)
-      at emitTwo (events.js:126:13)
-      at Request.emit (events.js:214:7)
-      at Request.<anonymous> (C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:134138:10)
-      at emitOne (events.js:116:13)
-      at Request.emit (events.js:211:7)
-      at IncomingMessage.<anonymous> (C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:134058:12)
-      at Object.onceWrapper (events.js:313:30)
-      at emitNone (events.js:111:20)
+  SyntaxError: E:\Piecework-Manager\package.json: Unexpected token } in JSON at position 318
+      at JSON.parse (<anonymous>)
+      at C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1130:59
+      at Generator.next (<anonymous>)
+      at step (C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:98:30)
+      at C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:109:13
+      at <anonymous>
 
 npm manifest: 
   {
@@ -35,7 +31,7 @@ npm manifest:
     "author": "Bendjen <unbolibob@foxmail.com>",
     "scripts": {
       "start": "parcel index.html",
-      "build": "parcel build index.html"
+      "build": "parcel build index.html --no-minify --no-cache --out-dir docs ",
     },
     "license": "MIT",
     "dependencies": {
