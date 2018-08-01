@@ -4,13 +4,12 @@
             <i class='iconfont icon-back' @click="$router.push('/home')"></i>
             <i class='iconfont icon-add' @click="addPopVisible=true"></i>
         </div> -->
-        <div class='staffDetail' style='height:100%;'>
-            <van-swipe style='height:100%;' :loop='false' >
-                <van-swipe-item>
+            <van-swipe style='height:100%;' :loop='false' :show-indicators='false' :initial-swipe='initialSwipe'  ref='swipe' @change='swipeChange'>
+                <van-swipe-item v-for='(item,key) in summary' :key='key'>
                     <div style='height:100%;width:100%;' class='staffDetail'  v-if='show'>
-                        <div style='height:60%;'>
-                            <h1 flex='main:justify cross:center' style="height:7%">
-                                <span style='font-size:16px'>张立群</span>
+                        <div style='height:50%;border: 1px solid #e5e5e5;'>
+                            <h1 flex='main:justify cross:center' style="height:10%">
+                                <span style='font-size:16px'>{{key}}</span>
                                 <div flex='main:right cross:center'  class='bar'>
                                     <div @click='$refs.monthPicker.toggle()'>
                                         <i class='iconfont icon-calendar'></i>
@@ -18,29 +17,28 @@
                                     </div>
                                 </div>
                             </h1>
-                           <div id="charts" style="width:9rem;height:85%;"></div>
+                           <div :id="`${key}Charts`" style="width:;height:85%;"></div>
                         </div>
-                        <div class='operationRecords' style="height:40%">
+                        <div class='operationRecords' style="height:50%">
                             <h1 style='height:10%' flex='cross:center'>当月记单</h1>
-                            <ul style='height:90%'>
-                                <li v-if="recordList.length == 0"> <div>暂无任何操作记录</div></li>
-                                <li flex='main:justify cross:center'  v-for='item in recordList' :key='item.time'>
+                            <ul style='height:80%;'>
+                                <li v-if="item.record.length == 0"> <div>暂无任何操作记录</div></li>
+                                <li flex='main:justify cross:center'  v-for='record in item.record' :key='record.time'>
                                     <div flex='dir:top'>
-                                        <h4>{{item.type}}</h4>
-                                        <p class='time'  style='color:#6a788c'>{{item.time | toTime}}</p>
+                                        <h4>{{record.type}}</h4>
+                                        <p class='time'  style='color:#6a788c'>{{record.time | toTime}}</p>
                                     </div>
-                                    <div class='content'  style='color:#38f;'> +{{item.num}}</div>
+                                    <div class='content'  style='color:#38f;'> +{{record.num}}</div>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </van-swipe-item>
             </van-swipe>
-        </div>
+ 
 
-
-         <i class='iconfont icon-last' @click="lastMonth"></i>
-         <i class='iconfont icon-next' @click="nextMonth"></i>
+         <i class='iconfont icon-last' v-if="!(activeIndex == 0)"  @click="lastMonth"></i>
+         <i class='iconfont icon-next' v-if="!(activeIndex >= Object.keys(summary).length-1)"  @click="nextMonth"></i>
 
 
         <month-picker ref='monthPicker' @change='monthChoose'></month-picker>
@@ -57,6 +55,7 @@ import dayjs from 'dayjs'
 import { Popup, Button, Toast, Swipe, SwipeItem } from 'vant'
 
 import MonthPicker from "../components/monthPicker"
+import * as Fetch from "../../utils/fetch";
 
 export default {
     components: {
@@ -67,29 +66,22 @@ export default {
         'MonthPicker': MonthPicker,
     },
     data () {
+        console.log(this.$route.query)
         return {
-            chooseMonth: new Date(),
+            chooseMonth: this.$route.query.date,
             addPopVisible: false,
             show: true,
-            recordList: [
-                { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
-                { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
-                { type: "A123", staff: '张璐群', num: 100, time: new Date().getTime(), actionName: '员工计件', action: 'PIECE_RECORD' },
-            ],
-            chartsOption: {
+            activeIndex: 0,
+            summary: Fetch.staffSummary(this.$route.query.date),
+            initOption: {
                 title: {
                     text: '当月统计',
-                    subtext: '纯属虚构',
-                    x: 'center'
+                    x: 'center',
+                    subtext: '当月工资:'
                 },
                 tooltip: {
                     trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                legend: {
-                    orient: 'vertical',
-                    left: 'left',
-                    data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+                    formatter: "{b} : {c} "
                 },
                 series: [
                     {
@@ -97,13 +89,7 @@ export default {
                         type: 'pie',
                         radius: '55%',
                         center: ['50%', '60%'],
-                        data: [
-                            { value: 335, name: '直接访问' },
-                            { value: 310, name: '邮件营销' },
-                            { value: 234, name: '联盟广告' },
-                            { value: 135, name: '视频广告' },
-                            { value: 1548, name: '搜索引擎' }
-                        ],
+                        data: [],
                         itemStyle: {
                             emphasis: {
                                 shadowBlur: 10,
@@ -119,20 +105,62 @@ export default {
     computed: {
         monthName: function () {
             return dayjs(this.chooseMonth).format('YYYY-MM')
-        }
+        },
+        initialSwipe: function () {
+            let index = Object.keys(this.summary).findIndex(item => item == this.$route.params.staff)
+            return index
+        },
+
     },
     mounted () {
+        console.log(this.$route)
+        this.activeIndex = this.initialSwipe;
+        this.renderCharts(this.chooseMonth)
     },
     methods: {
-        lastMonth () {
-            let myChart = echarts.init(document.getElementById('charts'));
-            myChart.setOption(this.chartsOption);
+        swipeChange (index) {
+            if (!Object.values(this.summary)[index].total) {
+                Toast.fail({
+                    message: '没有记单记录',
+                    duration: 1000
+                })
+            }
         },
-        nextMonth () {
+        lastMonth () {
+            console.log(this.activeIndex - 1)
+            if (this.activeIndex > 0) {
+                this.$refs.swipe.swipeTo(this.activeIndex - 1)
+                this.activeIndex -= 1
+            }
 
         },
+        nextMonth () {
+            console.log(this.activeIndex + 1)
+            if (this.activeIndex < Object.keys(this.summary).length - 1) {
+                this.$refs.swipe.swipeTo(this.activeIndex + 1)
+                this.activeIndex += 1
+            }
+        },
         monthChoose (month) {
-            this.chooseMonth = month
+            this.chooseMonth = month;
+            this.summary = Fetch.staffSummary(month)
+            this.renderCharts(month)
+        },
+        renderCharts (month) {
+            Toast.loading('加载中...')
+            setTimeout(() => {
+                Toast.clear()
+                Object.entries(this.summary).forEach(item => {
+                    let staffName = item[0];
+                    let staffSummary = item[1];
+                    let detailList = Object.entries(staffSummary.detail).map(item => { return { name: item[0], value: item[1] } })
+                    let options = this.initOption;
+                    options.series[0].data = detailList;
+                    options.title.subtext = `应发工资：${staffSummary.total}元`;
+                    let myChart = echarts.init(document.getElementById(`${staffName}Charts`));
+                    myChart.setOption(options);
+                })
+            }, 50)
         }
     }
 };
@@ -146,10 +174,10 @@ export default {
   height: 100%;
   .staffDetail {
     // border-radius: 0.4rem;
-    background: #e2e2e2;
+    // background: #e2e2e2;
     color: #8e7777;
     width: 100%;
-    border: 1px solid #e5e5e5;
+    // border: 1px solid #e5e5e5;
     box-sizing: border-box;
     h1 {
       box-sizing: content-box;
@@ -201,6 +229,8 @@ export default {
   overflow-x: hidden;
   height: 40%;
   width: 100%;
+  background: #f3f3f3;
+  border: none;
   ul {
     height: 100%;
     overflow-y: auto;

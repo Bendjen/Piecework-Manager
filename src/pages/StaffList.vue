@@ -5,34 +5,32 @@
             <i class='iconfont icon-add' @click="addPopVisible=true"></i>
         </div> -->
 		<i class='iconfont icon-add' @click="addPopVisible=true" style='position:fixed;top:.4rem;right:.4rem'></i>
-		<div @click='$refs.monthPicker.toggle()' style='position:fixed;top:1.0rem;right:.8rem;color:#333;'>
+		<div @click='$refs.monthPicker.toggle()' style='position:fixed;top:1.0rem;right:1.2rem;color:#333;'>
 			<i class='iconfont icon-calendar'></i>
 			<span>{{monthName}}</span>
 		</div>
         <div style='height:40%' class='summary'>
-            <h1 style='height:20%'>员工当月详情</h1>
-            <ul style='height:60%'>
-                <li flex='main:justify' v-for='i in 10' :key='i' >
-                    <span>A153</span>
-                    <span>*1500</span>
-                    <span>500元</span>
+            <h1 style='height:20%'>当月记单统计</h1>
+            <ul style='height:60%;padding:10px; box-sizing:border-box;'>
+                <li flex='main:left' v-for='(item,key) in goodsSummaryList' :key='key'  v-if="item.num">
+                    <span style='text-align:left;width:25%'>{{key}}</span>
+                    <span style='text-align:right;width:35%'>*{{item.num}}</span>
+                    <span style='text-align:right;width:40%'>{{item.money}}元</span>
                 </li>
             </ul>
             <div style='height:20%;' class='total'  flex='main:justify cross:center'>
                 <span>合计</span>
-                <span>25000</span>
-                <span>50000</span>
+                <span style='text-align:right;width:35%'>*{{totalNum}}</span>
+                <span style='text-align:right;width:40%'>{{totalMoney}}元</span>
             </div>
         </div>
         <div class='staffs' style='height:60%'>
-            <h1 style='height:10%' flex='cross:center'>当月记单</h1>
+            <h1 style='height:10%;padding:.2rem 0.4rem' flex='main:justify cross:center'> <span style='font-size:16px'>应发工资</span> <span>{{staffMoney}} 元</span> </h1>
             <ul style='height:90%'>
-                <li flex='main:justify cross:center'  v-for='item in staffSummaryList' :key='item.time' @click="$router.push('/staffDetail')">
-                    <div flex='dir:top'>
-                        <h4>{{item.type}}</h4>
-                        <p class='time'  style='color:#6a788c'>{{item.time | toTime}}</p>
-                    </div>
-                    <div class='content'  style='color:#38f;'> +{{item.num}}</div>
+                <li v-if="!staffMoney"> <div>当月没有员工记单记录</div></li>
+                <li flex='main:justify cross:center'  v-for="(item,key) in staffSummaryList" :key='key' @click="linkToDetail(key)" v-else>
+                    <div class='content' > {{key}}</div>
+                    <div class='content'  style='color:#f44;'> {{item.total}} 元</div>
                 </li>
             </ul>
         </div>
@@ -61,10 +59,11 @@
 
 <script>
 import dayjs from "dayjs";
-import { Popup, Button } from "vant";
+import { Popup, Button, Toast } from "vant";
 import StaffAdd from "../../utils/staffAdd";
 import * as Fetch from "../../utils/fetch";
 import MonthPicker from "../components/monthPicker";
+import NP from "number-precision";
 
 export default {
     components: {
@@ -77,17 +76,45 @@ export default {
             chooseMonth: new Date(),
             addPopVisible: false,
             newStaff: { name: "" },
-            staffSummaryList: Fetch.targerMonthStaffSummary(new Date())
+            staffSummaryList: Fetch.staffSummary(),
+            goodsSummaryList: Fetch.goodsSummary()
         };
     },
     computed: {
         monthName: function () {
             return dayjs(this.chooseMonth).format("YYYY-MM");
+        },
+        totalNum: function () {
+            return Object.values(this.goodsSummaryList).map(item => item.num).reduce((cur, pre) => NP.plus(cur || 0, pre || 0), 0)
+        },
+        totalMoney: function () {
+            return Object.values(this.goodsSummaryList).map(item => item.money).reduce((cur, pre) => NP.plus(cur || 0, pre || 0), 0)
+        },
+        staffMoney: function () {
+            return Object.values(this.staffSummaryList).map(item => item.total).reduce((cur, pre) => NP.plus(cur || 0, pre || 0), 0)
+        },
+    },
+    mounted () {
+        if (!this.totalNum) {
+            Toast.fail({ message: '无记单记录', duration: 1000 })
         }
     },
     methods: {
+        linkToDetail (staff) {
+            this.$router.push({ path: `/staffDetail/${staff}`, query: { date: this.chooseMonth.getTime() } })
+        },
         monthChoose (month) {
             this.chooseMonth = month;
+            Toast.loading('加载中...')
+            setTimeout(() => {
+                Toast.clear()
+                this.staffSummaryList = Fetch.staffSummary(month)
+                this.goodsSummaryList = Fetch.goodsSummary(month)
+                if (!this.totalNum) {
+                    Toast.fail({ message: '无记单记录', duration: 1000 })
+                }
+            }, 500)
+
         },
         addStaffConfirm () {
             let vm = this;
@@ -126,11 +153,14 @@ export default {
     font-size: 18px;
   }
   li {
-    padding: 0.15rem 1.2rem;
+    padding: 0.15rem 0.6rem;
     color: #7e9092;
+    span {
+      display: inline-block;
+    }
   }
   .total {
-    padding: 0.15rem 1.2rem;
+    padding: 0.15rem 0.6rem;
     color: #336933;
     span {
       font-weight: bold;
@@ -177,7 +207,7 @@ export default {
       }
       .content,
       .content span {
-        font-size: 24px;
+        font-size: 18px;
       }
     }
   }

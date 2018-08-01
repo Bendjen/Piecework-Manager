@@ -16,14 +16,14 @@ export default function ({ staff, type, num, time }) {
     store.set('OPERATION_RECORD_LIST', [...operationRecorddList, newOperationRecord])
     onfire.fire('add_operation_record', newOperationRecord);
 
-    // 添加员工记单记录
-    let staffPieceRecordList = store.get('STAFF_PIECE_RECORD_LIST') || {}
-    if (!staffPieceRecordList[staff]) {
-        Toast.fail('员工记单表中未添加此员工')
-        return false
-    }
-    staffPieceRecordList[staff].push({ staff, type, num, time })
-    store.set('STAFF_PIECE_RECORD_LIST', staffPieceRecordList)
+    // // 添加员工记单记录
+    // let staffPieceRecordList = store.get('STAFF_PIECE_RECORD_LIST') || {}
+    // if (!staffPieceRecordList[staff]) {
+    //     Toast.fail('员工记单表中未添加此员工')
+    //     return false
+    // }
+    // staffPieceRecordList[staff].push({ staff, type, num, time })
+    // store.set('STAFF_PIECE_RECORD_LIST', staffPieceRecordList)
 
     Toast.success('添加记单成功')
 }

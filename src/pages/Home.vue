@@ -167,18 +167,18 @@ export default {
             pieceRecordPopupVisible: false,
             importValue: {
                 type: "",
-                num: 0,
+                num: "",
                 time: ""
             },
             exportValue: {
                 type: "",
-                num: 0,
+                num: "",
                 time: ""
             },
             pieceRecordValue: {
                 staff: "",
                 type: "",
-                num: 0,
+                num: "",
                 time: ""
             },
             recordList: Fetch.operationRecord(),
@@ -368,7 +368,9 @@ export default {
         fileSave () {
             FileSave();
         },
-        onClick () { }
+        renderCharts () {
+            
+        }
     }
 };
 </script>

@@ -5,28 +5,29 @@ import Goods from "./pages/Goods.vue";
 import Today from "./pages/Today.vue";
 
 export default [
-	{
-		path: "/",
-		component: Home
-	},
-	{
-		path: "/home",
-		component: Home
-	},
-	{
-		path: "/staffList",
-		component: StaffList,
-	},
-	{
-		path: "/staffDetail",
-		component: StaffDetail
-	},
-	{
-		path: "/goods",
-		component: Goods
-	},
-	{
-		path: "/today",
-		component: Today
-	}
+    {
+        path: "/",
+        component: Home
+    },
+    {
+        path: "/home",
+        component: Home
+    },
+    {
+        path: "/staffList",
+        component: StaffList,
+    },
+    {
+        path: "/staffDetail/:staff",
+        component: StaffDetail,
+        props: true
+    },
+    {
+        path: "/goods",
+        component: Goods
+    },
+    {
+        path: "/today",
+        component: Today
+    }
 ];
