@@ -1,23 +1,25 @@
-import Vue from 'vue/dist/vue.js';
+import Vue from "vue/dist/vue.js";
 import VueRouter from "vue-router";
 
-import 'flex.css';
-import './index.scss'
+import "flex.css";
+import "./index.scss";
 
 import routes from "./src/route";
 import toTime from "./filter/toTime";
 
-import App from "./src/App.vue"
+import App from "./src/App.vue";
+try {
+	toTime(Vue);
+	Vue.use(VueRouter);
 
-toTime(Vue);
-Vue.use(VueRouter);
+	const router = new VueRouter({
+		routes
+	});
 
-
-const router = new VueRouter({
-    routes
-});
-
-const app = new Vue({
-    components: { App },
-    router: router,
-}).$mount("#app")
+	const app = new Vue({
+		components: { App },
+		router: router
+	}).$mount("#app");
+} catch (err) {
+	console.log(err.toString());
+}

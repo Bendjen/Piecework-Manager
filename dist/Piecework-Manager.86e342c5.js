@@ -73646,45 +73646,49 @@ render._withStripped = true
       }
     })();
 },{"../utils/storageInit.js":"utils\\storageInit.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"index.js":[function(require,module,exports) {
-'use strict';
+"use strict";
 
-var _vue = require('vue/dist/vue.js');
+var _vue = require("vue/dist/vue.js");
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _vueRouter = require('vue-router');
+var _vueRouter = require("vue-router");
 
 var _vueRouter2 = _interopRequireDefault(_vueRouter);
 
-require('flex.css');
+require("flex.css");
 
-require('./index.scss');
+require("./index.scss");
 
-var _route = require('./src/route');
+var _route = require("./src/route");
 
 var _route2 = _interopRequireDefault(_route);
 
-var _toTime = require('./filter/toTime');
+var _toTime = require("./filter/toTime");
 
 var _toTime2 = _interopRequireDefault(_toTime);
 
-var _App = require('./src/App.vue');
+var _App = require("./src/App.vue");
 
 var _App2 = _interopRequireDefault(_App);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _toTime2.default)(_vue2.default);
-_vue2.default.use(_vueRouter2.default);
+try {
+	(0, _toTime2.default)(_vue2.default);
+	_vue2.default.use(_vueRouter2.default);
 
-var router = new _vueRouter2.default({
-    routes: _route2.default
-});
+	var router = new _vueRouter2.default({
+		routes: _route2.default
+	});
 
-var app = new _vue2.default({
-    components: { App: _App2.default },
-    router: router
-}).$mount("#app");
+	var app = new _vue2.default({
+		components: { App: _App2.default },
+		router: router
+	}).$mount("#app");
+} catch (err) {
+	console.log(err.toString());
+}
 },{"vue/dist/vue.js":"node_modules\\vue\\dist\\vue.js","vue-router":"node_modules\\vue-router\\dist\\vue-router.esm.js","flex.css":"node_modules\\flex.css\\dist\\flex.css","./index.scss":"index.scss","./src/route":"src\\route.js","./filter/toTime":"filter\\toTime.js","./src/App.vue":"src\\App.vue"}],"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
