@@ -293,7 +293,6 @@ export default {
           try {
             FileLoad(JSON.parse(this.result));
           } catch (err) {
-            m;
             Dialog.alert({
               title: "错误",
               message: "文件解析失败：文件格式错误，请选择JSON文件"
@@ -384,6 +383,11 @@ export default {
   height: 35%;
   box-sizing: border-box;
   overflow: hidden;
+}
+.popup{
+	input{
+		height: 1rem;
+	}
 }
 .quickList {
   height: 25%;

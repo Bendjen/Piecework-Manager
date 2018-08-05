@@ -114,7 +114,7 @@ export default {
       let vm = this;
       Dialog.confirm({
         title: "提示",
-        message: `确定要删除型号“${name}”吗？`
+        message: `删除型号可能会导致之前汇总信息无法查询到型号价格，确定要删除型号“${name}”吗？`
       })
         .then(() => {
           Delete.type(name, () => {
@@ -166,6 +166,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.popup{
+	input{
+		height: 1rem;
+	}
+}
 .dataManage {
   height: 100%;
   width: 100%;

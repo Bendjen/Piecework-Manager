@@ -36,6 +36,9 @@
   box-sizing: border-box;
   overflow: hidden;
 }
+.popup input[data-v-461527] {
+  height: 1rem;
+}
 .quickList[data-v-461527] {
   height: 25%;
   box-sizing: border-box;
@@ -339,6 +342,9 @@ html{-webkit-tap-highlight-color:transparent}body{margin:0}a{text-decoration:non
   height: 100%;
 }
 
+.popup input[data-v-21e51c] {
+  height: 1rem;
+}
 .dataManage[data-v-21e51c] {
   height: 100%;
   width: 100%;

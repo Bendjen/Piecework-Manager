@@ -64925,6 +64925,11 @@ exports['default'] = index;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _dialog = require("vant/es/dialog");
+
+var _dialog2 = _interopRequireDefault(_dialog);
+
 exports.itemTypeList = itemTypeList;
 exports.staffList = staffList;
 exports.operationRecord = operationRecord;
@@ -64932,6 +64937,8 @@ exports.recordFilter = recordFilter;
 exports.staffSummary = staffSummary;
 exports.goodsSummary = goodsSummary;
 exports.exportSummary = exportSummary;
+
+require("vant/es/dialog/style");
 
 var _store = require("store");
 
@@ -64994,22 +65001,39 @@ function staffSummary() {
 	// 数据初始化为0
 	var staffSummary = {};
 	var itemTypeList = _store2.default.get("ITEM_TYPE_LIST");
-	_store2.default.get("STAFF_LIST").forEach(function (item) {
-		staffSummary[item.name] = {};
-		staffSummary[item.name]["detail"] = {};
-		staffSummary[item.name]["record"] = [];
-		staffSummary[item.name]["total"] = 0;
-	});
+	// store.get("STAFF_LIST").forEach(item => {
+	// 	staffSummary[item.name] = {};
+	// 	staffSummary[item.name]["detail"] = {};
+	// 	staffSummary[item.name]["record"] = [];
+	// 	staffSummary[item.name]["total"] = 0;
+	// });
 
 	// 数据累加
 	recordFilter({ date: date, unit: unit, action: "PIECE_RECORD" }).forEach(function (item) {
+		if (!staffSummary[item.staff]) {
+			staffSummary[item.staff] = {
+				detail: {},
+				record: [],
+				total: 0
+			};
+		}
 		staffSummary[item.staff]["detail"][item.type] = _numberPrecision2.default.plus(staffSummary[item.staff][["detail"]][item.type] || 0, item.num);
 
 		staffSummary[item.staff]["record"].push(item);
 
-		var itemPrice = itemTypeList.find(function (_item) {
-			return _item.name == item.type;
-		}).price;
+		var itemPrice = void 0;
+		try {
+			itemPrice = itemTypeList.find(function (_item) {
+				return _item.name == item.type;
+			}).price;
+			// 如果型号被删除会有查询不到价格的BUG
+		} catch (err) {
+			_dialog2.default.alert({
+				title: "错误",
+				message: "\u539F\u5148\u578B\u53F7\u201C" + item.type + "\u201D\u5DF2\u88AB\u5220\u9664\uFF0C\u8BF7\u8054\u7CFB\u7BA1\u7406\u5458\u5904\u7406"
+			});
+		}
+
 		staffSummary[item.staff]["total"] = _numberPrecision2.default.plus(staffSummary[item.staff]["total"], _numberPrecision2.default.times(item.num, itemPrice));
 	});
 
@@ -65026,17 +65050,31 @@ function goodsSummary() {
 	var goodsSummary = {};
 	var itemTypeList = _store2.default.get("ITEM_TYPE_LIST");
 
-	_store2.default.get("ITEM_TYPE_LIST").forEach(function (item) {
-		goodsSummary[item.name] = {};
-	});
+	// store.get("ITEM_TYPE_LIST").forEach(item => {
+	// 	goodsSummary[item.name] = {};
+	// });
 
 	// 数据累加
 	recordFilter({ date: date, unit: unit, action: "PIECE_RECORD" }).forEach(function (item) {
+		if (!goodsSummary[item.type]) {
+			goodsSummary[item.type] = {};
+		}
+
 		goodsSummary[item.type]["num"] = _numberPrecision2.default.plus(goodsSummary[item.type]["num"] || 0, item.num);
 
-		var itemPrice = itemTypeList.find(function (_item) {
-			return _item.name == item.type;
-		}).price;
+		var itemPrice = void 0;
+		try {
+			itemPrice = itemTypeList.find(function (_item) {
+				return _item.name == item.type;
+			}).price;
+			// 如果型号被删除会有查询不到价格的BUG
+		} catch (err) {
+			_dialog2.default.alert({
+				title: "错误",
+				message: "\u539F\u5148\u578B\u53F7\u201C" + item.type + "\u201D\u5DF2\u88AB\u5220\u9664\uFF0C\u8BF7\u8054\u7CFB\u7BA1\u7406\u5458\u5904\u7406"
+			});
+		}
+
 		goodsSummary[item.type]["money"] = _numberPrecision2.default.plus(goodsSummary[item.type]["money"] || 0, _numberPrecision2.default.times(item.num, itemPrice));
 	});
 
@@ -65050,20 +65088,23 @@ function exportSummary() {
 
 	// 数据初始化为0
 	var exportSummary = {};
-	var itemTypeList = _store2.default.get("ITEM_TYPE_LIST");
+	// let itemTypeList = store.get("ITEM_TYPE_LIST");
 
-	_store2.default.get("ITEM_TYPE_LIST").forEach(function (item) {
-		exportSummary[item.name] = 0;
-	});
+	// store.get("ITEM_TYPE_LIST").forEach(item => {
+	// 	exportSummary[item.name] = 0;
+	// });
 
 	// 数据累加
 	recordFilter({ date: date, unit: unit, action: "GOODS_EXPORT" }).forEach(function (item) {
+		if (!exportSummary[item.type]) {
+			exportSummary[item.type] = 0;
+		}
 		exportSummary[item.type] = _numberPrecision2.default.plus(exportSummary[item.type] || 0, item.num);
 	});
 
 	return exportSummary;
 }
-},{"store":"node_modules\\store\\dist\\store.legacy.js","number-precision":"node_modules\\number-precision\\build\\index.js","dayjs":"node_modules\\dayjs\\dayjs.min.js"}],"node_modules\\vue-hot-reload-api\\dist\\index.js":[function(require,module,exports) {
+},{"vant/es/dialog/style":"node_modules\\vant\\es\\dialog\\style\\index.js","vant/es/dialog":"node_modules\\vant\\es\\dialog\\index.js","store":"node_modules\\store\\dist\\store.legacy.js","number-precision":"node_modules\\number-precision\\build\\index.js","dayjs":"node_modules\\dayjs\\dayjs.min.js"}],"node_modules\\vue-hot-reload-api\\dist\\index.js":[function(require,module,exports) {
 var Vue // late bind
 var version
 var map = (window.__VUE_HOT_MAP__ = Object.create(null))
@@ -66845,7 +66886,6 @@ exports.default = {
           try {
             (0, _fileLoad2.default)(JSON.parse(this.result));
           } catch (err) {
-            m;
             _dialog2.default.alert({
               title: "错误",
               message: "文件解析失败：文件格式错误，请选择JSON文件"
@@ -72918,7 +72958,7 @@ exports.default = {
       var vm = this;
       _dialog2.default.confirm({
         title: "提示",
-        message: "\u786E\u5B9A\u8981\u5220\u9664\u578B\u53F7\u201C" + name + "\u201D\u5417\uFF1F"
+        message: "\u5220\u9664\u578B\u53F7\u53EF\u80FD\u4F1A\u5BFC\u81F4\u4E4B\u524D\u6C47\u603B\u4FE1\u606F\u65E0\u6CD5\u67E5\u8BE2\u5230\u578B\u53F7\u4EF7\u683C\uFF0C\u786E\u5B9A\u8981\u5220\u9664\u578B\u53F7\u201C" + name + "\u201D\u5417\uFF1F"
       }).then(function () {
         Delete.type(name, function () {
           vm.itemTypeList = Fetch.itemTypeList();
@@ -73674,7 +73714,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '55797' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '59531' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
