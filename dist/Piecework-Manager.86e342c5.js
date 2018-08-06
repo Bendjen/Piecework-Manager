@@ -66506,36 +66506,42 @@ var _dayjs2 = _interopRequireDefault(_dayjs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 },{"file-saver/FileSaver":"node_modules\\file-saver\\FileSaver.js","store":"node_modules\\store\\dist\\store.legacy.js","dayjs":"node_modules\\dayjs\\dayjs.min.js"}],"utils\\fileLoad.js":[function(require,module,exports) {
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-				value: true
+	value: true
 });
 
-var _toast = require('vant/es/toast');
+var _toast = require("vant/es/toast");
 
 var _toast2 = _interopRequireDefault(_toast);
 
 exports.default = function (data) {
-				_store2.default.set('OPERATION_RECORD_LIST', data['OPERATION_RECORD_LIST']);
-				// store.set('STOCK',data['STOCK']);
-				// store.set('EXPORT_RECORD_LIST',data['EXPORT_RECORD_LIST']);
-				// store.set('IMPORT_RECORD_LIST',data['IMPORT_RECORD_LIST']);
-				// store.set('STAFF_PIECE_RECORD_LIST',data['STAFF_PIECE_RECORD_LIST']);
-				_store2.default.set('STAFF_LIST', data['STAFF_LIST']);
-				_store2.default.set('ITEM_TYPE_LIST', data['ITEM_TYPE_LIST']);
+	console.log(data);
+	_store2.default.set("OPERATION_RECORD_LIST", data["OPERATION_RECORD_LIST"]);
+	// store.set('STOCK',data['STOCK']);
+	// store.set('EXPORT_RECORD_LIST',data['EXPORT_RECORD_LIST']);
+	// store.set('IMPORT_RECORD_LIST',data['IMPORT_RECORD_LIST']);
+	// store.set('STAFF_PIECE_RECORD_LIST',data['STAFF_PIECE_RECORD_LIST']);
+	_store2.default.set("STAFF_LIST", data["STAFF_LIST"]);
+	_store2.default.set("ITEM_TYPE_LIST", data["ITEM_TYPE_LIST"]);
 
-				_toast2.default.success('数据导入成功');
+	_toast2.default.success("数据导入成功");
+	_onfire2.default.fire("reload");
 };
 
-require('vant/es/toast/style');
+require("vant/es/toast/style");
 
-var _store = require('store');
+var _store = require("store");
 
 var _store2 = _interopRequireDefault(_store);
 
+var _onfire = require("onfire.js");
+
+var _onfire2 = _interopRequireDefault(_onfire);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","store":"node_modules\\store\\dist\\store.legacy.js"}],"src\\pages\\Home.vue":[function(require,module,exports) {
+},{"vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","store":"node_modules\\store\\dist\\store.legacy.js","onfire.js":"node_modules\\onfire.js\\dist\\onfire.min.js"}],"src\\pages\\Home.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -66879,7 +66885,7 @@ exports.default = {
       var file = this.files[0];
       if (!!file) {
         var reader = new FileReader();
-        reader.readAsBinaryString(file);
+        reader.readAsText(file);
         _toast2.default.loading({ duration: 0, message: "文件解析中..." });
         reader.onload = function () {
           _toast2.default.clear();
@@ -66899,6 +66905,9 @@ exports.default = {
     _onfire2.default.on("add_operation_record", function (record) {
       vm.recordList.splice(0, 0, record);
       vm.renderCharts();
+    });
+    _onfire2.default.on("reload", function (record) {
+      location.reload();
     });
   },
   beforeDestroy: function beforeDestroy() {
@@ -67291,7 +67300,7 @@ exports.default = {
         "van-popup",
         {
           staticClass: "popup",
-          staticStyle: { width: "100%", height: "50%", background: "#f3f3f3" },
+          staticStyle: { width: "100%", background: "#f3f3f3" },
           attrs: { position: "right" },
           model: {
             value: _vm.exportPopupVisible,
@@ -67307,7 +67316,7 @@ exports.default = {
               "h2",
               {
                 staticClass: "dialogTitle",
-                staticStyle: { height: "15%" },
+                staticStyle: { height: "1.2rem" },
                 attrs: { flex: "main:center cross:center" }
               },
               [_vm._v("出货")]
@@ -67385,7 +67394,7 @@ exports.default = {
             _c(
               "div",
               {
-                staticStyle: { height: "20%", padding: "0 10%" },
+                staticStyle: { height: "2rem", padding: "0 10%" },
                 attrs: { flex: "main:justify cross:center" }
               },
               [
@@ -67423,7 +67432,7 @@ exports.default = {
         "van-popup",
         {
           staticClass: "popup",
-          staticStyle: { width: "100%", height: "60%", background: "#f3f3f3" },
+          staticStyle: { width: "100%", background: "#f3f3f3" },
           attrs: { position: "right" },
           model: {
             value: _vm.pieceRecordPopupVisible,
@@ -67439,7 +67448,7 @@ exports.default = {
               "h2",
               {
                 staticClass: "dialogTitle",
-                staticStyle: { height: "15%" },
+                staticStyle: { height: "1.2rem" },
                 attrs: { flex: "main:center cross:center" }
               },
               [_vm._v("员工记单")]
@@ -67541,7 +67550,7 @@ exports.default = {
             _c(
               "div",
               {
-                staticStyle: { height: "20%", padding: "0 10%" },
+                staticStyle: { height: "2rem", padding: "0 10%" },
                 attrs: { flex: "main:justify cross:center" }
               },
               [
@@ -68183,6 +68192,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
 
 var echarts = require('echarts/lib/echarts');
 require('echarts/lib/chart/pie');
@@ -68201,7 +68211,6 @@ exports.default = {
         return {
             chooseMonth: this.$route.query.date,
             addPopVisible: false,
-            show: true,
             activeIndex: 0,
             summary: Fetch.staffSummary(this.$route.query.date),
             initOption: {
@@ -68277,6 +68286,7 @@ exports.default = {
         },
         monthChoose: function monthChoose(month) {
             this.chooseMonth = month;
+            console.log(Fetch.staffSummary(month));
             this.summary = Fetch.staffSummary(month);
             this.renderCharts(month);
         },
@@ -68332,142 +68342,123 @@ exports.default = {
         },
         _vm._l(_vm.summary, function(item, key) {
           return _c("van-swipe-item", { key: key }, [
-            _vm.show
-              ? _c(
+            _c(
+              "div",
+              {
+                staticClass: "staffDetail",
+                staticStyle: { height: "100%", width: "100%" }
+              },
+              [
+                _c(
                   "div",
                   {
-                    staticClass: "staffDetail",
-                    staticStyle: { height: "100%", width: "100%" }
+                    staticStyle: { height: "50%", border: "1px solid #e5e5e5" }
                   },
                   [
                     _c(
-                      "div",
+                      "h1",
                       {
-                        staticStyle: {
-                          height: "50%",
-                          border: "1px solid #e5e5e5"
-                        }
+                        staticStyle: { height: "10%" },
+                        attrs: { flex: "main:justify cross:center" }
                       },
                       [
+                        _c("span", { staticStyle: { "font-size": "16px" } }, [
+                          _vm._v(_vm._s(key))
+                        ]),
+                        _vm._v(" "),
                         _c(
-                          "h1",
+                          "div",
                           {
-                            staticStyle: { height: "10%" },
-                            attrs: { flex: "main:justify cross:center" }
+                            staticClass: "bar",
+                            attrs: { flex: "main:right cross:center" }
                           },
                           [
-                            _c(
-                              "span",
-                              { staticStyle: { "font-size": "16px" } },
-                              [_vm._v(_vm._s(key))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              {
-                                staticClass: "bar",
-                                attrs: { flex: "main:right cross:center" }
-                              },
-                              [
-                                _c(
-                                  "div",
-                                  {
-                                    on: {
-                                      click: function($event) {
-                                        _vm.$refs.monthPicker.toggle()
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("i", {
-                                      staticClass: "iconfont icon-calendar"
-                                    }),
-                                    _vm._v(" "),
-                                    _c("span", [_vm._v(_vm._s(_vm.monthName))])
-                                  ]
-                                )
-                              ]
-                            )
+                            _c("div", [
+                              _c("i", {
+                                staticClass: "iconfont icon-calendar"
+                              }),
+                              _vm._v(" "),
+                              _c("span", [_vm._v(_vm._s(_vm.monthName))])
+                            ])
                           ]
-                        ),
-                        _vm._v(" "),
-                        _c("div", {
-                          staticStyle: { height: "85%" },
-                          attrs: { id: key + "Charts" }
-                        })
+                        )
                       ]
                     ),
                     _vm._v(" "),
+                    _c("div", {
+                      staticStyle: { height: "85%" },
+                      attrs: { id: key + "Charts" }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "operationRecords",
+                    staticStyle: { height: "50%" }
+                  },
+                  [
                     _c(
-                      "div",
+                      "h1",
                       {
-                        staticClass: "operationRecords",
-                        staticStyle: { height: "50%" }
+                        staticStyle: { height: "10%" },
+                        attrs: { flex: "cross:center" }
                       },
+                      [_vm._v("当月记单")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "ul",
+                      { staticStyle: { height: "80%" } },
                       [
-                        _c(
-                          "h1",
-                          {
-                            staticStyle: { height: "10%" },
-                            attrs: { flex: "cross:center" }
-                          },
-                          [_vm._v("当月记单")]
-                        ),
+                        item.record.length == 0
+                          ? _c("li", [_c("div", [_vm._v("暂无任何操作记录")])])
+                          : _vm._e(),
                         _vm._v(" "),
-                        _c(
-                          "ul",
-                          { staticStyle: { height: "80%" } },
-                          [
-                            item.record.length == 0
-                              ? _c("li", [
-                                  _c("div", [_vm._v("暂无任何操作记录")])
-                                ])
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _vm._l(item.record, function(record) {
-                              return _c(
-                                "li",
-                                {
-                                  key: record.time,
-                                  attrs: { flex: "main:justify cross:center" }
-                                },
-                                [
-                                  _c("div", { attrs: { flex: "dir:top" } }, [
-                                    _c("h4", [_vm._v(_vm._s(record.type))]),
-                                    _vm._v(" "),
-                                    _c(
-                                      "p",
-                                      {
-                                        staticClass: "time",
-                                        staticStyle: { color: "#6a788c" }
-                                      },
-                                      [
-                                        _vm._v(
-                                          _vm._s(_vm._f("toTime")(record.time))
-                                        )
-                                      ]
+                        _vm._l(item.record, function(record) {
+                          return _c(
+                            "li",
+                            {
+                              key: record.time,
+                              attrs: { flex: "main:justify cross:center" }
+                            },
+                            [
+                              _c("div", { attrs: { flex: "dir:top" } }, [
+                                _c("h4", [_vm._v(_vm._s(record.type))]),
+                                _vm._v(" "),
+                                _c(
+                                  "p",
+                                  {
+                                    staticClass: "time",
+                                    staticStyle: { color: "#6a788c" }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(_vm._f("toTime")(record.time))
                                     )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "content",
-                                      staticStyle: { color: "#38f" }
-                                    },
-                                    [_vm._v(" +" + _vm._s(record.num))]
-                                  )
-                                ]
+                                  ]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "content",
+                                  staticStyle: { color: "#38f" }
+                                },
+                                [_vm._v(" +" + _vm._s(record.num))]
                               )
-                            })
-                          ],
-                          2
-                        )
-                      ]
+                            ]
+                          )
+                        })
+                      ],
+                      2
                     )
                   ]
                 )
-              : _vm._e()
+              ]
+            )
           ])
         })
       ),
@@ -73095,7 +73086,7 @@ exports.default = {
         "van-popup",
         {
           staticClass: "popup",
-          staticStyle: { width: "80%", height: "32%", background: "#f3f3f3" },
+          staticStyle: { width: "80%", background: "#f3f3f3" },
           model: {
             value: _vm.addTypeVisible,
             callback: function($$v) {
@@ -73110,37 +73101,72 @@ exports.default = {
               "h1",
               {
                 staticClass: "dialogTitle",
-                staticStyle: { height: "20%" },
+                staticStyle: { height: "1.2rem", "margin-bottom": "0.6rem" },
                 attrs: { flex: "main:center cross:center" }
               },
               [_vm._v("添加型号")]
             ),
             _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticStyle: { height: "55%" },
-                attrs: { flex: "dir:top cross:center main:center" }
-              },
-              [
-                _c("p", { attrs: { flex: "main:center cross:center" } }, [
+            _c("div", { attrs: { flex: "dir:top cross:center main:center" } }, [
+              _c("p", { attrs: { flex: "main:center cross:center" } }, [
+                _c("span", { staticStyle: { "padding-right": ".4rem" } }, [
+                  _vm._v("名称：")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model.trim",
+                      value: _vm.newType.name,
+                      expression: "newType.name",
+                      modifiers: { trim: true }
+                    }
+                  ],
+                  staticStyle: { height: "1rem", "text-align": "center" },
+                  attrs: { placeholder: "输入型号", type: "text" },
+                  domProps: { value: _vm.newType.name },
+                  on: {
+                    focus: function($event) {
+                      $event.target.select()
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.newType, "name", $event.target.value.trim())
+                    },
+                    blur: function($event) {
+                      _vm.$forceUpdate()
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticStyle: { margin: ".4rem 0" },
+                  attrs: { flex: "main:center cross:center" }
+                },
+                [
                   _c("span", { staticStyle: { "padding-right": ".4rem" } }, [
-                    _vm._v("名称：")
+                    _vm._v("单价：")
                   ]),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
                       {
                         name: "model",
-                        rawName: "v-model.trim",
-                        value: _vm.newType.name,
-                        expression: "newType.name",
-                        modifiers: { trim: true }
+                        rawName: "v-model.number",
+                        value: _vm.newType.price,
+                        expression: "newType.price",
+                        modifiers: { number: true }
                       }
                     ],
-                    staticStyle: { height: ".8rem", "text-align": "center" },
-                    attrs: { placeholder: "输入型号", type: "text" },
-                    domProps: { value: _vm.newType.name },
+                    staticStyle: { height: "1rem", "text-align": "center" },
+                    attrs: { type: "number" },
+                    domProps: { value: _vm.newType.price },
                     on: {
                       focus: function($event) {
                         $event.target.select()
@@ -73151,8 +73177,8 @@ exports.default = {
                         }
                         _vm.$set(
                           _vm.newType,
-                          "name",
-                          $event.target.value.trim()
+                          "price",
+                          _vm._n($event.target.value)
                         )
                       },
                       blur: function($event) {
@@ -73160,60 +73186,14 @@ exports.default = {
                       }
                     }
                   })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "p",
-                  {
-                    staticStyle: { margin: ".4rem 0" },
-                    attrs: { flex: "main:center cross:center" }
-                  },
-                  [
-                    _c("span", { staticStyle: { "padding-right": ".4rem" } }, [
-                      _vm._v("单价：")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model.number",
-                          value: _vm.newType.price,
-                          expression: "newType.price",
-                          modifiers: { number: true }
-                        }
-                      ],
-                      staticStyle: { height: ".8rem", "text-align": "center" },
-                      attrs: { type: "number" },
-                      domProps: { value: _vm.newType.price },
-                      on: {
-                        focus: function($event) {
-                          $event.target.select()
-                        },
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(
-                            _vm.newType,
-                            "price",
-                            _vm._n($event.target.value)
-                          )
-                        },
-                        blur: function($event) {
-                          _vm.$forceUpdate()
-                        }
-                      }
-                    })
-                  ]
-                )
-              ]
-            ),
+                ]
+              )
+            ]),
             _vm._v(" "),
             _c(
               "div",
               {
-                staticStyle: { height: "20%", padding: "0 10%" },
+                staticStyle: { height: "2rem", padding: "0 10%" },
                 attrs: { flex: "main:justify cross:center" }
               },
               [
@@ -73251,7 +73231,7 @@ exports.default = {
         "van-popup",
         {
           staticClass: "popup",
-          staticStyle: { width: "80%", height: "25%", background: "#f3f3f3" },
+          staticStyle: { width: "80%", background: "#f3f3f3" },
           model: {
             value: _vm.addStaffVisible,
             callback: function($$v) {
@@ -73266,64 +73246,53 @@ exports.default = {
               "h1",
               {
                 staticClass: "dialogTitle",
-                staticStyle: { height: "25%" },
+                staticStyle: { height: "1.2rem", "margin-bottom": "0.6rem" },
                 attrs: { flex: "main:center cross:center" }
               },
               [_vm._v("添加员工")]
             ),
             _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticStyle: { height: "45%" },
-                attrs: { flex: "dir:top cross:center main:center" }
-              },
-              [
-                _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", { staticStyle: { "padding-right": ".4rem" } }, [
-                    _vm._v("姓名：")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model.trim",
-                        value: _vm.newStaff.name,
-                        expression: "newStaff.name",
-                        modifiers: { trim: true }
-                      }
-                    ],
-                    staticStyle: { height: ".8rem", "text-align": "center" },
-                    attrs: { type: "text" },
-                    domProps: { value: _vm.newStaff.name },
-                    on: {
-                      focus: function($event) {
-                        $event.target.select()
-                      },
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.newStaff,
-                          "name",
-                          $event.target.value.trim()
-                        )
-                      },
-                      blur: function($event) {
-                        _vm.$forceUpdate()
-                      }
+            _c("div", { attrs: { flex: "dir:top cross:center main:center" } }, [
+              _c("p", { attrs: { flex: "main:center cross:center" } }, [
+                _c("span", { staticStyle: { "padding-right": ".4rem" } }, [
+                  _vm._v("姓名：")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model.trim",
+                      value: _vm.newStaff.name,
+                      expression: "newStaff.name",
+                      modifiers: { trim: true }
                     }
-                  })
-                ])
-              ]
-            ),
+                  ],
+                  staticStyle: { height: "1rem", "text-align": "center" },
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.newStaff.name },
+                  on: {
+                    focus: function($event) {
+                      $event.target.select()
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.newStaff, "name", $event.target.value.trim())
+                    },
+                    blur: function($event) {
+                      _vm.$forceUpdate()
+                    }
+                  }
+                })
+              ])
+            ]),
             _vm._v(" "),
             _c(
               "div",
               {
-                staticStyle: { height: "20%", padding: "0 10%" },
+                staticStyle: { height: "2rem", padding: "0 10%" },
                 attrs: { flex: "main:justify cross:center" }
               },
               [
@@ -73687,7 +73656,7 @@ try {
 		router: router
 	}).$mount("#app");
 } catch (err) {
-	console.log(err.toString());
+	alert(err.toString());
 }
 },{"vue/dist/vue.js":"node_modules\\vue\\dist\\vue.js","vue-router":"node_modules\\vue-router\\dist\\vue-router.esm.js","flex.css":"node_modules\\flex.css\\dist\\flex.css","./index.scss":"index.scss","./src/route":"src\\route.js","./filter/toTime":"filter\\toTime.js","./src/App.vue":"src\\App.vue"}],"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -73718,7 +73687,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '59531' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '62162' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 

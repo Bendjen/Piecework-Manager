@@ -4,14 +4,15 @@
             <i class='iconfont icon-back' @click="$router.push('/home')"></i>
             <i class='iconfont icon-add' @click="addPopVisible=true"></i>
         </div> -->
+
             <van-swipe style='height:100%;' :loop='false' :show-indicators='false' :initial-swipe='initialSwipe'  ref='swipe' @change='swipeChange'>
                 <van-swipe-item v-for='(item,key) in summary' :key='key'>
-                    <div style='height:100%;width:100%;' class='staffDetail'  v-if='show'>
+                    <div style='height:100%;width:100%;' class='staffDetail'>
                         <div style='height:50%;border: 1px solid #e5e5e5;'>
                             <h1 flex='main:justify cross:center' style="height:10%">
                                 <span style='font-size:16px'>{{key}}</span>
                                 <div flex='main:right cross:center'  class='bar'>
-                                    <div @click='$refs.monthPicker.toggle()'>
+                                    <div>
                                         <i class='iconfont icon-calendar'></i>
                                         <span>{{monthName}}</span>
                                     </div>
@@ -35,7 +36,7 @@
                     </div>
                 </van-swipe-item>
             </van-swipe>
- 
+
 
          <i class='iconfont icon-last' v-if="!(activeIndex == 0)"  @click="lastMonth"></i>
          <i class='iconfont icon-next' v-if="!(activeIndex >= Object.keys(summary).length-1)"  @click="nextMonth"></i>
@@ -70,7 +71,6 @@ export default {
         return {
             chooseMonth: this.$route.query.date,
             addPopVisible: false,
-            show: true,
             activeIndex: 0,
             summary: Fetch.staffSummary(this.$route.query.date),
             initOption: {
@@ -142,7 +142,8 @@ export default {
             }
         },
         monthChoose (month) {
-            this.chooseMonth = month;
+			this.chooseMonth = month;
+			console.log(Fetch.staffSummary(month))
             this.summary = Fetch.staffSummary(month)
             this.renderCharts(month)
         },

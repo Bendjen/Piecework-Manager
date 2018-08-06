@@ -66,9 +66,9 @@
           </van-popup>
 
           <!-- 出货弹窗 -->
-          <van-popup v-model="exportPopupVisible" position="right" style='width:100%;height:50%;background: #f3f3f3;' class='popup'>
+          <van-popup v-model="exportPopupVisible" position="right" style='width:100%;background: #f3f3f3;' class='popup'>
               <div style='width:100%;height:100%;'>
-                  <h2 class='dialogTitle' style='height:15%;' flex='main:center cross:center'>出货</h2>
+                  <h2 class='dialogTitle' style='height:1.2rem;' flex='main:center cross:center'>出货</h2>
                   <div style='height:65%;' flex='dir:top cross:center main:center'>
                         <p flex='main:center cross:center'>
                             <span>型号：</span>
@@ -83,7 +83,7 @@
                             <input type="text" readonly :value="exportValue.time | toTime" @click="$refs.timePicker.toggle()">
                         </p>
                   </div>
-                  <div style='height:20%;padding:0 10%;' flex='main:justify cross:center'>
+                  <div style='height:2rem;padding:0 10%;' flex='main:justify cross:center'>
                         <van-button type="default" style='width:40%' @click='exportPopupVisible = false'>取消</van-button>
                         <van-button type="primary" style='width:40%' @click='exportConfirm'>确定</van-button>
                   </div>
@@ -91,9 +91,9 @@
           </van-popup>
 
           <!-- 记单弹窗 -->
-          <van-popup v-model="pieceRecordPopupVisible" position="right" style='width:100%;height:60%;background: #f3f3f3;' class='popup'>
+          <van-popup v-model="pieceRecordPopupVisible" position="right" style='width:100%;background: #f3f3f3;' class='popup'>
               <div style='width:100%;height:100%;'>
-                  <h2 class='dialogTitle' style='height:15%;' flex='main:center cross:center'>员工记单</h2>
+                  <h2 class='dialogTitle' style='height:1.2rem;' flex='main:center cross:center'>员工记单</h2>
                   <div style='height:65%;' flex='dir:top cross:center main:center'>
                         <p flex='main:center cross:center'>
                             <span>员工：</span>
@@ -112,7 +112,7 @@
                             <input type="text" readonly :value="pieceRecordValue.time | toTime" @click="$refs.timePicker.toggle()">
                         </p>
                   </div>
-                  <div style='height:20%;padding:0 10%;' flex='main:justify cross:center'>
+                  <div style='height:2rem;padding:0 10%;' flex='main:justify cross:center'>
                         <van-button type="default" style='width:40%' @click='pieceRecordPopupVisible = false'>取消</van-button>
                         <van-button type="primary" style='width:40%' @click='pieceRecordConfirm'>确定</van-button>
                   </div>
@@ -286,7 +286,7 @@ export default {
       let file = this.files[0];
       if (!!file) {
         let reader = new FileReader();
-        reader.readAsBinaryString(file);
+        reader.readAsText(file);
         Toast.loading({ duration: 0, message: "文件解析中..." });
         reader.onload = function() {
           Toast.clear();
@@ -306,6 +306,9 @@ export default {
     onfire.on("add_operation_record", function(record) {
       vm.recordList.splice(0, 0, record);
       vm.renderCharts();
+    });
+    onfire.on("reload", function(record) {
+	  location.reload()
     });
   },
   beforeDestroy() {

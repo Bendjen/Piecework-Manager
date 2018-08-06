@@ -21,5 +21,5 @@ try {
 		router: router
 	}).$mount("#app");
 } catch (err) {
-	console.log(err.toString());
+	alert(err.toString());
 }

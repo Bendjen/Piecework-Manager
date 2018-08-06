@@ -26,20 +26,20 @@
 		</div>
 
 		<!-- 添加型号 -->
-          <van-popup v-model="addTypeVisible" style='width:80%;height:32%;background: #f3f3f3;' class='popup'>
+          <van-popup v-model="addTypeVisible" style='width:80%;background: #f3f3f3;' class='popup'>
               <div style='width:100%;height:100%;'>
-				  <h1 style='height:20%' class='dialogTitle'  flex='main:center cross:center'>添加型号</h1>
-                  <div style='height:55%;' flex='dir:top cross:center main:center'>
+				  <h1 style='height:1.2rem;margin-bottom:0.6rem' class='dialogTitle'  flex='main:center cross:center'>添加型号</h1>
+                  <div style='' flex='dir:top cross:center main:center'>
                         <p flex='main:center cross:center'>
                             <span style='padding-right:.4rem' >名称：</span>
-                            <input placeholder="输入型号" type="text" v-model.trim = "newType.name"  @focus="$event.target.select()" style='height:.8rem;text-align:center'>
+                            <input placeholder="输入型号" type="text" v-model.trim = "newType.name"  @focus="$event.target.select()" style='height:1rem;text-align:center'>
                         </p>
                         <p flex='main:center cross:center' style='margin:.4rem 0;'>
                             <span style='padding-right:.4rem' >单价：</span>
-                            <input type="number" v-model.number = "newType.price"  @focus="$event.target.select()" style='height:.8rem;text-align:center'>
+                            <input type="number" v-model.number = "newType.price"  @focus="$event.target.select()" style='height:1rem;text-align:center'>
                         </p>
                   </div>
-                  <div style='height:20%;padding:0 10%;' flex='main:justify cross:center'>
+                  <div style='height:2rem;padding:0 10%;' flex='main:justify cross:center'>
                         <van-button type="default"  style='width:40%' @click='addTypeVisible = false'>取消</van-button>
                         <van-button type="primary" style='width:40%' @click='addTypeConfirm'>确定</van-button>
                   </div>
@@ -47,16 +47,16 @@
           </van-popup>
 
 		    <!-- 添加员工 -->
-          <van-popup v-model="addStaffVisible" style='width:80%;height:25%;background: #f3f3f3;' class='popup'>
-              <div style='width:100%;height:100%;'>
-				  <h1 style='height:25%' class='dialogTitle'  flex='main:center cross:center'>添加员工</h1>
-                  <div style='height:45%;' flex='dir:top cross:center main:center'>
+          <van-popup v-model="addStaffVisible" style='width:80%;background: #f3f3f3;' class='popup'>
+              <div style='width:100%;height:100%'>
+				  <h1 style='height:1.2rem;margin-bottom:0.6rem' class='dialogTitle'  flex='main:center cross:center'>添加员工</h1>
+                  <div style='' flex='dir:top cross:center main:center'>
                         <p flex='main:center cross:center'>
                             <span style='padding-right:.4rem'>姓名：</span>
-                            <input type="text" v-model.trim = "newStaff.name" style='height:.8rem;text-align:center'  @focus="$event.target.select()">
+                            <input type="text" v-model.trim = "newStaff.name" style='height:1rem;text-align:center'  @focus="$event.target.select()">
                         </p>
                   </div>
-                  <div style='height:20%;padding:0 10%;' flex='main:justify cross:center'>
+                  <div style='height:2rem;padding:0 10%;' flex='main:justify cross:center'>
                         <van-button type="default"  style='width:40%' @click='addStaffVisible = false'>取消</van-button>
                         <van-button type="primary" style='width:40%' @click='addStaffConfirm'>确定</van-button>
                   </div>
