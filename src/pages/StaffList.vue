@@ -4,7 +4,7 @@
             <i class='iconfont icon-back' @click="$router.push('/home')"></i>
             <i class='iconfont icon-add' @click="addPopVisible=true"></i>
         </div> -->
-		<i class='iconfont icon-add' @click="addPopVisible=true" style='position:fixed;top:.4rem;right:.4rem'></i>
+		<!-- <i class='iconfont icon-add' @click="addPopVisible=true" style='position:fixed;top:.4rem;right:.4rem'></i> -->
 		<div @click='$refs.monthPicker.toggle()' style='position:fixed;top:1.0rem;right:1.2rem;color:#333;'>
 			<i class='iconfont icon-calendar'></i>
 			<span>{{monthName}}</span>

@@ -68785,16 +68785,6 @@ exports.default = {
     "div",
     { staticClass: "staffList" },
     [
-      _c("i", {
-        staticClass: "iconfont icon-add",
-        staticStyle: { position: "fixed", top: ".4rem", right: ".4rem" },
-        on: {
-          click: function($event) {
-            _vm.addPopVisible = true
-          }
-        }
-      }),
-      _vm._v(" "),
       _c(
         "div",
         {
