@@ -65347,25 +65347,31 @@ exports.reload = tryWrap(function (id, options) {
 })
 
 },{}],"src\\components\\TypePicker.vue":[function(require,module,exports) {
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
-var _picker = require('vant/es/picker');
+var _toast = require("vant/es/toast");
+
+var _toast2 = _interopRequireDefault(_toast);
+
+var _picker = require("vant/es/picker");
 
 var _picker2 = _interopRequireDefault(_picker);
 
-var _popup = require('vant/es/popup');
+var _popup = require("vant/es/popup");
 
 var _popup2 = _interopRequireDefault(_popup);
 
-require('vant/es/picker/style');
+require("vant/es/toast/style");
 
-require('vant/es/popup/style');
+require("vant/es/picker/style");
 
-var _fetch = require('../../utils/fetch.js');
+require("vant/es/popup/style");
+
+var _fetch = require("../../utils/fetch.js");
 
 var Fetch = _interopRequireWildcard(_fetch);
 
@@ -65374,32 +65380,37 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    components: {
-        'vanPopup': _popup2.default,
-        'vanPicker': _picker2.default
-    },
-    data: function data() {
-        return {
-            show: false,
-            value: '',
-            columns: Fetch.itemTypeList()
-        };
-    },
-    mounted: function mounted() {},
+  components: {
+    vanPopup: _popup2.default,
+    vanPicker: _picker2.default
+  },
+  data: function data() {
+    return {
+      show: false,
+      value: "",
+      columns: Fetch.itemTypeList()
+    };
+  },
+  mounted: function mounted() {},
 
-    methods: {
-        toggle: function toggle() {
-            this.show = !this.show;
-        },
-        onConfirm: function onConfirm(value) {
-            this.value = value;
-            this.$emit('change', value);
-            this.toggle();
-        },
-        onCancel: function onCancel() {
-            this.toggle();
-        }
+  methods: {
+    toggle: function toggle() {
+      this.show = !this.show;
+    },
+    onConfirm: function onConfirm(value) {
+      if (value && value.length > 0) {
+        this.value = value;
+        this.$emit("change", value);
+        this.toggle();
+      } else {
+        _toast2.default.fail("没有可选项");
+        this.toggle();
+      }
+    },
+    onCancel: function onCancel() {
+      this.toggle();
     }
+  }
 }; //
 //
 //
@@ -65485,7 +65496,7 @@ render._withStripped = true
       
       }
     })();
-},{"vant/es/picker/style":"node_modules\\vant\\es\\picker\\style\\index.js","vant/es/picker":"node_modules\\vant\\es\\picker\\index.js","vant/es/popup/style":"node_modules\\vant\\es\\popup\\style\\index.js","vant/es/popup":"node_modules\\vant\\es\\popup\\index.js","../../utils/fetch.js":"utils\\fetch.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"node_modules\\vant\\es\\datetime-picker\\style\\index.js":[function(require,module,exports) {
+},{"vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","vant/es/picker/style":"node_modules\\vant\\es\\picker\\style\\index.js","vant/es/picker":"node_modules\\vant\\es\\picker\\index.js","vant/es/popup/style":"node_modules\\vant\\es\\popup\\style\\index.js","vant/es/popup":"node_modules\\vant\\es\\popup\\index.js","../../utils/fetch.js":"utils\\fetch.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"node_modules\\vant\\es\\datetime-picker\\style\\index.js":[function(require,module,exports) {
 'use strict';
 
 require('../../vant-css/base.css');
@@ -65973,25 +65984,31 @@ render._withStripped = true
       }
     })();
 },{"vant/es/datetime-picker/style":"node_modules\\vant\\es\\datetime-picker\\style\\index.js","vant/es/datetime-picker":"node_modules\\vant\\es\\datetime-picker\\index.js","vant/es/popup/style":"node_modules\\vant\\es\\popup\\style\\index.js","vant/es/popup":"node_modules\\vant\\es\\popup\\index.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"src\\components\\StaffPicker.vue":[function(require,module,exports) {
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
-var _picker = require('vant/es/picker');
+var _toast = require("vant/es/toast");
+
+var _toast2 = _interopRequireDefault(_toast);
+
+var _picker = require("vant/es/picker");
 
 var _picker2 = _interopRequireDefault(_picker);
 
-var _popup = require('vant/es/popup');
+var _popup = require("vant/es/popup");
 
 var _popup2 = _interopRequireDefault(_popup);
 
-require('vant/es/picker/style');
+require("vant/es/toast/style");
 
-require('vant/es/popup/style');
+require("vant/es/picker/style");
 
-var _fetch = require('../../utils/fetch.js');
+require("vant/es/popup/style");
+
+var _fetch = require("../../utils/fetch.js");
 
 var Fetch = _interopRequireWildcard(_fetch);
 
@@ -66000,32 +66017,37 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    components: {
-        'vanPopup': _popup2.default,
-        'vanPicker': _picker2.default
-    },
-    data: function data() {
-        return {
-            show: false,
-            value: '',
-            columns: Fetch.staffList()
-        };
-    },
-    mounted: function mounted() {},
+  components: {
+    vanPopup: _popup2.default,
+    vanPicker: _picker2.default
+  },
+  data: function data() {
+    return {
+      show: false,
+      value: "",
+      columns: Fetch.staffList()
+    };
+  },
+  mounted: function mounted() {},
 
-    methods: {
-        toggle: function toggle() {
-            this.show = !this.show;
-        },
-        onConfirm: function onConfirm(value) {
-            this.value = value;
-            this.$emit('change', value);
-            this.toggle();
-        },
-        onCancel: function onCancel() {
-            this.toggle();
-        }
+  methods: {
+    toggle: function toggle() {
+      this.show = !this.show;
+    },
+    onConfirm: function onConfirm(value) {
+      if (value && value.length > 0) {
+        this.value = value;
+        this.$emit("change", value);
+        this.toggle();
+      } else {
+        _toast2.default.fail("没有可选项");
+        this.toggle();
+      }
+    },
+    onCancel: function onCancel() {
+      this.toggle();
     }
+  }
 }; //
 //
 //
@@ -66111,7 +66133,7 @@ render._withStripped = true
       
       }
     })();
-},{"vant/es/picker/style":"node_modules\\vant\\es\\picker\\style\\index.js","vant/es/picker":"node_modules\\vant\\es\\picker\\index.js","vant/es/popup/style":"node_modules\\vant\\es\\popup\\style\\index.js","vant/es/popup":"node_modules\\vant\\es\\popup\\index.js","../../utils/fetch.js":"utils\\fetch.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"utils\\goodsImport.js":[function(require,module,exports) {
+},{"vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","vant/es/picker/style":"node_modules\\vant\\es\\picker\\style\\index.js","vant/es/picker":"node_modules\\vant\\es\\picker\\index.js","vant/es/popup/style":"node_modules\\vant\\es\\popup\\style\\index.js","vant/es/popup":"node_modules\\vant\\es\\popup\\index.js","../../utils/fetch.js":"utils\\fetch.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"utils\\goodsImport.js":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -66945,6 +66967,7 @@ exports.default = {
       }
     },
     pieceRecordConfirm: function pieceRecordConfirm() {
+      console.log(this.pieceRecordValue);
       if (!this.pieceRecordValue.type) {
         _toast2.default.fail("请选择型号");
       } else if (!this.pieceRecordValue.num) {
@@ -66960,7 +66983,14 @@ exports.default = {
       document.getElementById("file").click();
     },
     fileSave: function fileSave() {
-      (0, _fileSave2.default)();
+      try {
+        (0, _fileSave2.default)();
+      } catch (err) {
+        _dialog2.default.alert({
+          title: "错误",
+          message: "微信或该浏览器不支持导出文件，请切换到主流浏览器后再次尝试"
+        });
+      }
     },
     renderCharts: function renderCharts() {
       var _this2 = this;
@@ -68927,114 +68957,7 @@ exports.default = {
       _c("month-picker", {
         ref: "monthPicker",
         on: { change: _vm.monthChoose }
-      }),
-      _vm._v(" "),
-      _c(
-        "van-popup",
-        {
-          staticClass: "popup",
-          staticStyle: { width: "80%", height: "25%", background: "#f3f3f3" },
-          model: {
-            value: _vm.addPopVisible,
-            callback: function($$v) {
-              _vm.addPopVisible = $$v
-            },
-            expression: "addPopVisible"
-          }
-        },
-        [
-          _c("div", { staticStyle: { width: "100%", height: "100%" } }, [
-            _c(
-              "h1",
-              {
-                staticClass: "dialogTitle",
-                staticStyle: { height: "25%" },
-                attrs: { flex: "main:center cross:center" }
-              },
-              [_vm._v("添加员工")]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticStyle: { height: "45%" },
-                attrs: { flex: "dir:top cross:center main:center" }
-              },
-              [
-                _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", { staticStyle: { "padding-right": ".4rem" } }, [
-                    _vm._v("姓名：")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model.trim",
-                        value: _vm.newStaff.name,
-                        expression: "newStaff.name",
-                        modifiers: { trim: true }
-                      }
-                    ],
-                    staticStyle: { height: ".8rem", "text-align": "center" },
-                    attrs: { type: "text" },
-                    domProps: { value: _vm.newStaff.name },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.newStaff,
-                          "name",
-                          $event.target.value.trim()
-                        )
-                      },
-                      blur: function($event) {
-                        _vm.$forceUpdate()
-                      }
-                    }
-                  })
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticStyle: { height: "20%", padding: "0 10%" },
-                attrs: { flex: "main:justify cross:center" }
-              },
-              [
-                _c(
-                  "van-button",
-                  {
-                    staticStyle: { width: "40%" },
-                    attrs: { type: "default" },
-                    on: {
-                      click: function($event) {
-                        _vm.addPopVisible = false
-                      }
-                    }
-                  },
-                  [_vm._v("取消")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "van-button",
-                  {
-                    staticStyle: { width: "40%" },
-                    attrs: { type: "primary" },
-                    on: { click: _vm.addStaffConfirm }
-                  },
-                  [_vm._v("确定")]
-                )
-              ],
-              1
-            )
-          ])
-        ]
-      )
+      })
     ],
     1
   )
@@ -73437,33 +73360,40 @@ function toyun(Vue) {
     });
 }
 },{"dayjs":"node_modules\\dayjs\\dayjs.min.js"}],"utils\\storageInit.js":[function(require,module,exports) {
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
 
 exports.default = function () {
-    var initData = [{ name: 'OPERATION_RECORD_LIST', value: [] },
-    // { name: 'STOCK', value: {} },
-    // { name: 'EXPORT_RECORD_LIST', value: [] },
-    // { name: 'IMPORT_RECORD_LIST', value: [] },
-    // { name:'STAFF_PIECE_RECORD_LIST', value: {} },
-    { name: 'STAFF_LIST', value: [] }, { name: 'ITEM_TYPE_LIST', value: [] }];
+	if (!_store2.default.get("OPERATION_RECORD_LIST") && !_store2.default.get("STAFF_LIST") && !_store2.default.get("ITEM_TYPE_LIST")) {
+		var initData = [{ name: "OPERATION_RECORD_LIST", value: [] },
+		// { name: 'STOCK', value: {} },
+		// { name: 'EXPORT_RECORD_LIST', value: [] },
+		// { name: 'IMPORT_RECORD_LIST', value: [] },
+		// { name:'STAFF_PIECE_RECORD_LIST', value: {} },
+		{ name: "STAFF_LIST", value: [] }, { name: "ITEM_TYPE_LIST", value: [] }];
 
-    initData.forEach(function (item) {
-        if (!_store2.default.get(item.name)) {
-            _store2.default.set(item.name, item.value);
-        }
-    });
+		initData.forEach(function (item) {
+			if (!_store2.default.get(item.name)) {
+				_store2.default.set(item.name, item.value);
+			}
+		});
+		_onfire2.default.fire("reload");
+	}
 };
 
-var _store = require('store');
+var _store = require("store");
 
 var _store2 = _interopRequireDefault(_store);
 
+var _onfire = require("onfire.js");
+
+var _onfire2 = _interopRequireDefault(_onfire);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"store":"node_modules\\store\\dist\\store.legacy.js"}],"src\\App.vue":[function(require,module,exports) {
+},{"store":"node_modules\\store\\dist\\store.legacy.js","onfire.js":"node_modules\\onfire.js\\dist\\onfire.min.js"}],"src\\App.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -73677,7 +73607,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '62162' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '50019' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 

@@ -6,36 +6,40 @@
 </template>
 
 <script>
-import { Popup, Picker } from 'vant';
-import * as Fetch from '../../utils/fetch.js'
+import { Popup, Picker, Toast } from "vant";
+import * as Fetch from "../../utils/fetch.js";
 
 export default {
-    components: {
-        'vanPopup': Popup,
-        'vanPicker': Picker,
+  components: {
+    vanPopup: Popup,
+    vanPicker: Picker
+  },
+  data() {
+    return {
+      show: false,
+      value: "",
+      columns: Fetch.itemTypeList()
+    };
+  },
+  mounted() {},
+  methods: {
+    toggle() {
+      this.show = !this.show;
     },
-    data () {
-        return {
-            show: false,
-            value: '',
-            columns: Fetch.itemTypeList()
-        }
+    onConfirm(value) {
+      if (value && value.length > 0) {
+        this.value = value;
+        this.$emit("change", value);
+        this.toggle();
+      } else {
+        Toast.fail("没有可选项");
+        this.toggle();
+      }
     },
-    mounted () {
-    },
-    methods: {
-        toggle () {
-            this.show = !this.show;
-        },
-        onConfirm (value) {
-            this.value = value
-            this.$emit('change', value)
-            this.toggle()
-        },
-        onCancel () {
-            this.toggle()
-        }
+    onCancel() {
+      this.toggle();
     }
+  }
 };
 </script>
 

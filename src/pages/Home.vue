@@ -308,7 +308,7 @@ export default {
       vm.renderCharts();
     });
     onfire.on("reload", function(record) {
-	  location.reload()
+      location.reload();
     });
   },
   beforeDestroy() {
@@ -345,6 +345,7 @@ export default {
       }
     },
     pieceRecordConfirm() {
+		console.log(this.pieceRecordValue)
       if (!this.pieceRecordValue.type) {
         Toast.fail("请选择型号");
       } else if (!this.pieceRecordValue.num) {
@@ -360,7 +361,14 @@ export default {
       document.getElementById("file").click();
     },
     fileSave() {
-      FileSave();
+      try {
+        FileSave();
+      } catch (err) {
+        Dialog.alert({
+          title: "错误",
+          message: "微信或该浏览器不支持导出文件，请切换到主流浏览器后再次尝试"
+        });
+      }
     },
     renderCharts() {
       setTimeout(() => {
@@ -387,10 +395,10 @@ export default {
   box-sizing: border-box;
   overflow: hidden;
 }
-.popup{
-	input{
-		height: 1rem;
-	}
+.popup {
+  input {
+    height: 1rem;
+  }
 }
 .quickList {
   height: 25%;

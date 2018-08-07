@@ -39,7 +39,7 @@
 		<month-picker ref='monthPicker' @change='monthChoose'></month-picker>
 
       <!-- 添加员工 -->
-          <van-popup v-model="addPopVisible" style='width:80%;height:25%;background: #f3f3f3;' class='popup'>
+          <!-- <van-popup v-model="addPopVisible" style='width:80%;height:25%;background: #f3f3f3;' class='popup'>
               <div style='width:100%;height:100%;'>
 				  <h1 style='height:25%' class='dialogTitle'  flex='main:center cross:center'>添加员工</h1>
                   <div style='height:45%;' flex='dir:top cross:center main:center'>
@@ -53,7 +53,7 @@
                         <van-button type="primary" style='width:40%' @click='addStaffConfirm'>确定</van-button>
                   </div>
               </div>
-          </van-popup>
+          </van-popup> -->
     </div>
 </template>
 
