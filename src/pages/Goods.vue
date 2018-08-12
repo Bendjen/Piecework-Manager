@@ -44,6 +44,14 @@ export default {
             type: "shadow"
           }
         },
+        dataZoom: [
+          {
+            type: "inside",
+            start: 0,
+            end: 10,
+            yAxisIndex: [0, 1]
+          }
+        ],
         legend: {
           data: ["当月出货", "当月完成"]
         },
@@ -58,6 +66,7 @@ export default {
           boundaryGap: [0, 0.01]
         },
         yAxis: {
+			boundaryGap : false,
           type: "category",
           data: []
         },
@@ -133,7 +142,6 @@ export default {
         myChart.setOption(chartsOption);
       }, 500);
     }
-
   }
 };
 </script>

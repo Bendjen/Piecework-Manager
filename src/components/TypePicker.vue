@@ -18,7 +18,7 @@ export default {
     return {
       show: false,
       value: "",
-      columns: Fetch.itemTypeList()
+      columns: Fetch.itemTypeList().map(item=>item.name)
     };
   },
   mounted() {},

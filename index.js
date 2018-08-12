@@ -6,10 +6,12 @@ import "./index.scss";
 
 import routes from "./src/route";
 import toTime from "./filter/toTime";
+import toYuan from "./filter/toYuan";
 
 import App from "./src/App.vue";
 try {
 	toTime(Vue);
+	toYuan(Vue);
 	Vue.use(VueRouter);
 
 	const router = new VueRouter({

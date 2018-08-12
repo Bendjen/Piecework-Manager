@@ -19,3 +19,13 @@ export function staff(name, callback) {
 	Toast.success({ message: "删除成功", duration: 1000 });
 	callback && callback();
 }
+
+export function record(record, callback) {
+	let operationRecord = store.get("OPERATION_RECORD_LIST");
+	let index = operationRecord.findIndex(item => item == record);
+	operationRecord.splice(index, 1);
+	store.set("OPERATION_RECORD_LIST", operationRecord);
+	Toast.success({ message: "删除成功", duration: 1000 });
+	operationRecord.reverse()
+	callback && callback(operationRecord);
+}

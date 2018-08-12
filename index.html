@@ -2,21 +2,30 @@
 <html lang="en" style="width: 100%;height: 100%;">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Piecework Manager</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <script src="./lib/amfe-flexible.js"></script>
-    <link rel="stylesheet" href='./lib/iconfont.css'></link>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Piecework Manager</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<script src="./lib/amfe-flexible.js"></script>
+	<link rel="manifest" href="./manifest.json" />
+	<link rel="stylesheet" href='./lib/iconfont.css'></link>
 </head>
 
-<body style='background:#f3f3f3;width: 100%;height: 100%;' >
-    <!-- <body style='background:#c39a9a;width: 100%;height: 100%;'> -->
-    <div id='app' style='width:100%;height:100%;'>
-        <App></App>
-    </div>
-    <script src='./index.js'></script>
+<body style='background:#f3f3f3;width: 100%;height: 100%;'>
+	<!-- <body style='background:#c39a9a;width: 100%;height: 100%;'> -->
+	<div id='app' style='width:100%;height:100%;'>
+		<App></App>
+	</div>
+	<script src='./index.js'></script>
+	<script>
+		// 执行注册
+		navigator.serviceWorker.register('./service-worker.js').then(function (registration) {
+
+		}).catch(function (err) {
+
+		});
+	</script>
 </body>
 
 </html>

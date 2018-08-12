@@ -29,5 +29,7 @@ export default function ({ type, num, time }) {
     // let newImportRecord = { type, num, time }
     // store.set('IMPORT_RECORD_LIST', [...importRecordList, newImportRecord])
 
-    Toast.success('添加进货成功')
+
+	Toast.success({ duration: 1000, message: "添加进货成功" });
+
 }

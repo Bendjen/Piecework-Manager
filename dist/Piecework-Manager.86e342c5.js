@@ -64956,7 +64956,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function itemTypeList() {
 	var list = _store2.default.get("ITEM_TYPE_LIST").map(function (item) {
-		return item.name;
+		return item;
 	});
 	list.reverse();
 	return list;
@@ -65388,7 +65388,9 @@ exports.default = {
     return {
       show: false,
       value: "",
-      columns: Fetch.itemTypeList()
+      columns: Fetch.itemTypeList().map(function (item) {
+        return item.name;
+      })
     };
   },
   mounted: function mounted() {},
@@ -66169,7 +66171,8 @@ exports.default = function (_ref) {
     // let newImportRecord = { type, num, time }
     // store.set('IMPORT_RECORD_LIST', [...importRecordList, newImportRecord])
 
-    _toast2.default.success('添加进货成功');
+
+    _toast2.default.success({ duration: 1000, message: "添加进货成功" });
 };
 
 require('vant/es/toast/style');
@@ -66230,7 +66233,7 @@ exports.default = function (_ref) {
     // let newExportRecord = { type, num, time }
     // store.set('IMPORT_RECORD_LIST', [...exportRecordList, newExportRecord])
 
-    _toast2.default.success('添加出货成功');
+    _toast2.default.success({ duration: 1000, message: "添加出货成功" });
 };
 
 require('vant/es/toast/style');
@@ -66256,51 +66259,58 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 // @num : 数量
 // @time : 时间
 },{"vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","store":"node_modules\\store\\dist\\store.legacy.js","number-precision":"node_modules\\number-precision\\build\\index.js","onfire.js":"node_modules\\onfire.js\\dist\\onfire.min.js"}],"utils\\pieceRecord.js":[function(require,module,exports) {
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
 
-var _toast = require('vant/es/toast');
+var _toast = require("vant/es/toast");
 
 var _toast2 = _interopRequireDefault(_toast);
 
 exports.default = function (_ref) {
-    var staff = _ref.staff,
-        type = _ref.type,
-        num = _ref.num,
-        time = _ref.time;
+	var staff = _ref.staff,
+	    type = _ref.type,
+	    num = _ref.num,
+	    time = _ref.time;
 
-    // 添加操作记录
-    var operationRecorddList = _store2.default.get('OPERATION_RECORD_LIST') || [];
-    var newOperationRecord = { type: type, num: num, time: time, staff: staff, action: 'PIECE_RECORD', actionName: '员工记单' };
-    _store2.default.set('OPERATION_RECORD_LIST', [].concat(_toConsumableArray(operationRecorddList), [newOperationRecord]));
-    _onfire2.default.fire('add_operation_record', newOperationRecord);
+	// 添加操作记录
+	var operationRecorddList = _store2.default.get("OPERATION_RECORD_LIST") || [];
+	var newOperationRecord = {
+		type: type,
+		num: num,
+		time: time,
+		staff: staff,
+		action: "PIECE_RECORD",
+		actionName: "员工记单"
+	};
+	_store2.default.set("OPERATION_RECORD_LIST", [].concat(_toConsumableArray(operationRecorddList), [newOperationRecord]));
+	_onfire2.default.fire("add_operation_record", newOperationRecord);
 
-    // // 添加员工记单记录
-    // let staffPieceRecordList = store.get('STAFF_PIECE_RECORD_LIST') || {}
-    // if (!staffPieceRecordList[staff]) {
-    //     Toast.fail('员工记单表中未添加此员工')
-    //     return false
-    // }
-    // staffPieceRecordList[staff].push({ staff, type, num, time })
-    // store.set('STAFF_PIECE_RECORD_LIST', staffPieceRecordList)
+	// // 添加员工记单记录
+	// let staffPieceRecordList = store.get('STAFF_PIECE_RECORD_LIST') || {}
+	// if (!staffPieceRecordList[staff]) {
+	//     Toast.fail('员工记单表中未添加此员工')
+	//     return false
+	// }
+	// staffPieceRecordList[staff].push({ staff, type, num, time })
+	// store.set('STAFF_PIECE_RECORD_LIST', staffPieceRecordList)
 
-    _toast2.default.success('添加记单成功');
+	_toast2.default.success({ duration: 1000, message: "添加记单成功" });
 };
 
-require('vant/es/toast/style');
+require("vant/es/toast/style");
 
-var _store = require('store');
+var _store = require("store");
 
 var _store2 = _interopRequireDefault(_store);
 
-var _numberPrecision = require('number-precision');
+var _numberPrecision = require("number-precision");
 
 var _numberPrecision2 = _interopRequireDefault(_numberPrecision);
 
-var _onfire = require('onfire.js');
+var _onfire = require("onfire.js");
 
 var _onfire2 = _interopRequireDefault(_onfire);
 
@@ -66563,7 +66573,67 @@ var _onfire = require("onfire.js");
 var _onfire2 = _interopRequireDefault(_onfire);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","store":"node_modules\\store\\dist\\store.legacy.js","onfire.js":"node_modules\\onfire.js\\dist\\onfire.min.js"}],"src\\pages\\Home.vue":[function(require,module,exports) {
+},{"vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","store":"node_modules\\store\\dist\\store.legacy.js","onfire.js":"node_modules\\onfire.js\\dist\\onfire.min.js"}],"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\_empty.js":[function(require,module,exports) {
+
+},{}],"utils\\delete.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _toast = require("vant/es/toast");
+
+var _toast2 = _interopRequireDefault(_toast);
+
+exports.type = type;
+exports.staff = staff;
+exports.record = record;
+
+require("vant/es/toast/style");
+
+var _store = require("store");
+
+var _store2 = _interopRequireDefault(_store);
+
+var _cluster = require("cluster");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function type(name, callback) {
+	var itemTypeList = _store2.default.get("ITEM_TYPE_LIST");
+	var index = itemTypeList.findIndex(function (item) {
+		return item.name == name;
+	});
+	itemTypeList.splice(index, 1);
+	_store2.default.set("ITEM_TYPE_LIST", itemTypeList);
+	_toast2.default.success({ message: "删除成功", duration: 1000 });
+	callback && callback();
+}
+
+function staff(name, callback) {
+	var staffList = _store2.default.get("STAFF_LIST");
+	var index = staffList.findIndex(function (item) {
+		return item.name == name;
+	});
+	staffList.splice(index, 1);
+	_store2.default.set("STAFF_LIST", staffList);
+	_toast2.default.success({ message: "删除成功", duration: 1000 });
+	callback && callback();
+}
+
+function record(record, callback) {
+	var operationRecord = _store2.default.get("OPERATION_RECORD_LIST");
+	var index = operationRecord.findIndex(function (item) {
+		return item == record;
+	});
+	operationRecord.splice(index, 1);
+	_store2.default.set("OPERATION_RECORD_LIST", operationRecord);
+	_toast2.default.success({ message: "删除成功", duration: 1000 });
+	operationRecord.reverse();
+	callback && callback(operationRecord);
+}
+},{"vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","store":"node_modules\\store\\dist\\store.legacy.js","cluster":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\_empty.js"}],"src\\pages\\Home.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -66638,10 +66708,15 @@ var _fetch = require("../../utils/fetch");
 
 var Fetch = _interopRequireWildcard(_fetch);
 
+var _delete = require("../../utils/delete");
+
+var Delete = _interopRequireWildcard(_delete);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
 //
 //
 //
@@ -66979,6 +67054,19 @@ exports.default = {
         this.pieceRecordPopupVisible = false;
       }
     },
+    deleteRecord: function deleteRecord(record) {
+      var that = this;
+      _dialog2.default.confirm({
+        title: "提示",
+        message: "\u5220\u9664\u8BB0\u5F55\u4F1A\u540C\u65F6\u5220\u9664\u76F8\u5173\u6570\u636E\uFF0C\u786E\u5B9A\u8981\u5220\u9664\u5417\uFF1F"
+      }).then(function () {
+        Delete.record(record, function (operationRecord) {
+          that.recordList = operationRecord;
+        });
+      }).catch(function () {
+        // on cancel
+      });
+    },
     fileLoad: function fileLoad() {
       document.getElementById("file").click();
     },
@@ -67099,14 +67187,32 @@ exports.default = {
               : _c(
                   "transition-group",
                   { attrs: { name: "slide-fade" } },
-                  _vm._l(_vm.recordList, function(item) {
+                  _vm._l(_vm.recordList, function(item, index) {
                     return _c(
                       "li",
                       {
-                        key: item.time,
+                        key: index,
+                        staticStyle: { position: "relative" },
                         attrs: { flex: "main:justify cross:center" }
                       },
                       [
+                        item.action == "PIECE_RECORD" ||
+                        item.action == "GOODS_EXPORT"
+                          ? _c("i", {
+                              staticClass: "iconfont icon-close",
+                              staticStyle: {
+                                position: "absolute",
+                                right: ".2rem",
+                                top: ".2rem"
+                              },
+                              on: {
+                                click: function($event) {
+                                  _vm.deleteRecord(item)
+                                }
+                              }
+                            })
+                          : _vm._e(),
+                        _vm._v(" "),
                         _c("div", { attrs: { flex: "dir:top" } }, [
                           _c("h4", [_vm._v(_vm._s(item.actionName))]),
                           _vm._v(" "),
@@ -67137,7 +67243,7 @@ exports.default = {
                                 staticClass: "content",
                                 staticStyle: { color: "#00c000" }
                               },
-                              [_vm._v(" -" + _vm._s(item.num))]
+                              [_vm._v(" +" + _vm._s(item.num) + " 万")]
                             )
                           : item.action == "GOODS_IMPORT"
                             ? _c(
@@ -67146,7 +67252,7 @@ exports.default = {
                                   staticClass: "content",
                                   staticStyle: { color: "#f44" }
                                 },
-                                [_vm._v(" +" + _vm._s(item.num))]
+                                [_vm._v(" +" + _vm._s(item.num) + " 万")]
                               )
                             : item.action == "TYPE_ADD"
                               ? _c(
@@ -67180,7 +67286,7 @@ exports.default = {
                                       ),
                                       _vm._v(" "),
                                       _c("span", [
-                                        _vm._v(" +" + _vm._s(item.num))
+                                        _vm._v(" +" + _vm._s(item.num) + " 万")
                                       ])
                                     ]
                                   )
@@ -67228,7 +67334,7 @@ exports.default = {
               },
               [
                 _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", [_vm._v("型号：")]),
+                  _c("span", { staticClass: "inputTitle" }, [_vm._v("型号：")]),
                   _vm._v(" "),
                   _c("input", {
                     attrs: {
@@ -67246,7 +67352,9 @@ exports.default = {
                 ]),
                 _vm._v(" "),
                 _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", [_vm._v("数量：")]),
+                  _c("span", { staticClass: "inputTitle" }, [
+                    _vm._v("数量（万）：")
+                  ]),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -67274,7 +67382,7 @@ exports.default = {
                 ]),
                 _vm._v(" "),
                 _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", [_vm._v("时间：")]),
+                  _c("span", { staticClass: "inputTitle" }, [_vm._v("时间：")]),
                   _vm._v(" "),
                   _c("input", {
                     attrs: { type: "text", readonly: "" },
@@ -67360,7 +67468,7 @@ exports.default = {
               },
               [
                 _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", [_vm._v("型号：")]),
+                  _c("span", { staticClass: "inputTitle" }, [_vm._v("型号：")]),
                   _vm._v(" "),
                   _c("input", {
                     attrs: {
@@ -67378,7 +67486,9 @@ exports.default = {
                 ]),
                 _vm._v(" "),
                 _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", [_vm._v("数量：")]),
+                  _c("span", { staticClass: "inputTitle" }, [
+                    _vm._v("数量（万）：")
+                  ]),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -67406,7 +67516,7 @@ exports.default = {
                 ]),
                 _vm._v(" "),
                 _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", [_vm._v("时间：")]),
+                  _c("span", { staticClass: "inputTitle" }, [_vm._v("时间：")]),
                   _vm._v(" "),
                   _c("input", {
                     attrs: { type: "text", readonly: "" },
@@ -67492,7 +67602,7 @@ exports.default = {
               },
               [
                 _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", [_vm._v("员工：")]),
+                  _c("span", { staticClass: "inputTitle" }, [_vm._v("员工：")]),
                   _vm._v(" "),
                   _c("input", {
                     attrs: {
@@ -67510,7 +67620,7 @@ exports.default = {
                 ]),
                 _vm._v(" "),
                 _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", [_vm._v("型号：")]),
+                  _c("span", { staticClass: "inputTitle" }, [_vm._v("型号：")]),
                   _vm._v(" "),
                   _c("input", {
                     attrs: {
@@ -67528,7 +67638,9 @@ exports.default = {
                 ]),
                 _vm._v(" "),
                 _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", [_vm._v("数量：")]),
+                  _c("span", { staticClass: "inputTitle" }, [
+                    _vm._v("数量（万）：")
+                  ]),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -67560,7 +67672,7 @@ exports.default = {
                 ]),
                 _vm._v(" "),
                 _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                  _c("span", [_vm._v("时间：")]),
+                  _c("span", { staticClass: "inputTitle" }, [_vm._v("时间：")]),
                   _vm._v(" "),
                   _c("input", {
                     attrs: { type: "text", readonly: "" },
@@ -67667,7 +67779,7 @@ render._withStripped = true
       
       }
     })();
-},{"vant/es/dialog/style":"node_modules\\vant\\es\\dialog\\style\\index.js","vant/es/dialog":"node_modules\\vant\\es\\dialog\\index.js","vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","vant/es/button/style":"node_modules\\vant\\es\\button\\style\\index.js","vant/es/button":"node_modules\\vant\\es\\button\\index.js","vant/es/popup/style":"node_modules\\vant\\es\\popup\\style\\index.js","vant/es/popup":"node_modules\\vant\\es\\popup\\index.js","echarts/lib/echarts":"node_modules\\echarts\\lib\\echarts.js","echarts/lib/chart/pie":"node_modules\\echarts\\lib\\chart\\pie.js","echarts/lib/component/tooltip":"node_modules\\echarts\\lib\\component\\tooltip.js","echarts/lib/component/title":"node_modules\\echarts\\lib\\component\\title.js","onfire.js":"node_modules\\onfire.js\\dist\\onfire.min.js","dayjs":"node_modules\\dayjs\\dayjs.min.js","../components/TypePicker":"src\\components\\TypePicker.vue","../components/TimePicker":"src\\components\\TimePicker.vue","../components/StaffPicker":"src\\components\\StaffPicker.vue","../../utils/goodsImport":"utils\\goodsImport.js","../../utils/goodsExport":"utils\\goodsExport.js","../../utils/pieceRecord":"utils\\pieceRecord.js","../../utils/fileSave":"utils\\fileSave.js","../../utils/fileLoad":"utils\\fileLoad.js","../../utils/fetch":"utils\\fetch.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"node_modules\\vant\\es\\swipe-item\\style\\index.js":[function(require,module,exports) {
+},{"vant/es/dialog/style":"node_modules\\vant\\es\\dialog\\style\\index.js","vant/es/dialog":"node_modules\\vant\\es\\dialog\\index.js","vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","vant/es/button/style":"node_modules\\vant\\es\\button\\style\\index.js","vant/es/button":"node_modules\\vant\\es\\button\\index.js","vant/es/popup/style":"node_modules\\vant\\es\\popup\\style\\index.js","vant/es/popup":"node_modules\\vant\\es\\popup\\index.js","echarts/lib/echarts":"node_modules\\echarts\\lib\\echarts.js","echarts/lib/chart/pie":"node_modules\\echarts\\lib\\chart\\pie.js","echarts/lib/component/tooltip":"node_modules\\echarts\\lib\\component\\tooltip.js","echarts/lib/component/title":"node_modules\\echarts\\lib\\component\\title.js","onfire.js":"node_modules\\onfire.js\\dist\\onfire.min.js","dayjs":"node_modules\\dayjs\\dayjs.min.js","../components/TypePicker":"src\\components\\TypePicker.vue","../components/TimePicker":"src\\components\\TimePicker.vue","../components/StaffPicker":"src\\components\\StaffPicker.vue","../../utils/goodsImport":"utils\\goodsImport.js","../../utils/goodsExport":"utils\\goodsExport.js","../../utils/pieceRecord":"utils\\pieceRecord.js","../../utils/fileSave":"utils\\fileSave.js","../../utils/fileLoad":"utils\\fileLoad.js","../../utils/fetch":"utils\\fetch.js","../../utils/delete":"utils\\delete.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"node_modules\\vant\\es\\swipe-item\\style\\index.js":[function(require,module,exports) {
 'use strict';
 
 require('../../vant-css/base.css');
@@ -68799,6 +68911,11 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
         var $6b72fe = exports.default || module.exports;
       
       if (typeof $6b72fe === 'function') {
@@ -68849,29 +68966,34 @@ exports.default = {
               "box-sizing": "border-box"
             }
           },
-          _vm._l(_vm.goodsSummaryList, function(item, key) {
-            return item.num
-              ? _c("li", { key: key, attrs: { flex: "main:left" } }, [
-                  _c(
-                    "span",
-                    { staticStyle: { "text-align": "left", width: "25%" } },
-                    [_vm._v(_vm._s(key))]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "span",
-                    { staticStyle: { "text-align": "right", width: "35%" } },
-                    [_vm._v("*" + _vm._s(item.num))]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "span",
-                    { staticStyle: { "text-align": "right", width: "40%" } },
-                    [_vm._v(_vm._s(item.money) + "元")]
-                  )
-                ])
-              : _vm._e()
-          })
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._l(_vm.goodsSummaryList, function(item, key) {
+              return item.num
+                ? _c("li", { key: key, attrs: { flex: "main:left" } }, [
+                    _c(
+                      "span",
+                      { staticStyle: { "text-align": "left", width: "25%" } },
+                      [_vm._v(_vm._s(key))]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      { staticStyle: { "text-align": "right", width: "35%" } },
+                      [_vm._v("*" + _vm._s(item.num))]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      { staticStyle: { "text-align": "right", width: "40%" } },
+                      [_vm._v(_vm._s(_vm._f("toYuan")(item.money)) + "元")]
+                    )
+                  ])
+                : _vm._e()
+            })
+          ],
+          2
         ),
         _vm._v(" "),
         _c(
@@ -68893,7 +69015,7 @@ exports.default = {
             _c(
               "span",
               { staticStyle: { "text-align": "right", width: "40%" } },
-              [_vm._v(_vm._s(_vm.totalMoney) + "元")]
+              [_vm._v(_vm._s(_vm._f("toYuan")(_vm.totalMoney)) + "元")]
             )
           ]
         )
@@ -68944,7 +69066,11 @@ exports.default = {
                           staticClass: "content",
                           staticStyle: { color: "#f44" }
                         },
-                        [_vm._v(" " + _vm._s(item.total) + " 元")]
+                        [
+                          _vm._v(
+                            " " + _vm._s(_vm._f("toYuan")(item.total)) + " 元"
+                          )
+                        ]
                       )
                     ]
                   )
@@ -68962,7 +69088,26 @@ exports.default = {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { attrs: { flex: "main:left" } }, [
+      _c("span", { staticStyle: { "text-align": "left", width: "25%" } }, [
+        _vm._v("型号")
+      ]),
+      _vm._v(" "),
+      _c("span", { staticStyle: { "text-align": "right", width: "35%" } }, [
+        _vm._v("数量（万）")
+      ]),
+      _vm._v(" "),
+      _c("span", { staticStyle: { "text-align": "right", width: "40%" } }, [
+        _vm._v("小结")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
           return {
@@ -72188,6 +72333,12 @@ exports.default = {
             type: "shadow"
           }
         },
+        dataZoom: [{
+          type: "inside",
+          start: 0,
+          end: 10,
+          yAxisIndex: [0, 1]
+        }],
         legend: {
           data: ["当月出货", "当月完成"]
         },
@@ -72202,6 +72353,7 @@ exports.default = {
           boundaryGap: [0, 0.01]
         },
         yAxis: {
+          boundaryGap: false,
           type: "category",
           data: []
         },
@@ -72576,54 +72728,7 @@ render._withStripped = true
 'use strict';
 
 require('../../vant-css/base.css');
-},{"../../vant-css/base.css":"node_modules\\vant\\es\\vant-css\\base.css"}],"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\_empty.js":[function(require,module,exports) {
-
-},{}],"utils\\delete.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _toast = require("vant/es/toast");
-
-var _toast2 = _interopRequireDefault(_toast);
-
-exports.type = type;
-exports.staff = staff;
-
-require("vant/es/toast/style");
-
-var _store = require("store");
-
-var _store2 = _interopRequireDefault(_store);
-
-var _cluster = require("cluster");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function type(name, callback) {
-	var itemTypeList = _store2.default.get("ITEM_TYPE_LIST");
-	var index = itemTypeList.findIndex(function (item) {
-		return item.name == name;
-	});
-	itemTypeList.splice(index, 1);
-	_store2.default.set("ITEM_TYPE_LIST", itemTypeList);
-	_toast2.default.success({ message: "删除成功", duration: 1000 });
-	callback && callback();
-}
-
-function staff(name, callback) {
-	var staffList = _store2.default.get("STAFF_LIST");
-	var index = staffList.findIndex(function (item) {
-		return item.name == name;
-	});
-	staffList.splice(index, 1);
-	_store2.default.set("STAFF_LIST", staffList);
-	_toast2.default.success({ message: "删除成功", duration: 1000 });
-	callback && callback();
-}
-},{"vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","store":"node_modules\\store\\dist\\store.legacy.js","cluster":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\_empty.js"}],"utils\\typeAdd.js":[function(require,module,exports) {
+},{"../../vant-css/base.css":"node_modules\\vant\\es\\vant-css\\base.css"}],"utils\\typeAdd.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -72976,15 +73081,23 @@ exports.default = {
           _vm._l(_vm.itemTypeList, function(item) {
             return _c(
               "li",
-              { key: item, attrs: { flex: "main:justify" } },
+              { key: item.name, attrs: { flex: "main:justify" } },
               [
-                _c("span", [_vm._v(_vm._s(item))]),
+                _c("p", [
+                  _c("span", [_vm._v(_vm._s(item.name))]),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    { staticStyle: { "font-size": "12px", color: "#c9c9c9" } },
+                    [_vm._v("- " + _vm._s(item.price * 1000) + "厘/个")]
+                  )
+                ]),
                 _vm._v(" "),
                 _c("van-icon", {
                   attrs: { name: "delete" },
                   on: {
                     click: function($event) {
-                      _vm.deleteType(item)
+                      _vm.deleteType(item.name)
                     }
                   }
                 })
@@ -73022,9 +73135,18 @@ exports.default = {
             _vm._v(" "),
             _c("div", { attrs: { flex: "dir:top cross:center main:center" } }, [
               _c("p", { attrs: { flex: "main:center cross:center" } }, [
-                _c("span", { staticStyle: { "padding-right": ".4rem" } }, [
-                  _vm._v("名称：")
-                ]),
+                _c(
+                  "span",
+                  {
+                    staticStyle: {
+                      "padding-right": ".4rem",
+                      display: "inline-block",
+                      width: "2.5rem",
+                      "text-align": "center"
+                    }
+                  },
+                  [_vm._v("名称：")]
+                ),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -73063,9 +73185,18 @@ exports.default = {
                   attrs: { flex: "main:center cross:center" }
                 },
                 [
-                  _c("span", { staticStyle: { "padding-right": ".4rem" } }, [
-                    _vm._v("单价：")
-                  ]),
+                  _c(
+                    "span",
+                    {
+                      staticStyle: {
+                        "padding-right": ".4rem",
+                        display: "inline-block",
+                        width: "2.5rem",
+                        "text-align": "center"
+                      }
+                    },
+                    [_vm._v("单价（元）：")]
+                  ),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -73359,7 +73490,30 @@ function toyun(Vue) {
         }
     });
 }
-},{"dayjs":"node_modules\\dayjs\\dayjs.min.js"}],"utils\\storageInit.js":[function(require,module,exports) {
+},{"dayjs":"node_modules\\dayjs\\dayjs.min.js"}],"filter\\toYuan.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = toyun;
+
+var _numberPrecision = require("number-precision");
+
+var _numberPrecision2 = _interopRequireDefault(_numberPrecision);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function toyun(Vue) {
+	Vue.filter("toYuan", function (val) {
+		var result = 0;
+		try {
+			result = _numberPrecision2.default.times(val, 10000);
+		} catch (err) {}
+		return result;
+	});
+}
+},{"number-precision":"node_modules\\number-precision\\build\\index.js"}],"utils\\storageInit.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -73557,6 +73711,10 @@ var _toTime = require("./filter/toTime");
 
 var _toTime2 = _interopRequireDefault(_toTime);
 
+var _toYuan = require("./filter/toYuan");
+
+var _toYuan2 = _interopRequireDefault(_toYuan);
+
 var _App = require("./src/App.vue");
 
 var _App2 = _interopRequireDefault(_App);
@@ -73565,6 +73723,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 try {
 	(0, _toTime2.default)(_vue2.default);
+	(0, _toYuan2.default)(_vue2.default);
 	_vue2.default.use(_vueRouter2.default);
 
 	var router = new _vueRouter2.default({
@@ -73578,7 +73737,7 @@ try {
 } catch (err) {
 	alert(err.toString());
 }
-},{"vue/dist/vue.js":"node_modules\\vue\\dist\\vue.js","vue-router":"node_modules\\vue-router\\dist\\vue-router.esm.js","flex.css":"node_modules\\flex.css\\dist\\flex.css","./index.scss":"index.scss","./src/route":"src\\route.js","./filter/toTime":"filter\\toTime.js","./src/App.vue":"src\\App.vue"}],"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\hmr-runtime.js":[function(require,module,exports) {
+},{"vue/dist/vue.js":"node_modules\\vue\\dist\\vue.js","vue-router":"node_modules\\vue-router\\dist\\vue-router.esm.js","flex.css":"node_modules\\flex.css\\dist\\flex.css","./index.scss":"index.scss","./src/route":"src\\route.js","./filter/toTime":"filter\\toTime.js","./filter/toYuan":"filter\\toYuan.js","./src/App.vue":"src\\App.vue"}],"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -73607,7 +73766,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '50019' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '59383' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 

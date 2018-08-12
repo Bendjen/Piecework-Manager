@@ -65,6 +65,11 @@
       font-size: 26px;
       color: #fff;
 }
+.inputTitle[data-v-461527] {
+  width: 2.7rem;
+  display: inline-block;
+  text-align: center;
+}
 .operationRecords[data-v-461527] {
   box-sizing: border-box;
   overflow-x: hidden;

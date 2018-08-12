@@ -29,5 +29,5 @@ export default function ({ type, num, time }) {
     // let newExportRecord = { type, num, time }
     // store.set('IMPORT_RECORD_LIST', [...exportRecordList, newExportRecord])
 
-    Toast.success('添加出货成功')
+	Toast.success({ duration: 1000, message: "添加出货成功" });
 }

@@ -20,7 +20,8 @@
 			  <ul>
                   <li v-if="recordList.length == 0"> <div>暂无任何操作记录</div></li>
                     <transition-group name="slide-fade"  v-else>
-                        <li flex='main:justify cross:center'  v-for='item in recordList' :key='item.time'>
+                        <li flex='main:justify cross:center'  v-for='(item,index) in recordList' :key='index' style='position:relative'>
+							<i class='iconfont icon-close' v-if="item.action == 'PIECE_RECORD' || item.action == 'GOODS_EXPORT' " style='position:absolute; right:.2rem;top:.2rem' @click="deleteRecord(item)"></i>
                             <div flex='dir:top'>
                                 <h4>{{item.actionName}}</h4>
                                 <p v-if='item.type'>[{{item.type}}]</p>
@@ -28,12 +29,12 @@
                                 <p class='time'  style='color:#6a788c'>{{item.time | toTime}}</p>
                             </div>
                             <div class='content' v-if="item.action == 'STAFF_ADD'">{{item.staff}}</div>
-                            <div class='content' v-if="item.action == 'GOODS_EXPORT'" style='color:#00c000;'> -{{item.num}}</div>
-                            <div class='content' v-else-if="item.action == 'GOODS_IMPORT'" style='color:#f44'> +{{item.num}}</div>
+                            <div class='content' v-if="item.action == 'GOODS_EXPORT'" style='color:#00c000;'> +{{item.num}} 万</div>
+                            <div class='content' v-else-if="item.action == 'GOODS_IMPORT'" style='color:#f44'> +{{item.num}} 万</div>
                             <div class='content' v-else-if="item.action == 'TYPE_ADD'" style='color:#f44'> {{item.name}}</div>
                             <div class='content' v-else-if="item.action == 'PIECE_RECORD'" flex='dir:top main:center cross:center' style='color:#38f;'>
                                 <span style='margin-bottom:.2rem;font-size:16px;'>{{item.staff}}</span>
-                                <span> +{{item.num}}</span>
+                                <span> +{{item.num}} 万</span>
                             </div>
                         </li>
                     </transition-group>
@@ -46,15 +47,15 @@
                   <h2 class='dialogTitle' style='height:15%;' flex='main:center cross:center'>进货</h2>
                   <div style='height:65%;' flex='dir:top cross:center main:center'>
                         <p flex='main:center cross:center'>
-                            <span>型号：</span>
+                            <span class='inputTitle'>型号：</span>
                             <input type="text" readonly placeholder="点击选择型号" @click="$refs.typePicker.toggle()" :value="importValue.type">
                         </p>
                         <p flex='main:center cross:center'>
-                            <span>数量：</span>
+                            <span class='inputTitle'>数量（万）：</span>
                             <input type="number" v-model="importValue.num" @focus="$event.target.select()">
                         </p>
                         <p flex='main:center cross:center'>
-                            <span>时间：</span>
+                            <span class='inputTitle'>时间：</span>
                             <input type="text" readonly :value="importValue.time | toTime" @click="$refs.timePicker.toggle()">
                         </p>
                   </div>
@@ -71,15 +72,15 @@
                   <h2 class='dialogTitle' style='height:1.2rem;' flex='main:center cross:center'>出货</h2>
                   <div style='height:65%;' flex='dir:top cross:center main:center'>
                         <p flex='main:center cross:center'>
-                            <span>型号：</span>
+                            <span class='inputTitle'>型号：</span>
                             <input type="text" readonly placeholder="点击选择型号" @click="$refs.typePicker.toggle()" :value="exportValue.type">
                         </p>
                         <p flex='main:center cross:center'>
-                            <span>数量：</span>
+                            <span class='inputTitle'>数量（万）：</span>
                             <input type="number" v-model="exportValue.num" @focus="$event.target.select()">
                         </p>
                         <p flex='main:center cross:center'>
-                            <span>时间：</span>
+                            <span class='inputTitle'>时间：</span>
                             <input type="text" readonly :value="exportValue.time | toTime" @click="$refs.timePicker.toggle()">
                         </p>
                   </div>
@@ -96,19 +97,19 @@
                   <h2 class='dialogTitle' style='height:1.2rem;' flex='main:center cross:center'>员工记单</h2>
                   <div style='height:65%;' flex='dir:top cross:center main:center'>
                         <p flex='main:center cross:center'>
-                            <span>员工：</span>
+                            <span class='inputTitle'>员工：</span>
                             <input type="text" readonly placeholder="点击选择员工" @click="$refs.staffPicker.toggle()" :value="pieceRecordValue.staff">
                         </p>
                         <p flex='main:center cross:center'>
-                            <span>型号：</span>
+                            <span class='inputTitle'>型号：</span>
                             <input type="text" readonly placeholder="点击选择型号" @click="$refs.typePicker.toggle()" :value="pieceRecordValue.type">
                         </p>
                         <p flex='main:center cross:center'>
-                            <span>数量：</span>
+                            <span class='inputTitle'>数量（万）：</span>
                             <input type="number" v-model="pieceRecordValue.num" @focus="$event.target.select()">
                         </p>
                         <p flex='main:center cross:center'>
-                            <span>时间：</span>
+                            <span class='inputTitle'>时间：</span>
                             <input type="text" readonly :value="pieceRecordValue.time | toTime" @click="$refs.timePicker.toggle()">
                         </p>
                   </div>
@@ -149,6 +150,7 @@ import PieceRecord from "../../utils/pieceRecord";
 import FileSave from "../../utils/fileSave";
 import FileLoad from "../../utils/fileLoad";
 import * as Fetch from "../../utils/fetch";
+import * as Delete from "../../utils/delete";
 
 export default {
   components: {
@@ -345,7 +347,7 @@ export default {
       }
     },
     pieceRecordConfirm() {
-		console.log(this.pieceRecordValue)
+      console.log(this.pieceRecordValue);
       if (!this.pieceRecordValue.type) {
         Toast.fail("请选择型号");
       } else if (!this.pieceRecordValue.num) {
@@ -356,6 +358,21 @@ export default {
         PieceRecord(this.pieceRecordValue);
         this.pieceRecordPopupVisible = false;
       }
+    },
+    deleteRecord(record) {
+      let that = this;
+      Dialog.confirm({
+        title: "提示",
+        message: `删除记录会同时删除相关数据，确定要删除吗？`
+      })
+        .then(() => {
+          Delete.record(record, operationRecord => {
+            that.recordList = operationRecord;
+          });
+        })
+        .catch(() => {
+          // on cancel
+        });
     },
     fileLoad() {
       document.getElementById("file").click();
@@ -429,6 +446,11 @@ export default {
       }
     }
   }
+}
+.inputTitle {
+  width: 2.7rem;
+  display: inline-block;
+  text-align: center;
 }
 .operationRecords {
   box-sizing: border-box;

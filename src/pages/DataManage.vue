@@ -18,9 +18,9 @@
 				<i class='iconfont icon-add' @click="addTypeVisible=true"></i>
 			</h1>
 			<ul>
-				<li v-for='item in itemTypeList' :key='item' flex='main:justify'>
-					<span>{{item}}</span>
-					<van-icon name="delete"  @click='deleteType(item)'/>
+				<li v-for='item in itemTypeList' :key='item.name' flex='main:justify'>
+					<p><span>{{item.name}}</span> <span style='font-size:12px;color:#c9c9c9;'>- {{item.price*1000}}厘/个</span> </p>
+					<van-icon name="delete"  @click='deleteType(item.name)'/>
 				</li>
 			</ul>
 		</div>
@@ -31,11 +31,11 @@
 				  <h1 style='height:1.2rem;margin-bottom:0.6rem' class='dialogTitle'  flex='main:center cross:center'>添加型号</h1>
                   <div style='' flex='dir:top cross:center main:center'>
                         <p flex='main:center cross:center'>
-                            <span style='padding-right:.4rem' >名称：</span>
+                            <span style='padding-right:.4rem;display:inline-block;width:2.5rem;text-align:center' >名称：</span>
                             <input placeholder="输入型号" type="text" v-model.trim = "newType.name"  @focus="$event.target.select()" style='height:1rem;text-align:center'>
                         </p>
                         <p flex='main:center cross:center' style='margin:.4rem 0;'>
-                            <span style='padding-right:.4rem' >单价：</span>
+                            <span style='padding-right:.4rem;display:inline-block;width:2.5rem;text-align:center' >单价（元）：</span>
                             <input type="number" v-model.number = "newType.price"  @focus="$event.target.select()" style='height:1rem;text-align:center'>
                         </p>
                   </div>
@@ -166,10 +166,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.popup{
-	input{
-		height: 1rem;
-	}
+.popup {
+  input {
+    height: 1rem;
+  }
 }
 .dataManage {
   height: 100%;

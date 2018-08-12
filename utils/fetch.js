@@ -4,7 +4,7 @@ import { Toast, Dialog } from "vant";
 import dayjs from "dayjs";
 
 export function itemTypeList() {
-	let list = store.get("ITEM_TYPE_LIST").map(item => item.name);
+	let list = store.get("ITEM_TYPE_LIST").map(item => item);
 	list.reverse();
 	return list;
 }
