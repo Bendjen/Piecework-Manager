@@ -49,7 +49,7 @@ export default {
             type: "inside",
             start: 0,
             end: 10,
-            yAxisIndex: [0, 1]
+            yAxisIndex: [0, 20]
           }
         ],
         legend: {
@@ -66,7 +66,7 @@ export default {
           boundaryGap: [0, 0.01]
         },
         yAxis: {
-			boundaryGap : false,
+          boundaryGap: false,
           type: "category",
           data: []
         },
@@ -114,22 +114,32 @@ export default {
       Toast.loading("加载中...");
       setTimeout(() => {
         Toast.clear();
-        let goodsSummary = Fetch.goodsSummary(month);
-        let exportSummary = Fetch.exportSummary(month);
         let chartsOption = this.initOption;
 
-        let exportData = Object.values(exportSummary);
-        let finishData = Object.values(goodsSummary).map(item => item.num);
+        let goodsSummary = Fetch.goodsSummary(month);
+        let exportSummary = Fetch.exportSummary(month);
 
-        chartsOption.yAxis.data = Object.keys(goodsSummary).filter(
-          (item, index) => !!exportData[index] || !!finishData[index]
-        );
-        chartsOption.series[0].data = exportData.filter(
-          (item, index) => !!item || !!finishData[index]
-        );
-        chartsOption.series[1].data = finishData.filter(
-          (item, index) => !!item || !!exportData[index]
-        );
+        let dataMap = [];
+        Object.entries(goodsSummary).forEach(item => {
+          let key = item[0];
+          let value = item[1].num;
+          dataMap.push({ name: key, piece: value });
+        });
+
+        Object.entries(exportSummary).forEach(item => {
+          let key = item[0];
+          let value = item[1];
+          let target = dataMap.find(item => item.name == key);
+          if (target) {
+            target.export = value;
+          } else {
+            dataMap.push({ name: key, piece: 0, export: value });
+          }
+        });
+
+        chartsOption.yAxis.data = dataMap.map(item => item.name);
+        chartsOption.series[0].data = dataMap.map(item => item.export);
+        chartsOption.series[1].data = dataMap.map(item => item.piece);
 
         if (chartsOption.yAxis.data.length == 0) {
           Toast.fail({

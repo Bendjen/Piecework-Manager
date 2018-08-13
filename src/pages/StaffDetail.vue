@@ -150,15 +150,21 @@ export default {
             this.renderCharts(month)
         },
         deleteRecord (record,key) {
+			console.log(this.summary)
+			console.log(key)
             let that = this;
             Dialog.confirm({
                 title: "提示",
                 message: `删除记录会同时删除相关数据，确定要删除吗？`
             })
                 .then(() => {
-                    Delete.record(record, operationRecord => {
-                        
-                    });
+                    Delete.record(record, () => {
+						let index = that.summary[key].record.findIndex(item => item ==  record)
+						let recordList = this.summary[key].record
+						recordList.splice(index, 1);
+						that.$set(that.$data.summary[key],'record',recordList)
+						that.renderCharts(that.chooseMonth)
+					});
                 })
                 .catch(() => {
                     // on cancel

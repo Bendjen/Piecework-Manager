@@ -81,22 +81,31 @@ export default {
       Toast.loading("加载中...");
       setTimeout(() => {
         Toast.clear();
+        let chartsOption = this.initOption;
         let goodsSummary = Fetch.goodsSummary(new Date(), "day");
         let exportSummary = Fetch.exportSummary(new Date(), "day");
-        let chartsOption = this.initOption;
 
-        let exportData = Object.values(exportSummary);
-        let finishData = Object.values(goodsSummary).map(item => item.num);
+        let dataMap = [];
+        Object.entries(goodsSummary).forEach(item => {
+          let key = item[0];
+          let value = item[1].num;
+          dataMap.push({ name: key, piece: value });
+        });
 
-        chartsOption.yAxis.data = Object.keys(goodsSummary).filter(
-          (item, index) => !!exportData[index] || !!finishData[index]
-        );
-        chartsOption.series[0].data = exportData.filter(
-          (item, index) => !!item || !!finishData[index]
-        );
-        chartsOption.series[1].data = finishData.filter(
-          (item, index) => !!item || !!exportData[index]
-        );
+        Object.entries(exportSummary).forEach(item => {
+          let key = item[0];
+          let value = item[1];
+          let target = dataMap.find(item => item.name == key);
+          if (target) {
+            target.export = value;
+          } else {
+            dataMap.push({ name: key, piece: 0, export: value });
+          }
+        });
+
+        chartsOption.yAxis.data = dataMap.map(item => item.name);
+        chartsOption.series[0].data = dataMap.map(item => item.export);
+        chartsOption.series[1].data = dataMap.map(item => item.piece);
 
         if (chartsOption.yAxis.data.length == 0) {
           Toast.fail({
