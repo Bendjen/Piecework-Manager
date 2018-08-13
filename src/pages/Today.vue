@@ -109,7 +109,7 @@ export default {
 
         if (chartsOption.yAxis.data.length == 0) {
           Toast.fail({
-            message: "当月无数据",
+            message: "今日无数据",
             duration: 1000
           });
         }
