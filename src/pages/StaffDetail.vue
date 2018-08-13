@@ -24,7 +24,8 @@
                             <h1 style='height:10%' flex='cross:center'>当月记单</h1>
                             <ul style='height:80%;'>
                                 <li v-if="item.record.length == 0"> <div>暂无任何操作记录</div></li>
-                                <li flex='main:justify cross:center'  v-for='record in item.record' :key='record.time'>
+                                <li flex='main:justify cross:center'  v-for='record in item.record' :key='record.time' style='position:relative;'>
+                                    <i class='iconfont icon-close' style='position:absolute; right:.2rem;top:.2rem' @click="deleteRecord(record,key)"></i>
                                     <div flex='dir:top'>
                                         <h4>{{record.type}}</h4>
                                         <p class='time'  style='color:#6a788c'>{{record.time | toTime}}</p>
@@ -53,10 +54,11 @@ require('echarts/lib/component/tooltip');
 require('echarts/lib/component/title');
 import dayjs from 'dayjs'
 
-import { Popup, Button, Toast, Swipe, SwipeItem } from 'vant'
+import { Popup, Button, Toast, Swipe, SwipeItem,Dialog } from 'vant'
 
 import MonthPicker from "../components/monthPicker"
 import * as Fetch from "../../utils/fetch";
+import * as Delete from "../../utils/delete";
 
 export default {
     components: {
@@ -142,10 +144,25 @@ export default {
             }
         },
         monthChoose (month) {
-			this.chooseMonth = month;
-			console.log(Fetch.staffSummary(month))
+            this.chooseMonth = month;
+            console.log(Fetch.staffSummary(month))
             this.summary = Fetch.staffSummary(month)
             this.renderCharts(month)
+        },
+        deleteRecord (record,key) {
+            let that = this;
+            Dialog.confirm({
+                title: "提示",
+                message: `删除记录会同时删除相关数据，确定要删除吗？`
+            })
+                .then(() => {
+                    Delete.record(record, operationRecord => {
+                        
+                    });
+                })
+                .catch(() => {
+                    // on cancel
+                });
         },
         renderCharts (month) {
             Toast.loading('加载中...')

@@ -30,8 +30,8 @@
             </div>
         </div>
         <div class='staffs' style='height:60%'>
-            <h1 style='height:10%;padding:.2rem 0.4rem' flex='main:justify cross:center'> <span style='font-size:16px'>应发工资</span> <span>{{staffMoney}} 元</span> </h1>
-            <ul style='height:90%'>
+            <h1 style='height:10%;padding:.2rem 0.4rem' flex='main:justify cross:center'> <span style='font-size:16px'>应发工资</span> <span>{{staffMoney | toYuan}} 元</span> </h1>
+            <ul style='height:80%'>
                 <li v-if="!staffMoney"> <div>当月没有员工记单记录</div></li>
                 <li flex='main:justify cross:center'  v-for="(item,key) in staffSummaryList" :key='key' @click="linkToDetail(key)" v-else>
                     <div class='content' > {{key}}</div>
