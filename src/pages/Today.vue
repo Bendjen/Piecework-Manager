@@ -34,13 +34,13 @@ export default {
           {
             type: "inside",
             start: 0,
-            end: 40,
+            end: 80,
             yAxisIndex: 0
           },
           {
             show: true,
             start: 0,
-            end: 40,
+            end: 80,
             yAxisIndex: 0
           }
         ],

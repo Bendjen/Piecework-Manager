@@ -75765,12 +75765,12 @@ exports.default = {
         dataZoom: [{
           type: "inside",
           start: 0,
-          end: 40,
+          end: 80,
           yAxisIndex: 0
         }, {
           show: true,
           start: 0,
-          end: 40,
+          end: 80,
           yAxisIndex: 0
         }],
         legend: {
@@ -76975,7 +76975,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '49899' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '57114' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 

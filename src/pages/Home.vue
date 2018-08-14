@@ -448,7 +448,7 @@ export default {
   }
 }
 .inputTitle {
-  width: 2.7rem;
+  width: 2.9rem;
   display: inline-block;
   text-align: center;
 }
