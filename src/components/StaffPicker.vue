@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { Popup, Picker,Toast } from "vant";
+import { Popup, Picker, Toast } from "vant";
 import * as Fetch from "../../utils/fetch.js";
 
 export default {

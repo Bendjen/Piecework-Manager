@@ -65,7 +65,7 @@ export function staffSummary(date = new Date(), unit = "month") {
 			item.num
 		);
 
-		staffSummary[item.staff]["record"].push(item);
+		staffSummary[item.staff]["record"].unshift(item);
 
 		let itemPrice
 		try {
@@ -85,7 +85,7 @@ export function staffSummary(date = new Date(), unit = "month") {
 		);
 	});
 
-	console.log(staffSummary);
+	//console.log(staffSummary);
 	return staffSummary;
 }
 

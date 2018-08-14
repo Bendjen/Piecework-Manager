@@ -65019,7 +65019,7 @@ function staffSummary() {
 		}
 		staffSummary[item.staff]["detail"][item.type] = _numberPrecision2.default.plus(staffSummary[item.staff][["detail"]][item.type] || 0, item.num);
 
-		staffSummary[item.staff]["record"].push(item);
+		staffSummary[item.staff]["record"].unshift(item);
 
 		var itemPrice = void 0;
 		try {
@@ -65037,7 +65037,7 @@ function staffSummary() {
 		staffSummary[item.staff]["total"] = _numberPrecision2.default.plus(staffSummary[item.staff]["total"], _numberPrecision2.default.times(item.num, itemPrice));
 	});
 
-	console.log(staffSummary);
+	//console.log(staffSummary);
 	return staffSummary;
 }
 
@@ -66549,7 +66549,7 @@ var _toast = require("vant/es/toast");
 var _toast2 = _interopRequireDefault(_toast);
 
 exports.default = function (data) {
-	console.log(data);
+	//console.log(data)
 	_store2.default.set("OPERATION_RECORD_LIST", data["OPERATION_RECORD_LIST"]);
 	// store.set('STOCK',data['STOCK']);
 	// store.set('EXPORT_RECORD_LIST',data['EXPORT_RECORD_LIST']);
@@ -67013,6 +67013,7 @@ exports.default = {
     },
     beforeDestroy: function beforeDestroy() {
         _onfire2.default.un("add_operation_record");
+        _onfire2.default.un("reload");
     },
 
     methods: {
@@ -67046,7 +67047,7 @@ exports.default = {
             }
         },
         pieceRecordConfirm: function pieceRecordConfirm() {
-            console.log(this.pieceRecordValue);
+            //console.log(this.pieceRecordValue);
             if (!this.pieceRecordValue.type) {
                 _toast2.default.fail("请选择型号");
             } else if (!this.pieceRecordValue.num) {
@@ -67093,7 +67094,7 @@ exports.default = {
                 chartsOption.series[0].data = Object.entries(Fetch.goodsSummary(new Date(), "day")).map(function (item) {
                     return { name: item[0], value: item[1].num };
                 });
-                console.log(chartsOption);
+                //console.log(chartsOption);
                 var myChart = echarts.init(document.getElementById("charts"));
                 myChart.setOption(chartsOption);
             }, 300);
@@ -68098,7 +68099,7 @@ exports.default = (0, _create2.default)({
     }
   }
 });
-},{"../utils/create":"node_modules\\vant\\es\\utils\\create.js","../mixins/touch":"node_modules\\vant\\es\\mixins\\touch.js","../utils/event":"node_modules\\vant\\es\\utils\\event.js"}],"src\\components\\monthPicker.vue":[function(require,module,exports) {
+},{"../utils/create":"node_modules\\vant\\es\\utils\\create.js","../mixins/touch":"node_modules\\vant\\es\\mixins\\touch.js","../utils/event":"node_modules\\vant\\es\\utils\\event.js"}],"src\\components\\MonthPicker.vue":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68154,14 +68155,14 @@ exports.default = {
         }
     }
 };
-        var $213a27 = exports.default || module.exports;
+        var $162736 = exports.default || module.exports;
       
-      if (typeof $213a27 === 'function') {
-        $213a27 = $213a27.options;
+      if (typeof $162736 === 'function') {
+        $162736 = $162736.options;
       }
     
         /* template */
-        Object.assign($213a27, (function () {
+        Object.assign($162736, (function () {
           var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -68212,7 +68213,7 @@ render._withStripped = true
             render: render,
             staticRenderFns: staticRenderFns,
             _compiled: true,
-            _scopeId: "data-v-213a27",
+            _scopeId: "data-v-162736",
             functional: undefined
           };
         })());
@@ -68225,9 +68226,9 @@ render._withStripped = true
         if (api.compatible) {
           module.hot.accept();
           if (!module.hot.data) {
-            api.createRecord('$213a27', $213a27);
+            api.createRecord('$162736', $162736);
           } else {
-            api.reload('$213a27', $213a27);
+            api.reload('$162736', $162736);
           }
         }
 
@@ -68239,65 +68240,85 @@ render._withStripped = true
       }
     })();
 },{"vant/es/datetime-picker/style":"node_modules\\vant\\es\\datetime-picker\\style\\index.js","vant/es/datetime-picker":"node_modules\\vant\\es\\datetime-picker\\index.js","vant/es/popup/style":"node_modules\\vant\\es\\popup\\style\\index.js","vant/es/popup":"node_modules\\vant\\es\\popup\\index.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"src\\pages\\StaffDetail.vue":[function(require,module,exports) {
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
-var _dialog = require('vant/es/dialog');
+var _dialog = require("vant/es/dialog");
 
 var _dialog2 = _interopRequireDefault(_dialog);
 
-var _toast = require('vant/es/toast');
+var _toast = require("vant/es/toast");
 
 var _toast2 = _interopRequireDefault(_toast);
 
-var _swipeItem = require('vant/es/swipe-item');
+var _swipeItem = require("vant/es/swipe-item");
 
 var _swipeItem2 = _interopRequireDefault(_swipeItem);
 
-var _swipe = require('vant/es/swipe');
+var _swipe = require("vant/es/swipe");
 
 var _swipe2 = _interopRequireDefault(_swipe);
 
-var _button = require('vant/es/button');
+var _button = require("vant/es/button");
 
 var _button2 = _interopRequireDefault(_button);
 
-var _popup = require('vant/es/popup');
+var _popup = require("vant/es/popup");
 
 var _popup2 = _interopRequireDefault(_popup);
 
-require('vant/es/dialog/style');
+require("vant/es/dialog/style");
 
-require('vant/es/toast/style');
+require("vant/es/toast/style");
 
-require('vant/es/swipe-item/style');
+require("vant/es/swipe-item/style");
 
-require('vant/es/swipe/style');
+require("vant/es/swipe/style");
 
-require('vant/es/button/style');
+require("vant/es/button/style");
 
-require('vant/es/popup/style');
+require("vant/es/popup/style");
 
-var _dayjs = require('dayjs');
+var _dayjs = require("dayjs");
 
 var _dayjs2 = _interopRequireDefault(_dayjs);
 
-var _numberPrecision = require('number-precision');
+var _numberPrecision = require("number-precision");
 
 var _numberPrecision2 = _interopRequireDefault(_numberPrecision);
 
-var _monthPicker = require('../components/monthPicker');
+var _onfire = require("onfire.js");
 
-var _monthPicker2 = _interopRequireDefault(_monthPicker);
+var _onfire2 = _interopRequireDefault(_onfire);
 
-var _fetch = require('../../utils/fetch');
+var _pieceRecord = require("../../utils/pieceRecord.js");
+
+var _pieceRecord2 = _interopRequireDefault(_pieceRecord);
+
+var _MonthPicker = require("../components/MonthPicker");
+
+var _MonthPicker2 = _interopRequireDefault(_MonthPicker);
+
+var _TypePicker = require("../components/TypePicker");
+
+var _TypePicker2 = _interopRequireDefault(_TypePicker);
+
+var _TimePicker = require("../components/TimePicker");
+
+var _TimePicker2 = _interopRequireDefault(_TimePicker);
+
+var _StaffPicker = require("../components/StaffPicker");
+
+var _StaffPicker2 = _interopRequireDefault(_StaffPicker);
+
+var _fetch = require("../../utils/fetch");
 
 var Fetch = _interopRequireWildcard(_fetch);
 
-var _delete = require('../../utils/delete');
+var _delete = require("../../utils/delete");
 
 var Delete = _interopRequireWildcard(_delete);
 
@@ -68305,6 +68326,42 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -68355,146 +68412,196 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 
-var echarts = require('echarts/lib/echarts');
-require('echarts/lib/chart/pie');
-require('echarts/lib/component/tooltip');
-require('echarts/lib/component/title');
+var echarts = require("echarts/lib/echarts");
+require("echarts/lib/chart/pie");
+require("echarts/lib/component/tooltip");
+require("echarts/lib/component/title");
 exports.default = {
-    components: {
-        'VanPopup': _popup2.default,
-        'VanButton': _button2.default,
-        'VanSwipe': _swipe2.default,
-        'VanSwipeItem': _swipeItem2.default,
-        'MonthPicker': _monthPicker2.default
-    },
-    data: function data() {
-        console.log(this.$route.query);
-        return {
-            chooseMonth: this.$route.query.date,
-            addPopVisible: false,
-            activeIndex: 0,
-            summary: Fetch.staffSummary(this.$route.query.date),
-            initOption: {
-                title: {
-                    text: '当月统计',
-                    x: 'center',
-                    subtext: '当月工资:'
-                },
-                tooltip: {
-                    trigger: 'item',
-                    formatter: "型号: {b} </br> 数量: {c} 万 "
-                },
-                series: [{
-                    name: '数据',
-                    type: 'pie',
-                    radius: '55%',
-                    center: ['50%', '60%'],
-                    data: [],
-                    itemStyle: {
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
-                }]
+  components: {
+    VanPopup: _popup2.default,
+    VanButton: _button2.default,
+    VanSwipe: _swipe2.default,
+    VanSwipeItem: _swipeItem2.default,
+    MonthPicker: _MonthPicker2.default,
+    TypePicker: _TypePicker2.default,
+    TimePicker: _TimePicker2.default,
+    StaffPicker: _StaffPicker2.default
+  },
+  data: function data() {
+    //console.log(this.$route.query)
+    return {
+      chooseMonth: this.$route.query.date,
+      addPopVisible: false,
+      activeIndex: 0,
+      summary: Fetch.staffSummary(this.$route.query.date),
+      pieceRecordPopupVisible: false,
+      pieceRecordValue: {
+        staff: "",
+        type: "",
+        num: "",
+        time: ""
+      },
+      initOption: {
+        title: {
+          text: "当月统计",
+          x: "center",
+          subtext: "当月工资:"
+        },
+        tooltip: {
+          trigger: "item",
+          formatter: "型号: {b} </br> 数量: {c} 万 "
+        },
+        series: [{
+          name: "数据",
+          type: "pie",
+          radius: "55%",
+          center: ["50%", "60%"],
+          data: [],
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: "rgba(0, 0, 0, 0.5)"
             }
-        };
+          }
+        }]
+      }
+    };
+  },
+
+  computed: {
+    monthName: function monthName() {
+      return (0, _dayjs2.default)(this.chooseMonth).format("YYYY-MM");
     },
+    initialSwipe: function initialSwipe() {
+      var _this = this;
 
-    computed: {
-        monthName: function monthName() {
-            return (0, _dayjs2.default)(this.chooseMonth).format('YYYY-MM');
-        },
-        initialSwipe: function initialSwipe() {
-            var _this = this;
-
-            var index = Object.keys(this.summary).findIndex(function (item) {
-                return item == _this.$route.params.staff;
-            });
-            return index;
-        }
-
-    },
-    mounted: function mounted() {
-        console.log(this.$route);
-        this.activeIndex = this.initialSwipe;
-        this.renderCharts(this.chooseMonth);
-    },
-
-    methods: {
-        swipeChange: function swipeChange(index) {
-            if (!Object.values(this.summary)[index].total) {
-                _toast2.default.fail({
-                    message: '没有记单记录',
-                    duration: 1000
-                });
-            }
-        },
-        lastMonth: function lastMonth() {
-            console.log(this.activeIndex - 1);
-            if (this.activeIndex > 0) {
-                this.$refs.swipe.swipeTo(this.activeIndex - 1);
-                this.activeIndex -= 1;
-            }
-        },
-        nextMonth: function nextMonth() {
-            console.log(this.activeIndex + 1);
-            if (this.activeIndex < Object.keys(this.summary).length - 1) {
-                this.$refs.swipe.swipeTo(this.activeIndex + 1);
-                this.activeIndex += 1;
-            }
-        },
-        monthChoose: function monthChoose(month) {
-            this.chooseMonth = month;
-            console.log(Fetch.staffSummary(month));
-            this.summary = Fetch.staffSummary(month);
-            this.renderCharts(month);
-        },
-        deleteRecord: function deleteRecord(record, key) {
-            var _this2 = this;
-
-            console.log(this.summary);
-            console.log(key);
-            var that = this;
-            _dialog2.default.confirm({
-                title: "提示",
-                message: '\u5220\u9664\u8BB0\u5F55\u4F1A\u540C\u65F6\u5220\u9664\u76F8\u5173\u6570\u636E\uFF0C\u786E\u5B9A\u8981\u5220\u9664\u5417\uFF1F'
-            }).then(function () {
-                Delete.record(record, function () {
-                    var index = that.summary[key].record.findIndex(function (item) {
-                        return item == record;
-                    });
-                    var recordList = _this2.summary[key].record;
-                    recordList.splice(index, 1);
-                    that.$set(that.$data.summary[key], 'record', recordList);
-                    that.renderCharts(that.chooseMonth);
-                });
-            }).catch(function () {
-                // on cancel
-            });
-        },
-        renderCharts: function renderCharts(month) {
-            var _this3 = this;
-
-            _toast2.default.loading('加载中...');
-            setTimeout(function () {
-                _toast2.default.clear();
-                Object.entries(_this3.summary).forEach(function (item) {
-                    var staffName = item[0];
-                    var staffSummary = item[1];
-                    var detailList = Object.entries(staffSummary.detail).map(function (item) {
-                        return { name: item[0], value: item[1] };
-                    });
-                    var options = _this3.initOption;
-                    options.series[0].data = detailList;
-                    options.title.subtext = '\u5E94\u53D1\u5DE5\u8D44\uFF1A' + _numberPrecision2.default.times(staffSummary.total, 10000) + '\u5143';
-                    var myChart = echarts.init(document.getElementById(staffName + 'Charts'));
-                    myChart.setOption(options);
-                });
-            }, 50);
-        }
+      var index = Object.keys(this.summary).findIndex(function (item) {
+        return item == _this.$route.params.staff;
+      });
+      return index;
     }
+  },
+  mounted: function mounted() {
+    var vm = this;
+    var targetStaff = Object.keys(this.summary)[this.activeIndex];
+    this.activeIndex = this.initialSwipe;
+    this.renderCharts(this.chooseMonth);
+    // 操作记录更新监听
+    _onfire2.default.on("add_operation_record", function (record) {
+      vm.$set(vm.$data.summary[targetStaff], "record", [record].concat(_toConsumableArray(vm.$data.summary[targetStaff].record)));
+    });
+  },
+  beforeDestroy: function beforeDestroy() {
+    _onfire2.default.un("add_operation_record");
+  },
+
+  methods: {
+    doRecord: function doRecord() {
+      var targetStaff = Object.keys(this.summary)[this.activeIndex];
+      this.pieceRecordPopupVisible = true;
+      this.pieceRecordValue = {
+        staff: targetStaff,
+        type: "",
+        num: 0,
+        time: new Date().getTime()
+      };
+    },
+    typeChoose: function typeChoose(val) {
+      this.$set(this.$data.pieceRecordValue, "type", val);
+    },
+    timeChoose: function timeChoose(val) {
+      this.$set(this.$data.pieceRecordValue, "time", val.getTime());
+    },
+    staffChoose: function staffChoose(val) {
+      this.$set(this.$data.pieceRecordValue, "staff", val);
+    },
+    swipeChange: function swipeChange(index) {
+      if (!Object.values(this.summary)[index].total) {
+        _toast2.default.fail({
+          message: "没有记单记录",
+          duration: 1000
+        });
+      }
+    },
+    lastMonth: function lastMonth() {
+      //console.log(this.activeIndex - 1)
+      if (this.activeIndex > 0) {
+        this.$refs.swipe.swipeTo(this.activeIndex - 1);
+        this.activeIndex -= 1;
+      }
+    },
+    nextMonth: function nextMonth() {
+      //console.log(this.activeIndex + 1)
+      if (this.activeIndex < Object.keys(this.summary).length - 1) {
+        this.$refs.swipe.swipeTo(this.activeIndex + 1);
+        this.activeIndex += 1;
+      }
+    },
+    monthChoose: function monthChoose(month) {
+      this.chooseMonth = month;
+      //console.log(Fetch.staffSummary(month))
+      this.summary = Fetch.staffSummary(month);
+      this.renderCharts(month);
+    },
+    pieceRecordConfirm: function pieceRecordConfirm() {
+      //console.log(this.pieceRecordValue);
+      if (!this.pieceRecordValue.type) {
+        _toast2.default.fail("请选择型号");
+      } else if (!this.pieceRecordValue.num) {
+        _toast2.default.fail("数量不能为0");
+      } else if (!this.pieceRecordValue.staff) {
+        _toast2.default.fail("请选择员工");
+      } else {
+        (0, _pieceRecord2.default)(this.pieceRecordValue);
+        this.pieceRecordPopupVisible = false;
+        location.reload();
+      }
+    },
+    deleteRecord: function deleteRecord(record, key) {
+      var _this2 = this;
+
+      //console.log(this.summary)
+      //console.log(key)
+      var that = this;
+      _dialog2.default.confirm({
+        title: "提示",
+        message: "\u5220\u9664\u8BB0\u5F55\u4F1A\u540C\u65F6\u5220\u9664\u76F8\u5173\u6570\u636E\uFF0C\u786E\u5B9A\u8981\u5220\u9664\u5417\uFF1F"
+      }).then(function () {
+        Delete.record(record, function () {
+          var index = that.summary[key].record.findIndex(function (item) {
+            return item == record;
+          });
+          var recordList = _this2.summary[key].record;
+          recordList.splice(index, 1);
+          that.$set(that.$data.summary[key], "record", recordList);
+          that.renderCharts(that.chooseMonth);
+        });
+      }).catch(function () {
+        // on cancel
+      });
+    },
+    renderCharts: function renderCharts(month) {
+      var _this3 = this;
+
+      _toast2.default.loading("加载中...");
+      setTimeout(function () {
+        _toast2.default.clear();
+        Object.entries(_this3.summary).forEach(function (item) {
+          var staffName = item[0];
+          var staffSummary = item[1];
+          var detailList = Object.entries(staffSummary.detail).map(function (item) {
+            return { name: item[0], value: item[1] };
+          });
+          var options = _this3.initOption;
+          options.series[0].data = detailList;
+          options.title.subtext = "\u5E94\u53D1\u5DE5\u8D44\uFF1A" + _numberPrecision2.default.times(staffSummary.total, 10000) + "\u5143";
+          var myChart = echarts.init(document.getElementById(staffName + "Charts"));
+          myChart.setOption(options);
+        });
+      }, 50);
+    }
+  }
 };
         var $b21b5a = exports.default || module.exports;
       
@@ -68512,6 +68619,12 @@ exports.default = {
     "div",
     { staticClass: "staffManageContainer" },
     [
+      _c("i", {
+        staticClass: "iconfont icon-add",
+        staticStyle: { position: "fixed", top: ".4rem", right: ".4rem" },
+        on: { click: _vm.doRecord }
+      }),
+      _vm._v(" "),
       _c(
         "van-swipe",
         {
@@ -68679,7 +68792,174 @@ exports.default = {
       _c("month-picker", {
         ref: "monthPicker",
         on: { change: _vm.monthChoose }
-      })
+      }),
+      _vm._v(" "),
+      _c("type-picker", { ref: "typePicker", on: { change: _vm.typeChoose } }),
+      _vm._v(" "),
+      _c("time-picker", { ref: "timePicker", on: { change: _vm.timeChoose } }),
+      _vm._v(" "),
+      _c("staff-picker", {
+        ref: "staffPicker",
+        on: { change: _vm.staffChoose }
+      }),
+      _vm._v(" "),
+      _c(
+        "van-popup",
+        {
+          staticClass: "popup",
+          staticStyle: { width: "100%", background: "#f3f3f3" },
+          attrs: { position: "right" },
+          model: {
+            value: _vm.pieceRecordPopupVisible,
+            callback: function($$v) {
+              _vm.pieceRecordPopupVisible = $$v
+            },
+            expression: "pieceRecordPopupVisible"
+          }
+        },
+        [
+          _c("div", { staticStyle: { width: "100%", height: "100%" } }, [
+            _c(
+              "h2",
+              {
+                staticClass: "dialogTitle",
+                staticStyle: { height: "1.2rem" },
+                attrs: { flex: "main:center cross:center" }
+              },
+              [_vm._v("员工记单")]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticStyle: { height: "65%" },
+                attrs: { flex: "dir:top cross:center main:center" }
+              },
+              [
+                _c("p", { attrs: { flex: "main:center cross:center" } }, [
+                  _c("span", { staticClass: "inputTitle" }, [_vm._v("员工：")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    attrs: {
+                      type: "text",
+                      readonly: "",
+                      placeholder: "点击选择员工"
+                    },
+                    domProps: { value: _vm.pieceRecordValue.staff },
+                    on: {
+                      click: function($event) {
+                        _vm.$refs.staffPicker.toggle()
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("p", { attrs: { flex: "main:center cross:center" } }, [
+                  _c("span", { staticClass: "inputTitle" }, [_vm._v("型号：")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    attrs: {
+                      type: "text",
+                      readonly: "",
+                      placeholder: "点击选择型号"
+                    },
+                    domProps: { value: _vm.pieceRecordValue.type },
+                    on: {
+                      click: function($event) {
+                        _vm.$refs.typePicker.toggle()
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("p", { attrs: { flex: "main:center cross:center" } }, [
+                  _c("span", { staticClass: "inputTitle" }, [
+                    _vm._v("数量（万）：")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.pieceRecordValue.num,
+                        expression: "pieceRecordValue.num"
+                      }
+                    ],
+                    attrs: { type: "number" },
+                    domProps: { value: _vm.pieceRecordValue.num },
+                    on: {
+                      focus: function($event) {
+                        $event.target.select()
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.pieceRecordValue,
+                          "num",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("p", { attrs: { flex: "main:center cross:center" } }, [
+                  _c("span", { staticClass: "inputTitle" }, [_vm._v("时间：")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    attrs: { type: "text", readonly: "" },
+                    domProps: {
+                      value: _vm._f("toTime")(_vm.pieceRecordValue.time)
+                    },
+                    on: {
+                      click: function($event) {
+                        _vm.$refs.timePicker.toggle()
+                      }
+                    }
+                  })
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticStyle: { height: "2rem", padding: "0 10%" },
+                attrs: { flex: "main:justify cross:center" }
+              },
+              [
+                _c(
+                  "van-button",
+                  {
+                    staticStyle: { width: "40%" },
+                    attrs: { type: "default" },
+                    on: {
+                      click: function($event) {
+                        _vm.pieceRecordPopupVisible = false
+                      }
+                    }
+                  },
+                  [_vm._v("取消")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "van-button",
+                  {
+                    staticStyle: { width: "40%" },
+                    attrs: { type: "primary" },
+                    on: { click: _vm.pieceRecordConfirm }
+                  },
+                  [_vm._v("确定")]
+                )
+              ],
+              1
+            )
+          ])
+        ]
+      )
     ],
     1
   )
@@ -68717,7 +68997,7 @@ render._withStripped = true
       
       }
     })();
-},{"vant/es/dialog/style":"node_modules\\vant\\es\\dialog\\style\\index.js","vant/es/dialog":"node_modules\\vant\\es\\dialog\\index.js","vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","vant/es/swipe-item/style":"node_modules\\vant\\es\\swipe-item\\style\\index.js","vant/es/swipe-item":"node_modules\\vant\\es\\swipe-item\\index.js","vant/es/swipe/style":"node_modules\\vant\\es\\swipe\\style\\index.js","vant/es/swipe":"node_modules\\vant\\es\\swipe\\index.js","vant/es/button/style":"node_modules\\vant\\es\\button\\style\\index.js","vant/es/button":"node_modules\\vant\\es\\button\\index.js","vant/es/popup/style":"node_modules\\vant\\es\\popup\\style\\index.js","vant/es/popup":"node_modules\\vant\\es\\popup\\index.js","echarts/lib/echarts":"node_modules\\echarts\\lib\\echarts.js","echarts/lib/chart/pie":"node_modules\\echarts\\lib\\chart\\pie.js","echarts/lib/component/tooltip":"node_modules\\echarts\\lib\\component\\tooltip.js","echarts/lib/component/title":"node_modules\\echarts\\lib\\component\\title.js","dayjs":"node_modules\\dayjs\\dayjs.min.js","number-precision":"node_modules\\number-precision\\build\\index.js","../components/monthPicker":"src\\components\\monthPicker.vue","../../utils/fetch":"utils\\fetch.js","../../utils/delete":"utils\\delete.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"utils\\staffAdd.js":[function(require,module,exports) {
+},{"vant/es/dialog/style":"node_modules\\vant\\es\\dialog\\style\\index.js","vant/es/dialog":"node_modules\\vant\\es\\dialog\\index.js","vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","vant/es/swipe-item/style":"node_modules\\vant\\es\\swipe-item\\style\\index.js","vant/es/swipe-item":"node_modules\\vant\\es\\swipe-item\\index.js","vant/es/swipe/style":"node_modules\\vant\\es\\swipe\\style\\index.js","vant/es/swipe":"node_modules\\vant\\es\\swipe\\index.js","vant/es/button/style":"node_modules\\vant\\es\\button\\style\\index.js","vant/es/button":"node_modules\\vant\\es\\button\\index.js","vant/es/popup/style":"node_modules\\vant\\es\\popup\\style\\index.js","vant/es/popup":"node_modules\\vant\\es\\popup\\index.js","echarts/lib/echarts":"node_modules\\echarts\\lib\\echarts.js","echarts/lib/chart/pie":"node_modules\\echarts\\lib\\chart\\pie.js","echarts/lib/component/tooltip":"node_modules\\echarts\\lib\\component\\tooltip.js","echarts/lib/component/title":"node_modules\\echarts\\lib\\component\\title.js","dayjs":"node_modules\\dayjs\\dayjs.min.js","number-precision":"node_modules\\number-precision\\build\\index.js","onfire.js":"node_modules\\onfire.js\\dist\\onfire.min.js","../../utils/pieceRecord.js":"utils\\pieceRecord.js","../components/MonthPicker":"src\\components\\MonthPicker.vue","../components/TypePicker":"src\\components\\TypePicker.vue","../components/TimePicker":"src\\components\\TimePicker.vue","../components/StaffPicker":"src\\components\\StaffPicker.vue","../../utils/fetch":"utils\\fetch.js","../../utils/delete":"utils\\delete.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"utils\\staffAdd.js":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68783,7 +69063,147 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 // @type : 型号
 // @num : 数量
 // @time : 时间
-},{"vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","store":"node_modules\\store\\dist\\store.legacy.js","number-precision":"node_modules\\number-precision\\build\\index.js","onfire.js":"node_modules\\onfire.js\\dist\\onfire.min.js"}],"src\\pages\\StaffList.vue":[function(require,module,exports) {
+},{"vant/es/toast/style":"node_modules\\vant\\es\\toast\\style\\index.js","vant/es/toast":"node_modules\\vant\\es\\toast\\index.js","store":"node_modules\\store\\dist\\store.legacy.js","number-precision":"node_modules\\number-precision\\build\\index.js","onfire.js":"node_modules\\onfire.js\\dist\\onfire.min.js"}],"src\\components\\monthPicker.vue":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _datetimePicker = require('vant/es/datetime-picker');
+
+var _datetimePicker2 = _interopRequireDefault(_datetimePicker);
+
+var _popup = require('vant/es/popup');
+
+var _popup2 = _interopRequireDefault(_popup);
+
+require('vant/es/datetime-picker/style');
+
+require('vant/es/popup/style');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    components: {
+        'vanPopup': _popup2.default,
+        'vanDatetimePicker': _datetimePicker2.default
+    },
+    data: function data() {
+        return {
+            show: false,
+            currentDate: new Date()
+        };
+    },
+    mounted: function mounted() {},
+
+    methods: {
+        toggle: function toggle() {
+            this.show = !this.show;
+        },
+        onConfim: function onConfim(value) {
+            this.value = value;
+            this.$emit('change', value);
+            this.toggle();
+        },
+        onCancel: function onCancel() {
+            this.toggle();
+        }
+    }
+};
+        var $213a27 = exports.default || module.exports;
+      
+      if (typeof $213a27 === 'function') {
+        $213a27 = $213a27.options;
+      }
+    
+        /* template */
+        Object.assign($213a27, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "van-popup",
+    {
+      staticStyle: { background: "#e5e5e5" },
+      attrs: { position: "bottom" },
+      model: {
+        value: _vm.show,
+        callback: function($$v) {
+          _vm.show = $$v
+        },
+        expression: "show"
+      }
+    },
+    [
+      _c(
+        "h4",
+        { staticClass: "title", attrs: { flex: "main:start cross:center" } },
+        [_vm._v("选择时间")]
+      ),
+      _vm._v(" "),
+      _c("van-datetime-picker", {
+        attrs: {
+          type: "year-month",
+          "confirm-button-text": "确定",
+          "cancel-button-text": "取消"
+        },
+        on: { confirm: _vm.onConfim, cancel: _vm.onCancel },
+        model: {
+          value: _vm.currentDate,
+          callback: function($$v) {
+            _vm.currentDate = $$v
+          },
+          expression: "currentDate"
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: "data-v-213a27",
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$213a27', $213a27);
+          } else {
+            api.reload('$213a27', $213a27);
+          }
+        }
+
+        
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
+      }
+    })();
+},{"vant/es/datetime-picker/style":"node_modules\\vant\\es\\datetime-picker\\style\\index.js","vant/es/datetime-picker":"node_modules\\vant\\es\\datetime-picker\\index.js","vant/es/popup/style":"node_modules\\vant\\es\\popup\\style\\index.js","vant/es/popup":"node_modules\\vant\\es\\popup\\index.js","_css_loader":"node_modules\\_parcel-bundler@1.9.7@parcel-bundler\\src\\builtins\\css-loader.js","vue-hot-reload-api":"node_modules\\vue-hot-reload-api\\dist\\index.js","vue":"node_modules\\vue\\dist\\vue.runtime.esm.js"}],"src\\pages\\StaffList.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68882,7 +69302,7 @@ exports.default = {
 
     methods: {
         linkToDetail: function linkToDetail(staff) {
-            this.$router.push({ path: "/staffDetail/" + staff, query: { date: this.chooseMonth.getTime() } });
+            this.$router.push({ path: "/staffDetail/" + staff, query: { date: (0, _dayjs2.default)(this.chooseMonth).format('YYYY-MM') } });
         },
         monthChoose: function monthChoose(month) {
             var _this = this;
@@ -76155,7 +76575,7 @@ exports.default = {
     };
   },
   mounted: function mounted() {
-    console.log(this.itemTypeList);
+    //console.log(this.itemTypeList);
   },
 
   methods: {
@@ -76975,7 +77395,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '57114' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '60277' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 

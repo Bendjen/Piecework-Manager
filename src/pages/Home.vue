@@ -315,6 +315,7 @@ export default {
     },
     beforeDestroy () {
         onfire.un("add_operation_record");
+        onfire.un("reload");
     },
     methods: {
         typeChoose (val) {
@@ -347,7 +348,7 @@ export default {
             }
         },
         pieceRecordConfirm () {
-            console.log(this.pieceRecordValue);
+            //console.log(this.pieceRecordValue);
             if (!this.pieceRecordValue.type) {
                 Toast.fail("请选择型号");
             } else if (!this.pieceRecordValue.num) {
@@ -396,7 +397,7 @@ export default {
                 ).map(item => {
                     return { name: item[0], value: item[1].num };
                 });
-                console.log(chartsOption);
+                //console.log(chartsOption);
                 let myChart = echarts.init(document.getElementById("charts"));
                 myChart.setOption(chartsOption);
             }, 300);

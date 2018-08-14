@@ -5,7 +5,7 @@ import onfire from "onfire.js";
 // 读取JSON文件进localStorage
 
 export default function(data) {
-	console.log(data)
+	//console.log(data)
 	store.set("OPERATION_RECORD_LIST", data["OPERATION_RECORD_LIST"]);
 	// store.set('STOCK',data['STOCK']);
 	// store.set('EXPORT_RECORD_LIST',data['EXPORT_RECORD_LIST']);

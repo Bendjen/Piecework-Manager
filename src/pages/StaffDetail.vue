@@ -4,7 +4,7 @@
             <i class='iconfont icon-back' @click="$router.push('/home')"></i>
             <i class='iconfont icon-add' @click="addPopVisible=true"></i>
         </div> -->
-
+			<i class='iconfont icon-add' style='position:fixed;top:.4rem;right:.4rem' @click="doRecord"></i>
             <van-swipe style='height:100%;' :loop='false' :show-indicators='false' :initial-swipe='initialSwipe'  ref='swipe' @change='swipeChange'>
                 <van-swipe-item v-for='(item,key) in summary' :key='key'>
                     <div style='height:100%;width:100%;' class='staffDetail'>
@@ -24,14 +24,16 @@
                             <h1 style='height:10%' flex='cross:center'>当月记单</h1>
                             <ul style='height:80%;'>
                                 <li v-if="item.record.length == 0"> <div>暂无任何操作记录</div></li>
-                                <li flex='main:justify cross:center'  v-for='record in item.record' :key='record.time' style='position:relative;'>
-                                    <i class='iconfont icon-close' style='position:absolute; right:.2rem;top:.2rem' @click="deleteRecord(record,key)"></i>
-                                    <div flex='dir:top'>
-                                        <h4>{{record.type}}</h4>
-                                        <p class='time'  style='color:#6a788c'>{{record.time | toTime}}</p>
-                                    </div>
-                                    <div class='content'  style='color:#38f;'> +{{record.num}} 万</div>
-                                </li>
+
+								<li flex='main:justify cross:center'  v-for='record in item.record' :key='record.time' style='position:relative;'>
+									<i class='iconfont icon-close' style='position:absolute; right:.2rem;top:.2rem' @click="deleteRecord(record,key)"></i>
+									<div flex='dir:top'>
+										<h4>{{record.type}}</h4>
+										<p class='time'  style='color:#6a788c'>{{record.time | toTime}}</p>
+									</div>
+									<div class='content'  style='color:#38f;'> +{{record.num}} 万</div>
+								</li>
+
                             </ul>
                         </div>
                     </div>
@@ -42,152 +44,252 @@
          <i class='iconfont icon-last' v-if="!(activeIndex == 0)"  @click="lastMonth"></i>
          <i class='iconfont icon-next' v-if="!(activeIndex >= Object.keys(summary).length-1)"  @click="nextMonth"></i>
 
-
+		<!-- 选择器 -->
         <month-picker ref='monthPicker' @change='monthChoose'></month-picker>
+        <type-picker ref='typePicker' @change='typeChoose'></type-picker>
+        <time-picker ref='timePicker' @change='timeChoose'></time-picker>
+        <staff-picker ref='staffPicker' @change='staffChoose'></staff-picker>
+
+		 <!-- 记单弹窗 -->
+          <van-popup v-model="pieceRecordPopupVisible" position="right" style='width:100%;background: #f3f3f3;' class='popup'>
+              <div style='width:100%;height:100%;'>
+                  <h2 class='dialogTitle' style='height:1.2rem;' flex='main:center cross:center'>员工记单</h2>
+                  <div style='height:65%;' flex='dir:top cross:center main:center'>
+                        <p flex='main:center cross:center'>
+                            <span class='inputTitle'>员工：</span>
+                            <input type="text" readonly placeholder="点击选择员工" @click="$refs.staffPicker.toggle()" :value="pieceRecordValue.staff">
+                        </p>
+                        <p flex='main:center cross:center'>
+                            <span class='inputTitle'>型号：</span>
+                            <input type="text" readonly placeholder="点击选择型号" @click="$refs.typePicker.toggle()" :value="pieceRecordValue.type">
+                        </p>
+                        <p flex='main:center cross:center'>
+                            <span class='inputTitle'>数量（万）：</span>
+                            <input type="number" v-model="pieceRecordValue.num" @focus="$event.target.select()">
+                        </p>
+                        <p flex='main:center cross:center'>
+                            <span class='inputTitle'>时间：</span>
+                            <input type="text" readonly :value="pieceRecordValue.time | toTime" @click="$refs.timePicker.toggle()">
+                        </p>
+                  </div>
+                  <div style='height:2rem;padding:0 10%;' flex='main:justify cross:center'>
+                        <van-button type="default" style='width:40%' @click='pieceRecordPopupVisible = false'>取消</van-button>
+                        <van-button type="primary" style='width:40%' @click='pieceRecordConfirm'>确定</van-button>
+                  </div>
+              </div>
+          </van-popup>
     </div>
 </template>
 
 <script>
-let echarts = require('echarts/lib/echarts');
-require('echarts/lib/chart/pie');
-require('echarts/lib/component/tooltip');
-require('echarts/lib/component/title');
-import dayjs from 'dayjs'
+let echarts = require("echarts/lib/echarts");
+require("echarts/lib/chart/pie");
+require("echarts/lib/component/tooltip");
+require("echarts/lib/component/title");
+import dayjs from "dayjs";
 import NP from "number-precision";
+import onfire from "onfire.js";
 
-import { Popup, Button, Toast, Swipe, SwipeItem,Dialog } from 'vant'
+import { Popup, Button, Toast, Swipe, SwipeItem, Dialog } from "vant";
 
-import MonthPicker from "../components/monthPicker"
+import PieceRecord from "../../utils/pieceRecord.js";
+import MonthPicker from "../components/MonthPicker";
+import TypePicker from "../components/TypePicker";
+import TimePicker from "../components/TimePicker";
+import StaffPicker from "../components/StaffPicker";
 import * as Fetch from "../../utils/fetch";
 import * as Delete from "../../utils/delete";
 
 export default {
-    components: {
-        'VanPopup': Popup,
-        'VanButton': Button,
-        'VanSwipe': Swipe,
-        'VanSwipeItem': SwipeItem,
-        'MonthPicker': MonthPicker,
-    },
-    data () {
-        console.log(this.$route.query)
-        return {
-            chooseMonth: this.$route.query.date,
-            addPopVisible: false,
-            activeIndex: 0,
-            summary: Fetch.staffSummary(this.$route.query.date),
-            initOption: {
-                title: {
-                    text: '当月统计',
-                    x: 'center',
-                    subtext: '当月工资:'
-                },
-                tooltip: {
-                    trigger: 'item',
-                    formatter: "型号: {b} </br> 数量: {c} 万 "
-                },
-                series: [
-                    {
-                        name: '数据',
-                        type: 'pie',
-                        radius: '55%',
-                        center: ['50%', '60%'],
-                        data: [],
-                        itemStyle: {
-                            emphasis: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
-                        }
-                    }
-                ]
+  components: {
+    VanPopup: Popup,
+    VanButton: Button,
+    VanSwipe: Swipe,
+    VanSwipeItem: SwipeItem,
+    MonthPicker: MonthPicker,
+    TypePicker: TypePicker,
+    TimePicker: TimePicker,
+    StaffPicker: StaffPicker
+  },
+  data() {
+    //console.log(this.$route.query)
+    return {
+      chooseMonth: this.$route.query.date,
+      addPopVisible: false,
+      activeIndex: 0,
+      summary: Fetch.staffSummary(this.$route.query.date),
+      pieceRecordPopupVisible: false,
+      pieceRecordValue: {
+        staff: "",
+        type: "",
+        num: "",
+        time: ""
+      },
+      initOption: {
+        title: {
+          text: "当月统计",
+          x: "center",
+          subtext: "当月工资:"
+        },
+        tooltip: {
+          trigger: "item",
+          formatter: "型号: {b} </br> 数量: {c} 万 "
+        },
+        series: [
+          {
+            name: "数据",
+            type: "pie",
+            radius: "55%",
+            center: ["50%", "60%"],
+            data: [],
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)"
+              }
             }
-        }
+          }
+        ]
+      }
+    };
+  },
+  computed: {
+    monthName: function() {
+      return dayjs(this.chooseMonth).format("YYYY-MM");
     },
-    computed: {
-        monthName: function () {
-            return dayjs(this.chooseMonth).format('YYYY-MM')
-        },
-        initialSwipe: function () {
-            let index = Object.keys(this.summary).findIndex(item => item == this.$route.params.staff)
-            return index
-        },
-
-    },
-    mounted () {
-        console.log(this.$route)
-        this.activeIndex = this.initialSwipe;
-        this.renderCharts(this.chooseMonth)
-    },
-    methods: {
-        swipeChange (index) {
-            if (!Object.values(this.summary)[index].total) {
-                Toast.fail({
-                    message: '没有记单记录',
-                    duration: 1000
-                })
-            }
-        },
-        lastMonth () {
-            console.log(this.activeIndex - 1)
-            if (this.activeIndex > 0) {
-                this.$refs.swipe.swipeTo(this.activeIndex - 1)
-                this.activeIndex -= 1
-            }
-
-        },
-        nextMonth () {
-            console.log(this.activeIndex + 1)
-            if (this.activeIndex < Object.keys(this.summary).length - 1) {
-                this.$refs.swipe.swipeTo(this.activeIndex + 1)
-                this.activeIndex += 1
-            }
-        },
-        monthChoose (month) {
-            this.chooseMonth = month;
-            console.log(Fetch.staffSummary(month))
-            this.summary = Fetch.staffSummary(month)
-            this.renderCharts(month)
-        },
-        deleteRecord (record,key) {
-			console.log(this.summary)
-			console.log(key)
-            let that = this;
-            Dialog.confirm({
-                title: "提示",
-                message: `删除记录会同时删除相关数据，确定要删除吗？`
-            })
-                .then(() => {
-                    Delete.record(record, () => {
-						let index = that.summary[key].record.findIndex(item => item ==  record)
-						let recordList = this.summary[key].record
-						recordList.splice(index, 1);
-						that.$set(that.$data.summary[key],'record',recordList)
-						that.renderCharts(that.chooseMonth)
-					});
-                })
-                .catch(() => {
-                    // on cancel
-                });
-        },
-        renderCharts (month) {
-            Toast.loading('加载中...')
-            setTimeout(() => {
-                Toast.clear()
-                Object.entries(this.summary).forEach(item => {
-                    let staffName = item[0];
-                    let staffSummary = item[1];
-                    let detailList = Object.entries(staffSummary.detail).map(item => { return { name: item[0], value: item[1] } })
-                    let options = this.initOption;
-                    options.series[0].data = detailList;
-                    options.title.subtext = `应发工资：${NP.times(staffSummary.total,10000)}元`;
-                    let myChart = echarts.init(document.getElementById(`${staffName}Charts`));
-                    myChart.setOption(options);
-                })
-            }, 50)
-        }
+    initialSwipe: function() {
+      let index = Object.keys(this.summary).findIndex(
+        item => item == this.$route.params.staff
+      );
+      return index;
     }
+  },
+  mounted() {
+    let vm = this;
+    let targetStaff = Object.keys(this.summary)[this.activeIndex];
+    this.activeIndex = this.initialSwipe;
+    this.renderCharts(this.chooseMonth);
+    // 操作记录更新监听
+    onfire.on("add_operation_record", function(record) {
+      vm.$set(vm.$data.summary[targetStaff], "record", [
+        record,
+        ...vm.$data.summary[targetStaff].record
+      ]);
+    });
+  },
+  beforeDestroy() {
+    onfire.un("add_operation_record");
+  },
+  methods: {
+    doRecord() {
+      let targetStaff = Object.keys(this.summary)[this.activeIndex];
+      this.pieceRecordPopupVisible = true;
+      this.pieceRecordValue = {
+        staff: targetStaff,
+        type: "",
+        num: 0,
+        time: new Date().getTime()
+      };
+    },
+    typeChoose(val) {
+      this.$set(this.$data.pieceRecordValue, "type", val);
+    },
+    timeChoose(val) {
+      this.$set(this.$data.pieceRecordValue, "time", val.getTime());
+    },
+    staffChoose(val) {
+      this.$set(this.$data.pieceRecordValue, "staff", val);
+    },
+    swipeChange(index) {
+      if (!Object.values(this.summary)[index].total) {
+        Toast.fail({
+          message: "没有记单记录",
+          duration: 1000
+        });
+      }
+    },
+    lastMonth() {
+      //console.log(this.activeIndex - 1)
+      if (this.activeIndex > 0) {
+        this.$refs.swipe.swipeTo(this.activeIndex - 1);
+        this.activeIndex -= 1;
+      }
+    },
+    nextMonth() {
+      //console.log(this.activeIndex + 1)
+      if (this.activeIndex < Object.keys(this.summary).length - 1) {
+        this.$refs.swipe.swipeTo(this.activeIndex + 1);
+        this.activeIndex += 1;
+      }
+    },
+    monthChoose(month) {
+      this.chooseMonth = month;
+      //console.log(Fetch.staffSummary(month))
+      this.summary = Fetch.staffSummary(month);
+      this.renderCharts(month);
+    },
+    pieceRecordConfirm() {
+      //console.log(this.pieceRecordValue);
+      if (!this.pieceRecordValue.type) {
+        Toast.fail("请选择型号");
+      } else if (!this.pieceRecordValue.num) {
+        Toast.fail("数量不能为0");
+      } else if (!this.pieceRecordValue.staff) {
+        Toast.fail("请选择员工");
+      } else {
+        PieceRecord(this.pieceRecordValue);
+		this.pieceRecordPopupVisible = false;
+		location.reload();
+      }
+    },
+    deleteRecord(record, key) {
+      //console.log(this.summary)
+      //console.log(key)
+      let that = this;
+      Dialog.confirm({
+        title: "提示",
+        message: `删除记录会同时删除相关数据，确定要删除吗？`
+      })
+        .then(() => {
+          Delete.record(record, () => {
+            let index = that.summary[key].record.findIndex(
+              item => item == record
+            );
+            let recordList = this.summary[key].record;
+            recordList.splice(index, 1);
+            that.$set(that.$data.summary[key], "record", recordList);
+            that.renderCharts(that.chooseMonth);
+          });
+        })
+        .catch(() => {
+          // on cancel
+        });
+    },
+    renderCharts(month) {
+      Toast.loading("加载中...");
+      setTimeout(() => {
+        Toast.clear();
+        Object.entries(this.summary).forEach(item => {
+          let staffName = item[0];
+          let staffSummary = item[1];
+          let detailList = Object.entries(staffSummary.detail).map(item => {
+            return { name: item[0], value: item[1] };
+          });
+          let options = this.initOption;
+          options.series[0].data = detailList;
+          options.title.subtext = `应发工资：${NP.times(
+            staffSummary.total,
+            10000
+          )}元`;
+          let myChart = echarts.init(
+            document.getElementById(`${staffName}Charts`)
+          );
+          myChart.setOption(options);
+        });
+      }, 50);
+    }
+  }
 };
 </script>
 
@@ -297,6 +399,13 @@ export default {
   font-size: 26px;
   color: #888888;
 }
+
+.inputTitle {
+  width: 2.9rem;
+  display: inline-block;
+  text-align: center;
+}
+
 </style>
 
 

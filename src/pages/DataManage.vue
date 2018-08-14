@@ -92,7 +92,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.itemTypeList);
+    //console.log(this.itemTypeList);
   },
   methods: {
     deleteStaff(name) {

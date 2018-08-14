@@ -106,7 +106,7 @@ export default {
     },
     methods: {
         linkToDetail (staff) {
-            this.$router.push({ path: `/staffDetail/${staff}`, query: { date: this.chooseMonth.getTime() } })
+            this.$router.push({ path: `/staffDetail/${staff}`, query: { date: dayjs(this.chooseMonth).format('YYYY-MM')} })
         },
         monthChoose (month) {
             this.chooseMonth = month;
