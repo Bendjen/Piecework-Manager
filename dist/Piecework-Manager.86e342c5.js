@@ -66269,7 +66269,7 @@ var _toast = require("vant/es/toast");
 
 var _toast2 = _interopRequireDefault(_toast);
 
-exports.default = function (_ref) {
+exports.default = function (_ref, callback) {
 	var staff = _ref.staff,
 	    type = _ref.type,
 	    num = _ref.num,
@@ -66298,6 +66298,7 @@ exports.default = function (_ref) {
 	// store.set('STAFF_PIECE_RECORD_LIST', staffPieceRecordList)
 
 	_toast2.default.success({ duration: 1000, message: "添加记单成功" });
+	callback && callback(newOperationRecord);
 };
 
 require("vant/es/toast/style");
@@ -68484,24 +68485,17 @@ exports.default = {
   },
   mounted: function mounted() {
     var vm = this;
-    var targetStaff = Object.keys(this.summary)[this.activeIndex];
+    this.targetStaff = Object.keys(this.summary)[this.activeIndex];
     this.activeIndex = this.initialSwipe;
     this.renderCharts(this.chooseMonth);
-    // 操作记录更新监听
-    _onfire2.default.on("add_operation_record", function (record) {
-      vm.$set(vm.$data.summary[targetStaff], "record", [record].concat(_toConsumableArray(vm.$data.summary[targetStaff].record)));
-    });
-  },
-  beforeDestroy: function beforeDestroy() {
-    _onfire2.default.un("add_operation_record");
   },
 
   methods: {
     doRecord: function doRecord() {
-      var targetStaff = Object.keys(this.summary)[this.activeIndex];
+      this.targetStaff = Object.keys(this.summary)[this.activeIndex];
       this.pieceRecordPopupVisible = true;
       this.pieceRecordValue = {
-        staff: targetStaff,
+        staff: this.targetStaff,
         type: "",
         num: 0,
         time: new Date().getTime()
@@ -68545,7 +68539,7 @@ exports.default = {
       this.renderCharts(month);
     },
     pieceRecordConfirm: function pieceRecordConfirm() {
-      //console.log(this.pieceRecordValue);
+      var that = this;
       if (!this.pieceRecordValue.type) {
         _toast2.default.fail("请选择型号");
       } else if (!this.pieceRecordValue.num) {
@@ -68553,9 +68547,11 @@ exports.default = {
       } else if (!this.pieceRecordValue.staff) {
         _toast2.default.fail("请选择员工");
       } else {
-        (0, _pieceRecord2.default)(this.pieceRecordValue);
-        this.pieceRecordPopupVisible = false;
-        location.reload();
+        (0, _pieceRecord2.default)(this.pieceRecordValue, function (record) {
+          that.$set(that.$data.summary[that.targetStaff], "record", [record].concat(_toConsumableArray(that.$data.summary[that.targetStaff].record)));
+          that.reRenderCharts();
+          that.pieceRecordPopupVisible = false;
+        });
       }
     },
     deleteRecord: function deleteRecord(record, key) {
@@ -68600,6 +68596,19 @@ exports.default = {
           myChart.setOption(options);
         });
       }, 50);
+    },
+    reRenderCharts: function reRenderCharts() {
+      this.summary = Fetch.staffSummary(this.$route.query.date);
+      var staffName = this.targetStaff;
+      var staffSummary = this.summary[staffName];
+      var detailList = Object.entries(staffSummary.detail).map(function (item) {
+        return { name: item[0], value: item[1] };
+      });
+      var options = this.initOption;
+      options.series[0].data = detailList;
+      options.title.subtext = "\u5E94\u53D1\u5DE5\u8D44\uFF1A" + _numberPrecision2.default.times(staffSummary.total, 10000) + "\u5143";
+      var myChart = echarts.init(document.getElementById(staffName + "Charts"));
+      myChart.setOption(options);
     }
   }
 };
@@ -68711,61 +68720,69 @@ exports.default = {
                       [
                         item.record.length == 0
                           ? _c("li", [_c("div", [_vm._v("暂无任何操作记录")])])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm._l(item.record, function(record) {
-                          return _c(
-                            "li",
-                            {
-                              key: record.time,
-                              staticStyle: { position: "relative" },
-                              attrs: { flex: "main:justify cross:center" }
-                            },
-                            [
-                              _c("i", {
-                                staticClass: "iconfont icon-close",
-                                staticStyle: {
-                                  position: "absolute",
-                                  right: ".2rem",
-                                  top: ".2rem"
-                                },
-                                on: {
-                                  click: function($event) {
-                                    _vm.deleteRecord(record, key)
-                                  }
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("div", { attrs: { flex: "dir:top" } }, [
-                                _c("h4", [_vm._v(_vm._s(record.type))]),
-                                _vm._v(" "),
-                                _c(
-                                  "p",
+                          : _c(
+                              "transition-group",
+                              { attrs: { name: "slide-fade" } },
+                              _vm._l(item.record, function(record) {
+                                return _c(
+                                  "li",
                                   {
-                                    staticClass: "time",
-                                    staticStyle: { color: "#6a788c" }
+                                    key: record.time,
+                                    staticStyle: { position: "relative" },
+                                    attrs: { flex: "main:justify cross:center" }
                                   },
                                   [
-                                    _vm._v(
-                                      _vm._s(_vm._f("toTime")(record.time))
+                                    _c("i", {
+                                      staticClass: "iconfont icon-close",
+                                      staticStyle: {
+                                        position: "absolute",
+                                        right: ".2rem",
+                                        top: ".2rem"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.deleteRecord(record, key)
+                                        }
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("div", { attrs: { flex: "dir:top" } }, [
+                                      _c("h4", [_vm._v(_vm._s(record.type))]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "p",
+                                        {
+                                          staticClass: "time",
+                                          staticStyle: { color: "#6a788c" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm._f("toTime")(record.time)
+                                            )
+                                          )
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "content",
+                                        staticStyle: { color: "#38f" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          " +" + _vm._s(record.num) + " 万"
+                                        )
+                                      ]
                                     )
                                   ]
                                 )
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                {
-                                  staticClass: "content",
-                                  staticStyle: { color: "#38f" }
-                                },
-                                [_vm._v(" +" + _vm._s(record.num) + " 万")]
-                              )
-                            ]
-                          )
-                        })
+                              })
+                            )
                       ],
-                      2
+                      1
                     )
                   ]
                 )
@@ -77395,7 +77412,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '60277' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '49851' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 

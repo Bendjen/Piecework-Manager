@@ -24,16 +24,16 @@
                             <h1 style='height:10%' flex='cross:center'>当月记单</h1>
                             <ul style='height:80%;'>
                                 <li v-if="item.record.length == 0"> <div>暂无任何操作记录</div></li>
-
-								<li flex='main:justify cross:center'  v-for='record in item.record' :key='record.time' style='position:relative;'>
-									<i class='iconfont icon-close' style='position:absolute; right:.2rem;top:.2rem' @click="deleteRecord(record,key)"></i>
-									<div flex='dir:top'>
-										<h4>{{record.type}}</h4>
-										<p class='time'  style='color:#6a788c'>{{record.time | toTime}}</p>
-									</div>
-									<div class='content'  style='color:#38f;'> +{{record.num}} 万</div>
-								</li>
-
+								<transition-group name="slide-fade"  v-else>
+									<li flex='main:justify cross:center'  v-for='record in item.record' :key='record.time' style='position:relative;'>
+										<i class='iconfont icon-close' style='position:absolute; right:.2rem;top:.2rem' @click="deleteRecord(record,key)"></i>
+										<div flex='dir:top'>
+											<h4>{{record.type}}</h4>
+											<p class='time'  style='color:#6a788c'>{{record.time | toTime}}</p>
+										</div>
+										<div class='content'  style='color:#38f;'> +{{record.num}} 万</div>
+									</li>
+								</transition-group>
                             </ul>
                         </div>
                     </div>
@@ -167,26 +167,16 @@ export default {
   },
   mounted() {
     let vm = this;
-    let targetStaff = Object.keys(this.summary)[this.activeIndex];
+    this.targetStaff = Object.keys(this.summary)[this.activeIndex];
     this.activeIndex = this.initialSwipe;
     this.renderCharts(this.chooseMonth);
-    // 操作记录更新监听
-    onfire.on("add_operation_record", function(record) {
-      vm.$set(vm.$data.summary[targetStaff], "record", [
-        record,
-        ...vm.$data.summary[targetStaff].record
-      ]);
-    });
-  },
-  beforeDestroy() {
-    onfire.un("add_operation_record");
   },
   methods: {
     doRecord() {
-      let targetStaff = Object.keys(this.summary)[this.activeIndex];
+      this.targetStaff = Object.keys(this.summary)[this.activeIndex];
       this.pieceRecordPopupVisible = true;
       this.pieceRecordValue = {
-        staff: targetStaff,
+        staff: this.targetStaff,
         type: "",
         num: 0,
         time: new Date().getTime()
@@ -230,7 +220,7 @@ export default {
       this.renderCharts(month);
     },
     pieceRecordConfirm() {
-      //console.log(this.pieceRecordValue);
+      let that = this;
       if (!this.pieceRecordValue.type) {
         Toast.fail("请选择型号");
       } else if (!this.pieceRecordValue.num) {
@@ -238,9 +228,14 @@ export default {
       } else if (!this.pieceRecordValue.staff) {
         Toast.fail("请选择员工");
       } else {
-        PieceRecord(this.pieceRecordValue);
-		this.pieceRecordPopupVisible = false;
-		location.reload();
+        PieceRecord(this.pieceRecordValue, (record) => {
+          that.$set(that.$data.summary[that.targetStaff], "record", [
+            record,
+            ...that.$data.summary[that.targetStaff].record
+          ]);
+		  that.reRenderCharts();
+		  that.pieceRecordPopupVisible = false;
+        });
       }
     },
     deleteRecord(record, key) {
@@ -288,6 +283,24 @@ export default {
           myChart.setOption(options);
         });
       }, 50);
+	},
+	reRenderCharts() {
+		  this.summary =  Fetch.staffSummary(this.$route.query.date);
+          let staffName = this.targetStaff;
+          let staffSummary = this.summary[staffName];
+          let detailList = Object.entries(staffSummary.detail).map(item => {
+            return { name: item[0], value: item[1] };
+          });
+          let options = this.initOption;
+          options.series[0].data = detailList;
+          options.title.subtext = `应发工资：${NP.times(
+            staffSummary.total,
+            10000
+          )}元`;
+          let myChart = echarts.init(
+            document.getElementById(`${staffName}Charts`)
+          );
+          myChart.setOption(options);
     }
   }
 };
@@ -406,6 +419,17 @@ export default {
   text-align: center;
 }
 
+.slide-fade-enter-active {
+  transition: all 0.5s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(2rem);
+  opacity: 0;
+}
 </style>
 
 

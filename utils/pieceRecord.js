@@ -9,7 +9,7 @@ import onfire from "onfire.js";
 // @num : 数量
 // @time : 时间
 
-export default function({ staff, type, num, time }) {
+export default function({ staff, type, num, time }, callback) {
 	// 添加操作记录
 	let operationRecorddList = store.get("OPERATION_RECORD_LIST") || [];
 	let newOperationRecord = {
@@ -36,4 +36,5 @@ export default function({ staff, type, num, time }) {
 	// store.set('STAFF_PIECE_RECORD_LIST', staffPieceRecordList)
 
 	Toast.success({ duration: 1000, message: "添加记单成功" });
+	callback && callback(newOperationRecord);
 }
