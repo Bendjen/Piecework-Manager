@@ -16,6 +16,7 @@ let echarts = require("echarts/lib/echarts");
 require("echarts/lib/chart/bar");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
+require("echarts/lib/component/dataZoom");
 import * as Fetch from "../../utils/fetch";
 
 export default {
@@ -29,6 +30,20 @@ export default {
             type: "shadow"
           }
         },
+        dataZoom: [
+          {
+            type: "inside",
+            start: 0,
+            end: 40,
+            yAxisIndex: 0
+          },
+          {
+            show: true,
+            start: 0,
+            end: 40,
+            yAxisIndex: 0
+          }
+        ],
         legend: {
           data: ["今日出货", "今日完成"]
         },

@@ -23,6 +23,7 @@ require("echarts/lib/chart/bar");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
 require("echarts/lib/component/legend");
+require("echarts/lib/component/dataZoom");
 import MonthPicker from "../components/monthPicker";
 import dayjs from "dayjs";
 
@@ -48,9 +49,15 @@ export default {
           {
             type: "inside",
             start: 0,
-            end: 10,
-            yAxisIndex: [0, 20]
-          }
+            end: 40,
+            yAxisIndex: 0
+		  },
+		  {
+                show: true,
+                start: 0,
+				end: 40,
+				yAxisIndex:0
+            },
         ],
         legend: {
           data: ["当月出货", "当月完成"]

@@ -30,7 +30,7 @@
                                         <h4>{{record.type}}</h4>
                                         <p class='time'  style='color:#6a788c'>{{record.time | toTime}}</p>
                                     </div>
-                                    <div class='content'  style='color:#38f;'> +{{record.num}}</div>
+                                    <div class='content'  style='color:#38f;'> +{{record.num}} 万</div>
                                 </li>
                             </ul>
                         </div>
@@ -53,6 +53,7 @@ require('echarts/lib/chart/pie');
 require('echarts/lib/component/tooltip');
 require('echarts/lib/component/title');
 import dayjs from 'dayjs'
+import NP from "number-precision";
 
 import { Popup, Button, Toast, Swipe, SwipeItem,Dialog } from 'vant'
 
@@ -83,11 +84,11 @@ export default {
                 },
                 tooltip: {
                     trigger: 'item',
-                    formatter: "{b} : {c} "
+                    formatter: "型号: {b} </br> 数量: {c} 万 "
                 },
                 series: [
                     {
-                        name: '访问来源',
+                        name: '数据',
                         type: 'pie',
                         radius: '55%',
                         center: ['50%', '60%'],
@@ -180,7 +181,7 @@ export default {
                     let detailList = Object.entries(staffSummary.detail).map(item => { return { name: item[0], value: item[1] } })
                     let options = this.initOption;
                     options.series[0].data = detailList;
-                    options.title.subtext = `应发工资：${staffSummary.total}元`;
+                    options.title.subtext = `应发工资：${NP.times(staffSummary.total,10000)}元`;
                     let myChart = echarts.init(document.getElementById(`${staffName}Charts`));
                     myChart.setOption(options);
                 })
