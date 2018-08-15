@@ -65,7 +65,7 @@
                         </p>
                         <p flex='main:center cross:center'>
                             <span class='inputTitle'>数量（万）：</span>
-                            <input type="number" v-model="pieceRecordValue.num" @focus="$event.target.select()">
+                            <input type="number" v-model.number="pieceRecordValue.num" @focus="$event.target.select()">
                         </p>
                         <p flex='main:center cross:center'>
                             <span class='inputTitle'>时间：</span>

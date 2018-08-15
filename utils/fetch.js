@@ -39,6 +39,26 @@ export function recordFilter({
 	});
 }
 
+
+// 过滤本月下单记录
+export function currentOperationRecord(
+	date = new Date(),
+	unit = "month",
+) {
+	let list = store.get("OPERATION_RECORD_LIST");
+	let targetMonthStart = dayjs(date).startOf(unit);
+	let targetMonthEnd = dayjs(date).endOf(unit);
+
+	list = list.filter(item => {
+		return (
+			dayjs(item.time).isAfter(targetMonthStart) &&
+			dayjs(item.time).isBefore(targetMonthEnd)
+		);
+	});
+	list.reverse()
+	return list
+}
+
 // 记单汇总(员工)
 export function staffSummary(date = new Date(), unit = "month") {
 	// 数据初始化为0

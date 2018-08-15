@@ -20,7 +20,7 @@
 			  <ul>
                   <li v-if="recordList.length == 0"> <div>暂无任何操作记录</div></li>
                     <transition-group name="slide-fade"  v-else>
-                        <li flex='main:justify cross:center'  v-for='(item,index) in recordList' :key='index' style='position:relative'>
+                        <li flex='main:justify cross:center'  v-for='item in recordList' :key='item.time' style='position:relative'>
 							<i class='iconfont icon-close' v-if="item.action == 'PIECE_RECORD' || item.action == 'GOODS_EXPORT' " style='position:absolute; right:.2rem;top:.2rem' @click="deleteRecord(item)"></i>
                             <div flex='dir:top'>
                                 <h4>{{item.actionName}}</h4>
@@ -52,7 +52,7 @@
                         </p>
                         <p flex='main:center cross:center'>
                             <span class='inputTitle'>数量（万）：</span>
-                            <input type="number" v-model="importValue.num" @focus="$event.target.select()">
+                            <input type="number" v-model.number="importValue.num" @focus="$event.target.select()">
                         </p>
                         <p flex='main:center cross:center'>
                             <span class='inputTitle'>时间：</span>
@@ -77,7 +77,7 @@
                         </p>
                         <p flex='main:center cross:center'>
                             <span class='inputTitle'>数量（万）：</span>
-                            <input type="number" v-model="exportValue.num" @focus="$event.target.select()">
+                            <input type="number" v-model.number="exportValue.num" @focus="$event.target.select()">
                         </p>
                         <p flex='main:center cross:center'>
                             <span class='inputTitle'>时间：</span>
@@ -106,7 +106,7 @@
                         </p>
                         <p flex='main:center cross:center'>
                             <span class='inputTitle'>数量（万）：</span>
-                            <input type="number" v-model="pieceRecordValue.num" @focus="$event.target.select()">
+                            <input type="number" v-model.number="pieceRecordValue.num" @focus="$event.target.select()">
                         </p>
                         <p flex='main:center cross:center'>
                             <span class='inputTitle'>时间：</span>
@@ -183,7 +183,7 @@ export default {
                 num: "",
                 time: ""
             },
-            recordList: Fetch.operationRecord(),
+            recordList: Fetch.currentOperationRecord(),
             navList1: [
                 // {
                 //     title: "进货",
@@ -280,7 +280,7 @@ export default {
     },
     mounted () {
         let vm = this;
-        this.renderCharts();
+		this.renderCharts();
 
         // 读取文件监听
         let input = document.getElementById("file");
@@ -306,8 +306,10 @@ export default {
 
         // 操作记录更新监听
         onfire.on("add_operation_record", function (record) {
-            vm.recordList.splice(0, 0, record);
-            vm.renderCharts();
+			setTimeout(()=>{
+				vm.recordList.splice(0, 0, record);
+            	vm.renderCharts();
+			},500)
         });
         onfire.on("reload", function (record) {
             location.reload();
