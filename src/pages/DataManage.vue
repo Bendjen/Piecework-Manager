@@ -19,7 +19,7 @@
 			</h1>
 			<ul>
 				<li v-for='item in itemTypeList' :key='item.name' flex='main:justify'>
-					<p><span>{{item.name}}</span> <span style='font-size:12px;color:#c9c9c9;'>- {{item.price*1000}}厘/个</span> </p>
+					<p><span>{{item.name}}</span> <span style='font-size:12px;color:#c9c9c9;'>- {{item.price}}元 / 件</span> </p>
 					<van-icon name="delete"  @click='deleteType(item.name)'/>
 				</li>
 			</ul>

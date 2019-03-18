@@ -14,28 +14,28 @@
             <ul style='height:60%;padding:10px; box-sizing:border-box;'>
                 <li flex='main:left'>
                     <span style='text-align:left;width:25%'>型号</span>
-                    <span style='text-align:right;width:35%'>数量（万）</span>
+                    <span style='text-align:right;width:35%'>数量（件）</span>
                     <span style='text-align:right;width:40%'>小结</span>
                 </li>
                 <li flex='main:left' v-for='(item,key) in goodsSummaryList' :key='key'  v-if="item.num">
                     <span style='text-align:left;width:25%'>{{key}}</span>
                     <span style='text-align:right;width:35%'>*{{item.num}}</span>
-                    <span style='text-align:right;width:40%'>{{item.money | toYuan}}元</span>
+                    <span style='text-align:right;width:40%'>{{item.money }}元</span>
                 </li>
             </ul>
             <div style='height:20%;' class='total'  flex='main:justify cross:center'>
                 <span>合计</span>
                 <span style='text-align:right;width:35%'>*{{totalNum}}</span>
-                <span style='text-align:right;width:40%'>{{totalMoney | toYuan}}元</span>
+                <span style='text-align:right;width:40%'>{{totalMoney }}元</span>
             </div>
         </div>
         <div class='staffs' style='height:60%'>
-            <h1 style='height:10%;padding:.2rem 0.4rem' flex='main:justify cross:center'> <span style='font-size:16px'>应发工资</span> <span>{{staffMoney | toYuan}} 元</span> </h1>
+            <h1 style='height:10%;padding:.2rem 0.4rem' flex='main:justify cross:center'> <span style='font-size:16px'>应发工资</span> <span>{{staffMoney }} 元</span> </h1>
             <ul style='height:80%'>
                 <li v-if="!staffMoney"> <div>当月没有员工记单记录</div></li>
                 <li flex='main:justify cross:center'  v-for="(item,key) in staffSummaryList" :key='key' @click="linkToDetail(key)" v-else>
                     <div class='content' > {{key}}</div>
-                    <div class='content'  style='color:#f44;'> {{item.total | toYuan}} 元</div>
+                    <div class='content'  style='color:#f44;'> {{item.total }} 元</div>
                 </li>
             </ul>
         </div>

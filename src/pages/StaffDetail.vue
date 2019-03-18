@@ -25,13 +25,13 @@
                             <ul style='height:80%;'>
                                 <li v-if="item.record.length == 0"> <div>暂无任何操作记录</div></li>
 								<transition-group name="slide-fade"  v-else>
-									<li flex='main:justify cross:center'  v-for='record in item.record' :key='record.time' style='position:relative;'>
+									<li flex='main:justify cross:center'  v-for='(record,index) in item.record' :key='index' style='position:relative;'>
 										<i class='iconfont icon-close' style='position:absolute; right:.2rem;top:.2rem' @click="deleteRecord(record,key)"></i>
 										<div flex='dir:top'>
 											<h4>{{record.type}}</h4>
 											<p class='time'  style='color:#6a788c'>{{record.time | toTime}}</p>
 										</div>
-										<div class='content'  style='color:#38f;'> +{{record.num}} 万</div>
+										<div class='content'  style='color:#38f;'> +{{record.num}} 件</div>
 									</li>
 								</transition-group>
                             </ul>
@@ -64,7 +64,7 @@
                             <input type="text" readonly placeholder="点击选择型号" @click="$refs.typePicker.toggle()" :value="pieceRecordValue.type">
                         </p>
                         <p flex='main:center cross:center'>
-                            <span class='inputTitle'>数量（万）：</span>
+                            <span class='inputTitle'>数量（件）：</span>
                             <input type="number" v-model.number="pieceRecordValue.num" @focus="$event.target.select()">
                         </p>
                         <p flex='main:center cross:center'>
@@ -133,7 +133,7 @@ export default {
         },
         tooltip: {
           trigger: "item",
-          formatter: "型号: {b} </br> 数量: {c} 万 "
+          formatter: "型号: {b} </br> 数量: {c} 件 "
         },
         series: [
           {
