@@ -273,10 +273,7 @@ export default {
           });
           let options = this.initOption;
           options.series[0].data = detailList;
-          options.title.subtext = `应发工资：${NP.times(
-            staffSummary.total,
-            10000
-          )}元`;
+          options.title.subtext = `应发工资：${staffSummary.total}元`;
           let myChart = echarts.init(
             document.getElementById(`${staffName}Charts`)
           );

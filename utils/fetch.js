@@ -64,12 +64,6 @@ export function staffSummary(date = new Date(), unit = "month") {
 	// 数据初始化为0
 	let staffSummary = {};
 	let itemTypeList = store.get("ITEM_TYPE_LIST");
-	// store.get("STAFF_LIST").forEach(item => {
-	// 	staffSummary[item.name] = {};
-	// 	staffSummary[item.name]["detail"] = {};
-	// 	staffSummary[item.name]["record"] = [];
-	// 	staffSummary[item.name]["total"] = 0;
-	// });
 
 	// 数据累加
 	recordFilter({ date, unit, action: "PIECE_RECORD" }).forEach(item => {
@@ -77,7 +71,8 @@ export function staffSummary(date = new Date(), unit = "month") {
 			staffSummary[item.staff] = {
 				detail: {},
 				record: [],
-				total: 0
+				total: 0,
+				take: 0
 			};
 		}
 		staffSummary[item.staff]["detail"][item.type] = NP.plus(
@@ -87,10 +82,13 @@ export function staffSummary(date = new Date(), unit = "month") {
 
 		staffSummary[item.staff]["record"].unshift(item);
 
-		let itemPrice
+		let itemPrice, itemTakeMoney
 		try {
 			itemPrice = itemTypeList.find(_item => _item.name == item.type)
 				.price;
+			itemTakeMoney = itemTypeList.find(_item => _item.name == item.type)
+				.takeMoney || 0;
+				console.log(itemTakeMoney)
 			// 如果型号被删除会有查询不到价格的BUG
 		} catch (err) {
 			Dialog.alert({
@@ -103,9 +101,14 @@ export function staffSummary(date = new Date(), unit = "month") {
 			staffSummary[item.staff]["total"],
 			NP.times(item.num, itemPrice)
 		);
+
+		staffSummary[item.staff]["take"] = NP.plus(
+			staffSummary[item.staff]["take"],
+			NP.times(item.num, itemTakeMoney)
+		);
 	});
 
-	//console.log(staffSummary);
+	console.log(staffSummary);
 	return staffSummary;
 }
 
@@ -147,6 +150,52 @@ export function goodsSummary(date = new Date(), unit = "month") {
 			NP.times(item.num, itemPrice)
 		);
 	});
+
+	return goodsSummary;
+}
+
+// 记单汇总（抽成）
+export function takeSummary(date = new Date(), unit = "month") {
+	// 数据初始化为0
+	let goodsSummary = {};
+	let itemTypeList = store.get("ITEM_TYPE_LIST");
+
+	// store.get("ITEM_TYPE_LIST").forEach(item => {
+	// 	goodsSummary[item.name] = {};
+	// });
+
+	// 数据累加
+	recordFilter({ date, unit, action: "PIECE_RECORD" }).filter(item => {
+		return !!itemTypeList.find(_item => _item.name == item.type).ifTake
+	}).forEach(item => {
+		if (!goodsSummary[item.type]) {
+			goodsSummary[item.type] = {};
+		}
+
+		goodsSummary[item.type]["num"] = NP.plus(
+			goodsSummary[item.type]["num"] || 0,
+			item.num
+		);
+
+		let itemTakeMoney
+		try {
+			itemTakeMoney = itemTypeList.find(_item => _item.name == item.type)
+				.takeMoney || 0;
+			// 如果型号被删除会有查询不到价格的BUG
+		} catch (err) {
+			Dialog.alert({
+				title: "错误",
+				message: `原先型号“${item.type}”已被删除，请联系管理员处理`
+			});
+		}
+
+		goodsSummary[item.type]["takeMoney"] = NP.plus(
+			goodsSummary[item.type]["takeMoney"] || 0,
+			NP.times(item.num, itemTakeMoney)
+		);
+	});
+
+
 
 	return goodsSummary;
 }

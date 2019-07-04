@@ -1,73 +1,121 @@
 <template>
-	<div class='dataManage' flex='dir:top main:justify'>
-		<div style='height:48%' class='container'>
-			<h1 flex='main:justify cross:center'>
-				<span>员工管理</span>
-				<i class='iconfont icon-add'  @click="addStaffVisible=true"></i>
-			</h1>
-			<ul>
-				<li v-for='item in staffList' :key='item' flex='main:justify'>
-					<span>{{item}}</span>
-					<van-icon name="delete"  @click='deleteStaff(item)'/>
-				</li>
-			</ul>
-		</div>
-		<div style='height:48%' class='container'>
-			<h1 flex='main:justify cross:center'>
-				<span>型号管理</span>
-				<i class='iconfont icon-add' @click="addTypeVisible=true"></i>
-			</h1>
-			<ul>
-				<li v-for='item in itemTypeList' :key='item.name' flex='main:justify'>
-					<p><span>{{item.name}}</span> <span style='font-size:12px;color:#c9c9c9;'>- {{item.price}}元 / 件</span> </p>
-					<van-icon name="delete"  @click='deleteType(item.name)'/>
-				</li>
-			</ul>
-		</div>
-
-		<!-- 添加型号 -->
-          <van-popup v-model="addTypeVisible" style='width:80%;background: #f3f3f3;' class='popup'>
-              <div style='width:100%;height:100%;'>
-				  <h1 style='height:1.2rem;margin-bottom:0.6rem' class='dialogTitle'  flex='main:center cross:center'>添加型号</h1>
-                  <div style='' flex='dir:top cross:center main:center'>
-                        <p flex='main:center cross:center'>
-                            <span style='padding-right:.4rem;display:inline-block;width:2.5rem;text-align:center' >名称：</span>
-                            <input placeholder="输入型号" type="text" v-model.trim = "newType.name"  @focus="$event.target.select()" style='height:1rem;text-align:center'>
-                        </p>
-                        <p flex='main:center cross:center' style='margin:.4rem 0;'>
-                            <span style='padding-right:.4rem;display:inline-block;width:2.5rem;text-align:center' >单价（元）：</span>
-                            <input type="number" v-model.number = "newType.price"  @focus="$event.target.select()" style='height:1rem;text-align:center'>
-                        </p>
-                  </div>
-                  <div style='height:2rem;padding:0 10%;' flex='main:justify cross:center'>
-                        <van-button type="default"  style='width:40%' @click='addTypeVisible = false'>取消</van-button>
-                        <van-button type="primary" style='width:40%' @click='addTypeConfirm'>确定</van-button>
-                  </div>
-              </div>
-          </van-popup>
-
-		    <!-- 添加员工 -->
-          <van-popup v-model="addStaffVisible" style='width:80%;background: #f3f3f3;' class='popup'>
-              <div style='width:100%;height:100%'>
-				  <h1 style='height:1.2rem;margin-bottom:0.6rem' class='dialogTitle'  flex='main:center cross:center'>添加员工</h1>
-                  <div style='' flex='dir:top cross:center main:center'>
-                        <p flex='main:center cross:center'>
-                            <span style='padding-right:.4rem'>姓名：</span>
-                            <input type="text" v-model.trim = "newStaff.name" style='height:1rem;text-align:center'  @focus="$event.target.select()">
-                        </p>
-                  </div>
-                  <div style='height:2rem;padding:0 10%;' flex='main:justify cross:center'>
-                        <van-button type="default"  style='width:40%' @click='addStaffVisible = false'>取消</van-button>
-                        <van-button type="primary" style='width:40%' @click='addStaffConfirm'>确定</van-button>
-                  </div>
-              </div>
-          </van-popup>
-
+  <div class="dataManage" flex="dir:top main:justify">
+    <div style="height:48%" class="container">
+      <h1 flex="main:justify cross:center">
+        <span>员工管理</span>
+        <i class="iconfont icon-add" @click="addStaffVisible=true"></i>
+      </h1>
+      <ul>
+        <li v-for="item in staffList" :key="item" flex="main:justify">
+          <span>{{item}}</span>
+          <van-icon name="delete" @click="deleteStaff(item)" />
+        </li>
+      </ul>
     </div>
+    <div style="height:48%" class="container">
+      <h1 flex="main:justify cross:center">
+        <span>型号管理</span>
+        <i class="iconfont icon-add" @click="addTypeVisible=true"></i>
+      </h1>
+      <ul>
+        <li v-for="item in itemTypeList" :key="item.name" flex="main:justify">
+          <p>
+            <span>{{item.name}}</span>
+            <span style="font-size:12px;color:#c9c9c9;padding-left:1rem"> 单价：{{item.price}}元 / 件</span>
+            <span style="font-size:12px;color:#c9c9c9;" v-if='item.ifTake'> ; 抽成：{{item.takeMoney}}元 / 件</span>
+          </p>
+          <van-icon name="delete" @click="deleteType(item.name)" />
+        </li>
+      </ul>
+    </div>
+
+    <!-- 添加型号 -->
+    <van-popup v-model="addTypeVisible" style="width:80%;background: #f3f3f3;" class="popup">
+      <div style="width:100%;height:100%;">
+        <h1
+          style="height:1.2rem;margin-bottom:0.6rem"
+          class="dialogTitle"
+          flex="main:center cross:center"
+        >添加型号</h1>
+        <div style flex="dir:top cross:center main:center">
+          <p flex="main:center cross:center">
+            <span
+              style="padding-right:.4rem;display:inline-block;width:2.5rem;text-align:center"
+            >名称：</span>
+            <input
+              placeholder="输入型号"
+              type="text"
+              v-model.trim="newType.name"
+              @focus="$event.target.select()"
+              style="height:1rem;text-align:center"
+            />
+          </p>
+          <p flex="main:center cross:center" style="margin:.4rem 0;">
+            <span
+              style="padding-right:.4rem;display:inline-block;width:2.5rem;text-align:center"
+            >单价（元）：</span>
+            <input
+              type="number"
+              v-model.number="newType.price"
+              @focus="$event.target.select()"
+              style="height:1rem;text-align:center"
+            />
+          </p>
+          <p flex="main:center cross:center" style="margin:.4rem 0;">
+            <span
+              style="padding-right:.4rem;display:inline-block;width:2.5rem;text-align:center"
+            >是否抽成：</span>
+            <van-checkbox v-model="newType.ifTake" style="width:4rem;text-align:center"></van-checkbox>
+          </p>
+          <p flex="main:center cross:center" style="margin:.4rem 0;" v-if="newType.ifTake">
+            <span
+              style="padding-right:.4rem;display:inline-block;width:2.5rem;text-align:center"
+            >抽成（元）：</span>
+            <input
+              type="number"
+              v-model.number="newType.takeMoney"
+              @focus="$event.target.select()"
+              style="height:1rem;text-align:center"
+            />
+          </p>
+        </div>
+        <div style="height:2rem;padding:0 10%;" flex="main:justify cross:center">
+          <van-button type="default" style="width:40%" @click="addTypeVisible = false">取消</van-button>
+          <van-button type="primary" style="width:40%" @click="addTypeConfirm">确定</van-button>
+        </div>
+      </div>
+    </van-popup>
+
+    <!-- 添加员工 -->
+    <van-popup v-model="addStaffVisible" style="width:80%;background: #f3f3f3;" class="popup">
+      <div style="width:100%;height:100%">
+        <h1
+          style="height:1.2rem;margin-bottom:0.6rem"
+          class="dialogTitle"
+          flex="main:center cross:center"
+        >添加员工</h1>
+        <div style flex="dir:top cross:center main:center">
+          <p flex="main:center cross:center">
+            <span style="padding-right:.4rem">姓名：</span>
+            <input
+              type="text"
+              v-model.trim="newStaff.name"
+              style="height:1rem;text-align:center"
+              @focus="$event.target.select()"
+            />
+          </p>
+        </div>
+        <div style="height:2rem;padding:0 10%;" flex="main:justify cross:center">
+          <van-button type="default" style="width:40%" @click="addStaffVisible = false">取消</van-button>
+          <van-button type="primary" style="width:40%" @click="addStaffConfirm">确定</van-button>
+        </div>
+      </div>
+    </van-popup>
+  </div>
 </template>
 
 <script>
-import { Toast, Icon, Popup, Button, Dialog } from "vant";
+import { Toast, Icon, Popup, Button, Dialog, Checkbox } from "vant";
 
 import * as Fetch from "../../utils/fetch";
 import * as Delete from "../../utils/delete";
@@ -79,14 +127,15 @@ export default {
     vanIcon: Icon,
     VanPopup: Popup,
     VanPopup: Popup,
-    VanButton: Button
+    VanButton: Button,
+    VanCheckbox: Checkbox
   },
   data() {
     return {
       addTypeVisible: false,
       addStaffVisible: false,
       newStaff: { name: "" },
-      newType: { name: "", price: 0 },
+      newType: { name: "", price: 0, ifTake: false, takeMoney: 0 },
       staffList: Fetch.staffList(),
       itemTypeList: Fetch.itemTypeList()
     };
@@ -146,16 +195,20 @@ export default {
         Toast.fail("名称不能为空");
       } else if (!this.newType.price) {
         Toast.fail("单格不能为0");
+      } else if (this.newType.takeMoney > this.newType.price) {
+        Toast.fail("抽成不能超过单价");
       } else {
         TypeAdd(
           {
             name: this.newType.name,
             price: this.newType.price,
-            time: new Date().getTime()
+            time: new Date().getTime(),
+            ifTake: this.newType.ifTake,
+            takeMoney: this.newType.takeMoney
           },
           () => {
             vm.addTypeVisible = false;
-            vm.newType = { name: "", price: 0 };
+            vm.newType = { name: "", price: 0, ifTake: false, takeMoney: 0 };
             vm.itemTypeList = Fetch.itemTypeList();
           }
         );

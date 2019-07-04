@@ -1,50 +1,88 @@
 <template>
-	<div class='staffList'>
-        <!-- <div class='toolBar' flex='main:justify' style='height:6%'>
-            <i class='iconfont icon-back' @click="$router.push('/home')"></i>
-            <i class='iconfont icon-add' @click="addPopVisible=true"></i>
-        </div> -->
-		<!-- <i class='iconfont icon-add' @click="addPopVisible=true" style='position:fixed;top:.4rem;right:.4rem'></i> -->
-		<div @click='$refs.monthPicker.toggle()' style='position:fixed;top:1.0rem;right:1.2rem;color:#333;'>
-			<i class='iconfont icon-calendar'></i>
-			<span>{{monthName}}</span>
-		</div>
-        <div style='height:40%' class='summary'>
-            <h1 style='height:20%'>当月记单统计</h1>
-            <ul style='height:60%;padding:10px; box-sizing:border-box;'>
-                <li flex='main:left'>
-                    <span style='text-align:left;width:25%'>型号</span>
-                    <span style='text-align:right;width:35%'>数量（件）</span>
-                    <span style='text-align:right;width:40%'>小结</span>
-                </li>
-                <li flex='main:left' v-for='(item,key) in goodsSummaryList' :key='key'  v-if="item.num">
-                    <span style='text-align:left;width:25%'>{{key}}</span>
-                    <span style='text-align:right;width:35%'>*{{item.num}}</span>
-                    <span style='text-align:right;width:40%'>{{item.money }}元</span>
-                </li>
-            </ul>
-            <div style='height:20%;' class='total'  flex='main:justify cross:center'>
-                <span>合计</span>
-                <span style='text-align:right;width:35%'>*{{totalNum}}</span>
-                <span style='text-align:right;width:40%'>{{totalMoney }}元</span>
-            </div>
+  <div class="staffList">
+    <div
+      @click="$refs.monthPicker.toggle()"
+      style="position:fixed;top:1.0rem;right:1.2rem;color:#333;"
+    >
+      <i class="iconfont icon-calendar"></i>
+      <span>{{monthName}}</span>
+    </div>
+    <van-swipe style="height:50%" :show-indicators="false" :loop="false">
+      <van-swipe-item style="height:100%;">
+        <div class="summary" style="height:100%;">
+          <h1 style="height:15%">当月记单统计</h1>
+          <ul style="height:70%;padding:10px; box-sizing:border-box;">
+            <li flex="main:left">
+              <span style="text-align:left;width:25%">型号</span>
+              <span style="text-align:right;width:35%">数量（件）</span>
+              <span style="text-align:right;width:40%">小结</span>
+            </li>
+            <li flex="main:left" v-for="(item,key) in goodsSummaryList" :key="key" v-if="item.num">
+              <span style="text-align:left;width:25%">{{key}}</span>
+              <span style="text-align:right;width:35%">*{{item.num}}</span>
+              <span style="text-align:right;width:40%">{{item.money }}元</span>
+            </li>
+          </ul>
+          <div style="height:15%;" class="total" flex="main:justify cross:center">
+            <span>合计</span>
+            <span style="text-align:right;width:35%">*{{totalNum}}</span>
+            <span style="text-align:right;width:40%">{{totalMoney }}元</span>
+          </div>
         </div>
-        <div class='staffs' style='height:60%'>
-            <h1 style='height:10%;padding:.2rem 0.4rem' flex='main:justify cross:center'> <span style='font-size:16px'>应发工资</span> <span>{{staffMoney }} 元</span> </h1>
-            <ul style='height:80%'>
-                <li v-if="!staffMoney"> <div>当月没有员工记单记录</div></li>
-                <li flex='main:justify cross:center'  v-for="(item,key) in staffSummaryList" :key='key' @click="linkToDetail(key)" v-else>
-                    <div class='content' > {{key}}</div>
-                    <div class='content'  style='color:#f44;'> {{item.total }} 元</div>
-                </li>
-            </ul>
+      </van-swipe-item>
+      <van-swipe-item style="height:100%;">
+        <div class="summary" style="height:100%;">
+          <h1 style="height:15%">当月抽成统计</h1>
+          <ul style="height:70%;padding:10px; box-sizing:border-box;">
+            <li flex="main:left">
+              <span style="text-align:left;width:25%">型号</span>
+              <span style="text-align:right;width:35%">数量（件）</span>
+              <span style="text-align:right;width:40%">小结</span>
+            </li>
+            <li flex="main:left" v-for="(item,key) in takeSummaryList" :key="key" v-if="item.num">
+              <span style="text-align:left;width:25%">{{key}}</span>
+              <span style="text-align:right;width:35%">*{{item.num}}</span>
+              <span style="text-align:right;width:40%">{{item.takeMoney }}元</span>
+            </li>
+          </ul>
+          <div style="height:15%;" class="total" flex="main:justify cross:center">
+            <span>合计</span>
+            <span style="text-align:right;width:35%">*{{totalTakeNum}}</span>
+            <span style="text-align:right;width:40%">{{totalTakeMoney }}元</span>
+          </div>
         </div>
+      </van-swipe-item>
+    </van-swipe>
 
+    <div class="staffs" style="height:50%">
+      <h1 style="height:10%;padding:.2rem 0.4rem" flex="main:justify cross:center">
+        <span style="font-size:16px">应发工资</span>
+        <span>{{staffMoney }} 元</span>
+      </h1>
+      <ul style="height:80%">
+        <li v-if="!staffMoney">
+          <div>当月没有员工记单记录</div>
+        </li>
+        <li
+          flex="main:justify cross:center"
+          v-for="(item,key) in staffSummaryList"
+          :key="key"
+          @click="linkToDetail(key)"
+          v-else
+        >
+          <div class="content">{{key}}</div>
+          <div class="content">
+            <span style="color:#f44;">{{item.total }} 元</span>
+            <span style="color:#2196f3;">{{item.take > 0 ? `/ ${item.take}元` : ''}}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
 
-		<month-picker ref='monthPicker' @change='monthChoose'></month-picker>
+    <month-picker ref="monthPicker" @change="monthChoose"></month-picker>
 
-      <!-- 添加员工 -->
-          <!-- <van-popup v-model="addPopVisible" style='width:80%;height:25%;background: #f3f3f3;' class='popup'>
+    <!-- 添加员工 -->
+    <!-- <van-popup v-model="addPopVisible" style='width:80%;height:25%;background: #f3f3f3;' class='popup'>
               <div style='width:100%;height:100%;'>
 				  <h1 style='height:25%' class='dialogTitle'  flex='main:center cross:center'>添加员工</h1>
                   <div style='height:45%;' flex='dir:top cross:center main:center'>
@@ -58,83 +96,104 @@
                         <van-button type="primary" style='width:40%' @click='addStaffConfirm'>确定</van-button>
                   </div>
               </div>
-          </van-popup> -->
-    </div>
+    </van-popup>-->
+  </div>
 </template>
 
 <script>
 import dayjs from "dayjs";
-import { Popup, Button, Toast } from "vant";
+import { Popup, Button, Toast, Swipe, SwipeItem } from "vant";
 import StaffAdd from "../../utils/staffAdd";
 import * as Fetch from "../../utils/fetch";
 import MonthPicker from "../components/monthPicker";
 import NP from "number-precision";
 
 export default {
-    components: {
-        VanPopup: Popup,
-        VanButton: Button,
-        MonthPicker: MonthPicker
+  components: {
+    VanPopup: Popup,
+    VanButton: Button,
+    MonthPicker: MonthPicker,
+    VanSwipe: Swipe,
+    VanSwipeItem: SwipeItem
+  },
+  data() {
+    return {
+      chooseMonth: new Date(),
+      addPopVisible: false,
+      newStaff: { name: "" },
+      staffSummaryList: Fetch.staffSummary(),
+      goodsSummaryList: Fetch.goodsSummary(),
+      takeSummaryList: Fetch.takeSummary()
+    };
+  },
+  computed: {
+    monthName: function() {
+      return dayjs(this.chooseMonth).format("YYYY-MM");
     },
-    data () {
-        return {
-            chooseMonth: new Date(),
-            addPopVisible: false,
-            newStaff: { name: "" },
-            staffSummaryList: Fetch.staffSummary(),
-            goodsSummaryList: Fetch.goodsSummary()
-        };
+    totalNum: function() {
+      return Object.values(this.goodsSummaryList)
+        .map(item => item.num)
+        .reduce((cur, pre) => NP.plus(cur || 0, pre || 0), 0);
     },
-    computed: {
-        monthName: function () {
-            return dayjs(this.chooseMonth).format("YYYY-MM");
-        },
-        totalNum: function () {
-            return Object.values(this.goodsSummaryList).map(item => item.num).reduce((cur, pre) => NP.plus(cur || 0, pre || 0), 0)
-        },
-        totalMoney: function () {
-            return Object.values(this.goodsSummaryList).map(item => item.money).reduce((cur, pre) => NP.plus(cur || 0, pre || 0), 0)
-        },
-        staffMoney: function () {
-            return Object.values(this.staffSummaryList).map(item => item.total).reduce((cur, pre) => NP.plus(cur || 0, pre || 0), 0)
-        },
+    totalMoney: function() {
+      return Object.values(this.goodsSummaryList)
+        .map(item => item.money)
+        .reduce((cur, pre) => NP.plus(cur || 0, pre || 0), 0);
     },
-    mounted () {
-        if (!this.totalNum) {
-            Toast.fail({ message: '无记单记录', duration: 1000 })
-        }
+    totalTakeNum: function() {
+      return Object.values(this.takeSummaryList)
+        .map(item => item.num)
+        .reduce((cur, pre) => NP.plus(cur || 0, pre || 0), 0);
     },
-    methods: {
-        linkToDetail (staff) {
-            this.$router.push({ path: `/staffDetail/${staff}`, query: { date: dayjs(this.chooseMonth).format('YYYY-MM')} })
-        },
-        monthChoose (month) {
-            this.chooseMonth = month;
-            Toast.loading('加载中...')
-            setTimeout(() => {
-                Toast.clear()
-                this.staffSummaryList = Fetch.staffSummary(month)
-                this.goodsSummaryList = Fetch.goodsSummary(month)
-                if (!this.totalNum) {
-                    Toast.fail({ message: '无记单记录', duration: 1000 })
-                }
-            }, 500)
-
-        },
-        addStaffConfirm () {
-            let vm = this;
-            if (!this.newStaff.name) {
-                Toast.fail("姓名不能为空");
-            } else {
-                StaffAdd(
-                    { name: this.newStaff.name, time: new Date().getTime() },
-                    () => {
-                        vm.addPopVisible = false;
-                    }
-                );
-            }
-        }
+    totalTakeMoney: function() {
+      return Object.values(this.takeSummaryList)
+        .map(item => item.takeMoney)
+        .reduce((cur, pre) => NP.plus(cur || 0, pre || 0), 0);
+    },
+    staffMoney: function() {
+      return Object.values(this.staffSummaryList)
+        .map(item => item.total)
+        .reduce((cur, pre) => NP.plus(cur || 0, pre || 0), 0);
     }
+  },
+  mounted() {
+    if (!this.totalNum) {
+      Toast.fail({ message: "无记单记录", duration: 1000 });
+    }
+  },
+  methods: {
+    linkToDetail(staff) {
+      this.$router.push({
+        path: `/staffDetail/${staff}`,
+        query: { date: dayjs(this.chooseMonth).format("YYYY-MM") }
+      });
+    },
+    monthChoose(month) {
+      this.chooseMonth = month;
+      Toast.loading("加载中...");
+      setTimeout(() => {
+        Toast.clear();
+        this.staffSummaryList = Fetch.staffSummary(month);
+        this.goodsSummaryList = Fetch.goodsSummary(month);
+        if (!this.totalNum) {
+          Toast.fail({ message: "无记单记录", duration: 1000 });
+        }
+      }, 500);
+    },
+    addStaffConfirm() {
+      let vm = this;
+      if (!this.newStaff.name) {
+        Toast.fail("姓名不能为空");
+      } else {
+        StaffAdd(
+          { name: this.newStaff.name, time: new Date().getTime() },
+          () => {
+            vm.addPopVisible = false;
+          }
+        );
+      }
+    }
+  }
 };
 </script>
 

@@ -8,13 +8,15 @@ import onfire from "onfire.js";
 // @price : 单价
 // @time : 时间
 
-export default function({ name, price, time }, callback) {
+export default function({ name, price, time,ifTake,takeMoney }, callback) {
 	// 添加操作记录
 	let operationRecorddList = store.get("OPERATION_RECORD_LIST") || [];
 	let newOperationRecord = {
 		name,
 		time,
 		price,
+		ifTake,
+		takeMoney,
 		action: "TYPE_ADD",
 		actionName: "新增型号"
 	};
@@ -26,7 +28,7 @@ export default function({ name, price, time }, callback) {
 
 	// 更新类型列表
 	let itemTypeList = store.get("ITEM_TYPE_LIST") || [];
-	let newType = { name, time, price };
+	let newType = { name, time, price, ifTake, takeMoney };
 
 	if (!!itemTypeList.find(item => item.name == name)) {
 		Toast.fail("添加失败，已存在同名型号");
