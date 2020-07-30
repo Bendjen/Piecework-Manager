@@ -1,6 +1,7 @@
 import Vue from "vue/dist/vue.js";
 import VueRouter from "vue-router";
 
+import "./libs/flexible.min";
 import "flex.css";
 import "./index.scss";
 
