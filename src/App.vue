@@ -13,16 +13,13 @@
 </template>
 
 <script>
-import StorageInit from '../utils/storageInit.js'
 export default {
   data() {
     return {
       transitionName: "slide-left"
     };
   },
-  mounted(){
-      StorageInit()
-  },
+  mounted(){},
   watch: {
     $route(to, from) {
       if (to.path == "/home" || to.path == "/") {

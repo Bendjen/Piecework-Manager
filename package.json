@@ -1,8 +1,8 @@
 {
-  "name": "Pieceword-Manager",
+  "name": "CountMaster",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:Bendjen/Pieceword-Manager.git",
+  "repository": "git@github.com:Bendjen/CountMaster.git",
   "author": "Bendjen <unbolibob@foxmail.com>",
   "scripts": {
     "start": "parcel index.html",

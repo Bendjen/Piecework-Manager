@@ -1,5 +1,6 @@
 import Vue from "vue/dist/vue.js";
 import VueRouter from "vue-router";
+import StorageInit from "./utils/storageInit.js";
 
 import "./libs/flexible.min";
 import "flex.css";
@@ -13,13 +14,14 @@ import App from "./src/App.vue";
 try {
 	toTime(Vue);
 	toYuan(Vue);
+    StorageInit();
+    
 	Vue.use(VueRouter);
 
 	const router = new VueRouter({
 		routes
 	});
-
-	const app = new Vue({
+	new Vue({
 		components: { App },
 		router: router
 	}).$mount("#app");
