@@ -1,6 +1,6 @@
 {
-	"name": "记单管理",
-	"short_name": "Piecework Manage",
+	"name": "记件大师",
+	"short_name": "CountMaster",
 	"description": "一个提供给管理者记单与结账的本地工具",
 	"display": "standalone",
 	"start_url": "/",

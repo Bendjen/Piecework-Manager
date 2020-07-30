@@ -71,6 +71,9 @@ export default {
 .height100{
 	height: 100%;
 }
+.toolBar{
+    padding: 0.2rem;
+}
 </style>
 
 

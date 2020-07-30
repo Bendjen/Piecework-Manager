@@ -50,7 +50,7 @@ export default {
         grid: {
           left: "3%",
           right: "4%",
-          bottom: "3%",
+          bottom: "0",
           containLabel: true
         },
         xAxis: {
@@ -69,7 +69,7 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "right"
+                // position: "right"
               }
             }
           },
@@ -80,7 +80,7 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "right"
+                // position: "right"
               }
             }
           }
@@ -139,7 +139,7 @@ export default {
 
 <style lang="scss" scoped>
 .goods {
-  padding: 0.4rem;
+//   padding: 0.4rem;
   box-sizing: border-box;
   width: 100%;
   height: 100%;

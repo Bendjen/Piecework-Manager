@@ -254,7 +254,7 @@ require("echarts/lib/component/title");
 
 import onfire from "onfire.js";
 import dayjs from "dayjs";
-import { Popup, Button, Toast, Dialog } from "vant";
+import { Popup, Button, Toast,  Dialog } from "vant";
 import TypePicker from "../components/TypePicker";
 import TimePicker from "../components/TimePicker";
 import StaffPicker from "../components/StaffPicker";
@@ -537,6 +537,7 @@ export default {
       try {
         FileSave();
       } catch (err) {
+        console.log(err)
         Dialog.alert({
           title: "错误",
           message: "微信或该浏览器不支持导出文件，请切换到主流浏览器后再次尝试"
@@ -678,10 +679,13 @@ export default {
   border: 1px solid #e5e5e5;
   width: 2rem;
   i {
-    font-size: 24px;
+    font-size: 40px;
+      color: #409eff;
   }
   span {
     padding-top: 0.3rem;
+    color: #969799;
+    font-size: 14px;
   }
 }
 
