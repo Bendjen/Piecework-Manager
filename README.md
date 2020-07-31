@@ -1,8 +1,8 @@
-# Piecework-Manager
+# CountMaster
 
 ## GitPage
 ```
-https://bendjen.github.io/Piecework-Manager-mobile/
+https://bendjen.github.io/Count-Master/
 ```
 
 ### Dependencies
