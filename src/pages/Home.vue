@@ -87,10 +87,10 @@
     <!-- 进货弹窗 -->
     <van-popup
       v-model="importPopupVisible"
-      style="width:100%;height:50%;background: #f3f3f3;"
+      style="width:90%;height:50%;background: #f3f3f3;"
       class="popup"
     >
-      <div style="width:100%;height:100%;">
+      <div style="width:90%;height:100%;">
         <h2 class="dialogTitle" style="height:15%;" flex="main:center cross:center">进货</h2>
         <div style="height:65%;" flex="dir:top cross:center main:center">
           <p flex="main:center cross:center">
@@ -174,7 +174,7 @@
     >
       <div style="width:100%;height:100%;">
         <h2 class="dialogTitle" style="height:1.2rem;" flex="main:center cross:center">员工记单</h2>
-        <div style="height:65%;" flex="dir:top cross:center main:center">
+        <div flex="dir:top cross:center main:center">
           <p flex="main:center cross:center">
             <span class="inputTitle">员工：</span>
             <input
@@ -662,8 +662,8 @@ export default {
     padding: 0.3rem;
     font-size: 20px;
     span {
-      font-size: 18px;
-      margin-right: 0.5rem;
+      font-size: 17px;
+    //   margin-right: 0.5rem;
       color: #000;
     }
     input {
@@ -673,7 +673,7 @@ export default {
       text-align: center;
       font-weight: bold;
       font-size: 16px;
-      padding: 0.1rem 0.4rem;
+    //   padding: 0.1rem 0.4rem;
     }
   }
 }
