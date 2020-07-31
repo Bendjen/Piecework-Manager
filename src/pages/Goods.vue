@@ -72,8 +72,9 @@ export default {
 					containLabel: true
 				},
 				xAxis: {
-					type: "value",
-					boundaryGap: [0, 0.01]
+                    type: "value",
+                    show:false,
+					boundaryGap: [0, 0.05]
 				},
 				yAxis: {
 					type: "category",

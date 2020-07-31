@@ -8,7 +8,7 @@
       <ul>
         <li v-for="item in staffList" :key="item" flex="main:justify">
           <span>{{item}}</span>
-          <van-icon name="delete" @click="deleteStaff(item)" />
+          <van-icon name="cross" @click="deleteStaff(item)" />
         </li>
       </ul>
     </div>
@@ -24,7 +24,7 @@
             <span style="font-size:12px;color:#c9c9c9;padding-left:1rem"> 单价：{{item.price}}元 / 件</span>
             <span style="font-size:12px;color:#c9c9c9;" v-if='item.ifTake'> ; 抽成：{{item.takeMoney}}元 / 件</span>
           </p>
-          <van-icon name="delete" @click="deleteType(item.name)" />
+          <van-icon name="cross" @click="deleteType(item.name)" />
         </li>
       </ul>
     </div>

@@ -19,13 +19,13 @@
             </li>
             <li flex="main:left" v-for="(item,key) in goodsSummaryList" :key="key" v-if="item.num">
               <span style="text-align:left;width:25%">{{key}}</span>
-              <span style="text-align:right;width:35%">*{{item.num}}</span>
+              <span style="text-align:right;width:35%;padding:0 0.25rem;">{{item.num}}</span>
               <span style="text-align:right;width:40%">{{item.money }}元</span>
             </li>
           </ul>
           <div style="height:15%;" class="total" flex="main:justify cross:center">
             <span>合计</span>
-            <span style="text-align:right;width:35%">*{{totalNum}}</span>
+            <span style="text-align:right;width:35%">{{totalNum}}</span>
             <span style="text-align:right;width:40%">{{totalMoney }}元</span>
           </div>
         </div>
@@ -72,7 +72,7 @@
         >
           <div class="content">{{key}}</div>
           <div class="content">
-            <span style="color:#f44;">{{item.total }} 元</span>
+            <span style="color:#967171;">{{item.total }} 元</span>
             <span style="color:#2196f3;">{{item.take > 0 ? `/ ${item.take}元` : ''}}</span>
           </div>
         </li>

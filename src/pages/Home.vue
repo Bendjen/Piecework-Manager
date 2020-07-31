@@ -87,7 +87,6 @@
     <!-- 进货弹窗 -->
     <van-popup
       v-model="importPopupVisible"
-      position="right"
       style="width:100%;height:50%;background: #f3f3f3;"
       class="popup"
     >
@@ -106,7 +105,8 @@
           </p>
           <p flex="main:center cross:center">
             <span class="inputTitle">数量（件）：</span>
-            <input type="number" v-model.number="importValue.num" @focus="$event.target.select()">
+            <input type="number" v-model.number="importValue.num">
+            <!-- <input type="number" v-model.number="importValue.num" @focus="$event.target.select()"> -->
           </p>
           <p flex="main:center cross:center">
             <span class="inputTitle">时间：</span>
@@ -128,7 +128,6 @@
     <!-- 出货弹窗 -->
     <van-popup
       v-model="exportPopupVisible"
-      position="right"
       style="width:100%;background: #f3f3f3;"
       class="popup"
     >
@@ -147,7 +146,8 @@
           </p>
           <p flex="main:center cross:center">
             <span class="inputTitle">数量（件）：</span>
-            <input type="number" v-model.number="exportValue.num" @focus="$event.target.select()">
+            <input type="number" v-model.number="exportValue.num">
+            <!-- <input type="number" v-model.number="exportValue.num" @focus="$event.target.select()"> -->
           </p>
           <p flex="main:center cross:center">
             <span class="inputTitle">时间：</span>
@@ -169,7 +169,6 @@
     <!-- 记单弹窗 -->
     <van-popup
       v-model="pieceRecordPopupVisible"
-      position="right"
       style="width:100%;background: #f3f3f3;"
       class="popup"
     >
@@ -201,8 +200,12 @@
             <input
               type="number"
               v-model.number="pieceRecordValue.num"
-              @focus="$event.target.select()"
             >
+            <!-- <input
+              type="number"
+              v-model.number="pieceRecordValue.num"
+              @focus="$event.target.select()"
+            > -->
           </p>
           <p flex="main:center cross:center">
             <span class="inputTitle">时间：</span>
@@ -318,7 +321,7 @@ export default {
           onClick: () => {
             this.exportPopupVisible = true;
             this.activeKey = "exportValue";
-            this.exportValue = { type: "", num: 0, time: new Date().getTime() };
+            this.exportValue = { type: "", num: "", time: new Date().getTime() };
           }
         },
         {
@@ -330,7 +333,7 @@ export default {
             this.pieceRecordValue = {
               staff: "",
               type: "",
-              num: 0,
+              num: "",
               time: new Date().getTime()
             };
           }
@@ -668,7 +671,7 @@ export default {
       border-radius: 2px;
       color: #000;
       text-align: center;
-      font-weight: lighter;
+      font-weight: bold;
       font-size: 16px;
       padding: 0.1rem 0.4rem;
     }
